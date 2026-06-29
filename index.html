@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Parlour — pass-and-play games for the family table</title>
+<meta name="description" content="A calm cupboard of classic games for the whole family. Pass-and-play on one device, or play the computer. Local-first, offline, no accounts, no ads.">
+<meta name="theme-color" content="#2f5d50">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<style>
+  :root{
+    --felt:#2f5d50; --felt-deep:#234a3f; --felt-line:#3c6f60;
+    --paper:#f4efe3; --paper-edge:#e6dcc6; --ink:#26201a; --muted:#6f6453;
+    --wood:#7a4e2e; --brass:#c9a24b; --brass-deep:#a8842f;
+    --x:#b8502f; --o:#2f6f8f;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:var(--sans); color:var(--ink); min-height:100dvh;
+    background:
+      radial-gradient(120% 80% at 50% -10%, #366c5d 0%, var(--felt) 45%, var(--felt-deep) 100%);
+    background-attachment:fixed;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 18px 40px}
+
+  /* ---- Header ---- */
+  header.top{text-align:center;color:var(--paper);padding:26px 8px 22px}
+  .brand{font-family:var(--serif);font-weight:600;font-size:clamp(2.4rem,7vw,3.4rem);
+    letter-spacing:-.01em;margin:0;line-height:1}
+  .brand .dot{color:var(--brass)}
+  .tag{margin:.5rem 0 0;opacity:.86;font-size:clamp(.92rem,2.6vw,1.05rem)}
+  .rule{width:64px;height:3px;border-radius:3px;background:var(--brass);margin:16px auto 0;opacity:.85}
+
+  /* ---- Cupboard grid ---- */
+  .cupboard{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));margin-top:8px}
+  .tile{
+    appearance:none;text-align:left;cursor:pointer;color:var(--ink);
+    background:linear-gradient(180deg,var(--paper) 0%,var(--paper-edge) 100%);
+    border:1px solid #00000018;border-radius:14px;padding:15px 15px 13px;
+    box-shadow:0 1px 0 #ffffff90 inset, 0 6px 16px #00000035;
+    display:flex;flex-direction:column;gap:8px;min-height:128px;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .tile:hover{transform:translateY(-3px);box-shadow:0 1px 0 #ffffff90 inset,0 12px 24px #00000045}
+  .tile:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+  .tile .glyph{font-size:1.9rem;line-height:1}
+  .tile h3{font-family:var(--serif);font-size:1.18rem;margin:0;font-weight:600;letter-spacing:-.01em}
+  .tile p{margin:0;color:var(--muted);font-size:.82rem;flex:1}
+  .badges{display:flex;gap:6px;flex-wrap:wrap}
+  .badge{font-size:.66rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+    color:var(--wood);background:#7a4e2e1a;border-radius:999px;padding:3px 8px}
+  .badge.le{color:var(--brass-deep);background:#c9a24b22}
+
+  /* ---- Stage (a single game) ---- */
+  .stage{display:none;color:var(--paper)}
+  .stage.on{display:block}
+  body.playing .cupboard,body.playing header.top,body.playing .shelf-foot{display:none}
+  .gbar{display:flex;align-items:center;gap:12px;margin:6px 0 18px}
+  .back{appearance:none;cursor:pointer;font:inherit;font-weight:600;color:var(--paper);
+    background:#ffffff1f;border:1px solid #ffffff33;border-radius:999px;padding:9px 15px}
+  .back:hover{background:#ffffff30}
+  .back:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+  .gtitle{font-family:var(--serif);font-size:1.5rem;margin:0;font-weight:600}
+  .panel{background:linear-gradient(180deg,var(--paper),var(--paper-edge));color:var(--ink);
+    border-radius:18px;padding:20px;box-shadow:0 10px 30px #00000045;max-width:560px;margin:0 auto}
+  .status{text-align:center;font-size:1.1rem;font-weight:600;min-height:1.5em;margin:0 0 14px}
+  .controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+  .btn{appearance:none;cursor:pointer;font:inherit;font-weight:600;border-radius:999px;padding:10px 18px;
+    border:1px solid #00000022;background:var(--felt);color:var(--paper)}
+  .btn.ghost{background:transparent;color:var(--ink)}
+  .btn[aria-pressed=true]{background:var(--brass);color:var(--ink);border-color:transparent}
+  .btn:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+
+  /* ---- Tic-tac-toe board ---- */
+  .ttt{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:330px;margin:0 auto;aspect-ratio:1}
+  .ttt button{appearance:none;cursor:pointer;border:none;border-radius:12px;
+    background:#2f5d500f;font-family:var(--serif);font-weight:700;font-size:clamp(2rem,11vw,3rem);
+    display:grid;place-items:center;aspect-ratio:1}
+  .ttt button:disabled{cursor:default}
+  .ttt button:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+  .ttt .X{color:var(--x)} .ttt .O{color:var(--o)}
+  .ttt button.win{background:var(--brass);}
+
+  .shelf-foot{color:#ffffffcc;text-align:center;margin-top:32px;font-size:.8rem;line-height:1.7}
+  .shelf-foot a{color:var(--paper)}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1 class="brand">Parlour<span class="dot">.</span></h1>
+    <p class="tag">Pass-and-play games for the family table.</p>
+    <div class="rule"></div>
+  </header>
+
+  <main>
+    <div class="cupboard" id="cupboard" aria-label="Games cupboard"></div>
+    <section class="stage" id="stage" aria-live="polite"></section>
+  </main>
+
+  <p class="shelf-foot">
+    Local-first · offline · no accounts, no ads, no tracking.<br>
+    An <a href="https://levitatingflyfisher.github.io">OpenHearth</a> game cupboard.
+  </p>
+</div>
+
+<script>
+// Auto-generated by build.mjs — edit games/*.mjs then `npm run build`.
+const TICTACTOE = (function(){
+// Tic-Tac-Toe — pure game logic (no DOM). The Parlour "scaffold" game: its
+// board/win/AI shape is reused by the other grid games. Perfect minimax AI.
+const LINES = [
+  [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+  [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+  [0, 4, 8], [2, 4, 6], // diagonals
+];
+function emptyBoard() {
+  return Array(9).fill(null);
+}
+function available(board) {
+  const out = [];
+  for (let i = 0; i < 9; i++) if (board[i] == null) out.push(i);
+  return out;
+}
+
+/// 'X' | 'O' if a line is complete, 'draw' if the board is full, else null.
+function winner(board) {
+  for (const [a, b, c] of LINES) {
+    if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+      return board[a];
+    }
+  }
+  return available(board).length === 0 ? 'draw' : null;
+}
+
+const other = (p) => (p === 'X' ? 'O' : 'X');
+
+// Minimax scored from `me`'s perspective so values stay consistent down the
+// tree: +1 we win, -1 we lose, 0 draw. Returns the best {score, move}.
+function minimax(board, toMove, me) {
+  const w = winner(board);
+  if (w === me) return { score: 1, move: -1 };
+  if (w === other(me)) return { score: -1, move: -1 };
+  if (w === 'draw') return { score: 0, move: -1 };
+
+  let best = null;
+  for (const i of available(board)) {
+    const next = board.slice();
+    next[i] = toMove;
+    const { score } = minimax(next, other(toMove), me);
+    const better = best == null ||
+      (toMove === me ? score > best.score : score < best.score);
+    if (better) best = { score, move: i };
+  }
+  return best;
+}
+
+/// The optimal move index for `player` under perfect play.
+function bestMove(board, player) {
+  return minimax(board, player, player).move;
+}
+
+return { LINES, emptyBoard, available, winner, bestMove };
+})();
+
+
+// ---- Game registry. Each entry: {id, name, glyph, blurb, badges, mount} ----
+// `mount(host, helpers)` renders the game into `host`; helpers.status(text)
+// updates the status line. Logic lives in the namespaced bundles above.
+const GAMES = [
+  {
+    id:'tictactoe', name:'Tic-Tac-Toe', glyph:'⨯〇', tier:0,
+    blurb:'Three in a row. Beat the computer or pass-and-play.',
+    badges:['1 player','2 players'],
+    mount: mountTicTacToe,
+  },
+];
+
+// ---- Cupboard + router ----
+const cupboardEl = document.getElementById('cupboard');
+const stageEl = document.getElementById('stage');
+
+function renderCupboard(){
+  cupboardEl.innerHTML='';
+  for(const g of GAMES){
+    const t=document.createElement('button');
+    t.className='tile'; t.type='button';
+    t.innerHTML =
+      `<div class="glyph" aria-hidden="true">${g.glyph}</div>`+
+      `<h3>${g.name}</h3><p>${g.blurb}</p>`+
+      `<div class="badges">${g.badges.map(b=>`<span class="badge${/le$/.test(g.id)?' le':''}">${b}</span>`).join('')}</div>`;
+    t.addEventListener('click',()=>openGame(g));
+    cupboardEl.appendChild(t);
+  }
+}
+
+function openGame(g){
+  document.body.classList.add('playing');
+  stageEl.classList.add('on');
+  stageEl.innerHTML =
+    `<div class="gbar"><button class="back" type="button" id="back">← Cupboard</button>`+
+    `<h2 class="gtitle">${g.name}</h2></div>`+
+    `<div class="panel"><p class="status" id="status"></p><div id="board"></div>`+
+    `<div class="controls" id="controls"></div></div>`;
+  document.getElementById('back').addEventListener('click',closeGame);
+  const helpers = {
+    board: document.getElementById('board'),
+    controls: document.getElementById('controls'),
+    status: (t)=>{ document.getElementById('status').textContent = t; },
+  };
+  g.mount(helpers.board, helpers);
+  location.hash = g.id;
+  window.scrollTo(0,0);
+}
+
+function closeGame(){
+  document.body.classList.remove('playing');
+  stageEl.classList.remove('on');
+  stageEl.innerHTML='';
+  if(location.hash) history.replaceState(null,'',location.pathname+location.search);
+}
+
+window.addEventListener('hashchange',()=>{
+  const id=location.hash.replace('#','');
+  const g=GAMES.find(x=>x.id===id);
+  if(g && !document.body.classList.contains('playing')) openGame(g);
+  if(!id && document.body.classList.contains('playing')) closeGame();
+});
+
+// ---- Tic-Tac-Toe UI (logic from the TICTACTOE bundle) ----
+function mountTicTacToe(host, h){
+  let board, mode='ai', turn='X', over=false;
+  const controls=h.controls;
+
+  function newGame(){ board=TICTACTOE.emptyBoard(); turn='X'; over=false; draw(); }
+
+  function think(){
+    if(over) return;
+    if(mode==='ai' && turn==='O'){
+      const i=TICTACTOE.bestMove(board,'O');
+      setTimeout(()=>{ if(over) return; board[i]='O'; turn='X'; resolve(); }, 260);
+    }
+  }
+  function resolve(){ draw(); maybeEnd(); }
+  function maybeEnd(){
+    const w=TICTACTOE.winner(board);
+    if(w){ over=true; draw(); }
+    else if(mode==='ai') think();
+  }
+  function play(i){
+    if(over||board[i]) return;
+    if(mode==='ai' && turn==='O') return;
+    board[i]=turn; turn = turn==='X'?'O':'X'; resolve();
+  }
+  function draw(){
+    const w=TICTACTOE.winner(board);
+    const lineCells = winningCells(board);
+    h.status(
+      w==='draw' ? 'A draw — well matched.' :
+      w ? `${w} wins!` :
+      mode==='ai' ? (turn==='X'?'Your turn — you’re ✕.':'Thinking…') :
+      `${turn}’s turn.`
+    );
+    host.className='ttt';
+    host.innerHTML='';
+    for(let i=0;i<9;i++){
+      const b=document.createElement('button');
+      b.type='button';
+      b.className = board[i]||'';
+      if(lineCells.includes(i)) b.classList.add('win');
+      b.textContent = board[i]==='X'?'✕':board[i]==='O'?'◯':'';
+      b.setAttribute('aria-label', board[i]?`${board[i]} at ${i+1}`:`empty cell ${i+1}`);
+      b.disabled = !!board[i]||over||(mode==='ai'&&turn==='O');
+      b.addEventListener('click',()=>play(i));
+      host.appendChild(b);
+    }
+  }
+  function winningCells(bd){
+    for(const ln of TICTACTOE.LINES){
+      const [a,b,c]=ln;
+      if(bd[a]&&bd[a]===bd[b]&&bd[a]===bd[c]) return ln;
+    }
+    return [];
+  }
+
+  controls.innerHTML='';
+  const vsAi=ctrl('vs Computer',()=>{mode='ai';setModes();newGame();},true);
+  const vs2=ctrl('2 Players',()=>{mode='2p';setModes();newGame();});
+  const again=ctrl('New game',()=>newGame());
+  again.classList.add('ghost');
+  function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
+  function ctrl(label,fn,pressed){
+    const b=document.createElement('button'); b.className='btn'; b.type='button';
+    b.textContent=label; if(pressed)b.setAttribute('aria-pressed','true');
+    b.addEventListener('click',fn); controls.appendChild(b); return b;
+  }
+  setModes(); newGame();
+}
+
+renderCupboard();
+// Deep-link straight into a game if the URL carries a hash.
+if(location.hash){ const g=GAMES.find(x=>x.id===location.hash.replace('#','')); if(g) openGame(g); }
+
+// ---- Service worker for offline play ----
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>

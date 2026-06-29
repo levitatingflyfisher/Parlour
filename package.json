@@ -1,0 +1,12 @@
+{
+  "name": "parlour",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Parlour — a calm cupboard of pass-and-play family games. Single-file PWA.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Parlour — family games",
+  "short_name": "Parlour",
+  "description": "A calm cupboard of pass-and-play classic games for the family. Local-first, offline, no accounts.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#2f5d50",
+  "theme_color": "#2f5d50",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
