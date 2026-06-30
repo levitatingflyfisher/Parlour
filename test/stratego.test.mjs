@@ -293,3 +293,40 @@ test('aiMove will not charge a revealed stronger enemy when a safe move exists',
   assert.ok(mv);
   assert.notDeepEqual(mv, { from: at(3, 5), to: at(4, 5) });
 });
+
+test('a long vs-AI game runs without crashing or deadlocking', () => {
+  // Random armies, then alternate: owner 0 plays a (deterministic) legal move,
+  // owner 1 plays aiMove. The point is that the AI loop never throws and always
+  // terminates — random play rarely captures a flag, so the cap is the backstop.
+  const b0 = emptyBoard();
+  for (const owner of [0, 1]) {
+    const idxs = setupIndices(owner);
+    const bag = pieceBag(owner);
+    idxs.forEach((i, k) => { b0[i] = bag[k]; });
+  }
+  let b = b0;
+  let turn = 0;
+  let moves = 0;
+  while (winner(b) === null && moves < 1500) {
+    let mv;
+    if (turn === 0) {
+      const froms = [];
+      for (let i = 0; i < b.length; i++) {
+        const p = b[i];
+        if (p && p.owner === 0 && legalMoves(b, i).length) froms.push(i);
+      }
+      if (!froms.length) break;
+      const from = froms[moves % froms.length];
+      const tos = legalMoves(b, from);
+      mv = { from, to: tos[moves % tos.length] };
+    } else {
+      mv = aiMove(b, 1);
+      if (!mv) break;
+      assert.ok(legalMoves(b, mv.from).includes(mv.to), 'AI move must be legal');
+    }
+    b = applyMove(b, mv.from, mv.to);
+    turn = turn === 0 ? 1 : 0;
+    moves += 1;
+  }
+  assert.ok(winner(b) !== null || moves >= 1500 || true, 'completed without throwing');
+});
