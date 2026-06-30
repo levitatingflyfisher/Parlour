@@ -331,6 +331,20 @@
   .c8 .suit-ask{align-self:center;font-weight:600;color:var(--ink)}
   .btn.suit{min-width:48px;font-size:1.25rem;line-height:1;background:var(--paper);color:var(--ink);border:1px solid var(--paper-edge)}
   .btn.suit.red{color:var(--x)}
+  .dab{--d:15px;--e:40px;max-width:380px;margin:0 auto;text-align:center}
+.dab .grid{display:inline-grid;gap:0;background:var(--paper);padding:12px;border-radius:14px;border:1px solid var(--paper-edge);box-shadow:0 1px 3px #00000018 inset}
+.dab .dot{width:9px;height:9px;border-radius:50%;background:var(--ink);opacity:.5;justify-self:center;align-self:center}
+.dab .edge{appearance:none;border:none;padding:0;cursor:pointer;background:transparent;display:grid;place-items:center;width:100%;height:100%}
+.dab .edge:disabled{cursor:default}
+.dab .edge .line{background:var(--paper-edge);border-radius:3px;transition:background .12s ease}
+.dab .edge.h .line{width:76%;height:5px}
+.dab .edge.v .line{width:5px;height:76%}
+.dab .edge.open:not(:disabled):hover .line{background:var(--brass);opacity:.55}
+.dab .edge.on .line{background:var(--brass)}
+.dab .edge:focus-visible{outline:2px solid var(--brass);outline-offset:-2px;border-radius:5px}
+.dab .box{display:grid;place-items:center;font-family:var(--serif);font-weight:700;color:var(--paper);font-size:.85rem;border-radius:5px;margin:2px;background:#2f5d5010;transition:background .15s ease}
+.dab .box.p0{background:var(--x)}
+.dab .box.p1{background:var(--o)}
   /*__MORE_CSS__*/
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -408,6 +422,7 @@ const GAMES = [
   { id:'mastermind', name:'Mastermind', glyph:'🔴', blurb:'Crack the hidden four-peg colour code in ten guesses — black pegs for right colour and place, white for right colour only.', badges:['solo'], tier:0, mount: mountMastermind },
   { id:'wordle', name:'Wordle', glyph:'🟩', blurb:'Six tries to crack today’s five-letter word.', badges:['daily-le'], tier:0, mount: mountWordle },
   { id:'crazyeights', name:'Crazy Eights', glyph:'🃏', blurb:'Shed your hand by matching rank or suit — eights are wild. You versus the computer.', badges:['1 player'], tier:3, mount: mountCrazyeights },
+  { id:'dotsboxes', name:'Dots & Boxes', glyph:'⊞', blurb:'Seal the 4th wall of a box to claim it — and go again. Beat the computer or pass-and-play.', badges:['1 player','2 players'], tier:0, mount: mountDotsboxes },
   /*__MORE_GAMES__*/
 ];
 
@@ -1475,6 +1490,98 @@ function mountCrazyeights(host, h){
   }
 
   newGame();
+}
+
+function mountDotsboxes(host, h){
+  let model, mode='ai', over=false, busy=false, gen=0;
+  const N = DOTSBOXES.DOTS - 1, DIM = 2*DOTSBOXES.DOTS - 1;
+
+  function play(type, index){
+    if(over||busy) return;
+    if(mode==='ai' && model.turn===1) return;
+    if((type==='h'?model.h:model.v)[index]) return;
+    model = DOTSBOXES.claimEdge(model, type, index);
+    afterMove();
+  }
+
+  function afterMove(){
+    if(DOTSBOXES.isOver(model)){ over=true; busy=false; draw(); return; }
+    if(mode==='ai' && model.turn===1){
+      busy=true; draw();
+      const myGen=gen;
+      setTimeout(()=>{
+        if(over || myGen!==gen || !host.isConnected) return;
+        const mv=DOTSBOXES.bestMove(model);
+        if(mv) model=DOTSBOXES.claimEdge(model, mv.type, mv.index);
+        afterMove();
+      }, 280);
+    } else { busy=false; draw(); }
+  }
+
+  function newGame(){ gen++; model=DOTSBOXES.newGame(); over=false; busy=false; draw(); }
+
+  function makeEdge(type, index, live){
+    const on=(type==='h'?model.h:model.v)[index];
+    const b=document.createElement('button'); b.type='button';
+    b.className='edge '+type+(on?' on':' open');
+    const line=document.createElement('span'); line.className='line'; b.appendChild(line);
+    b.disabled = on || !live;
+    b.setAttribute('aria-label',(on?'drawn ':'draw ')+(type==='h'?'horizontal':'vertical')+' edge');
+    if(!on && live) b.addEventListener('click',()=>play(type,index));
+    return b;
+  }
+
+  function draw(){
+    const s0=model.scores[0], s1=model.scores[1];
+    let status;
+    if(over){
+      const w=DOTSBOXES.winner(model), hi=Math.max(s0,s1), lo=Math.min(s0,s1);
+      if(w==='draw') status='Every box claimed — '+s0+'–'+s1+'. A draw.';
+      else if(mode==='ai') status=(w===0?'You win':'The computer wins')+' '+hi+'–'+lo+'!';
+      else status='Player '+(w+1)+' wins '+hi+'–'+lo+'!';
+    } else {
+      const whose = mode==='ai'
+        ? (model.turn===0?'Your turn':'The computer is thinking…')
+        : 'Player '+(model.turn+1)+'’s turn';
+      const board = mode==='ai' ? ('You '+s0+' · Computer '+s1) : ('P1 '+s0+' · P2 '+s1);
+      status = whose+'  —  '+board;
+    }
+    h.status(status);
+
+    host.className='dab'; host.innerHTML='';
+    const grid=document.createElement('div'); grid.className='grid';
+    grid.style.gridTemplateColumns='var(--d) '+'var(--e) var(--d) '.repeat(N);
+    grid.style.gridTemplateRows='var(--d) '+'var(--e) var(--d) '.repeat(N);
+    const live = !over && !busy && !(mode==='ai' && model.turn===1);
+    for(let gr=0; gr<DIM; gr++){
+      for(let gc=0; gc<DIM; gc++){
+        const dotRow=gr%2===0, dotCol=gc%2===0;
+        if(dotRow && dotCol){
+          const d=document.createElement('span'); d.className='dot'; grid.appendChild(d);
+        } else if(dotRow && !dotCol){
+          grid.appendChild(makeEdge('h', (gr/2)*N + (gc-1)/2, live));
+        } else if(!dotRow && dotCol){
+          grid.appendChild(makeEdge('v', ((gr-1)/2)*DOTSBOXES.DOTS + gc/2, live));
+        } else {
+          const bi=((gr-1)/2)*N + (gc-1)/2, o=model.owner[bi];
+          const cell=document.createElement('div'); cell.className='box';
+          if(o===0){ cell.classList.add('p0'); cell.textContent='1'; }
+          else if(o===1){ cell.classList.add('p1'); cell.textContent='2'; }
+          grid.appendChild(cell);
+        }
+      }
+    }
+    host.appendChild(grid);
+  }
+
+  const controls=h.controls; controls.innerHTML='';
+  function ctrl(label,fn,p){ const b=document.createElement('button'); b.className='btn'; b.type='button';
+    b.textContent=label; if(p)b.setAttribute('aria-pressed','true'); b.addEventListener('click',fn); controls.appendChild(b); return b; }
+  const vsAi=ctrl('vs Computer',()=>{mode='ai';setModes();newGame();},true);
+  const vs2=ctrl('2 Players',()=>{mode='2p';setModes();newGame();});
+  const again=ctrl('New game',()=>newGame()); again.classList.add('ghost');
+  function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
+  setModes(); newGame();
 }
 
 /*__MORE_MOUNTS__*/
