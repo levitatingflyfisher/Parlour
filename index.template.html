@@ -461,6 +461,116 @@ div.qd .cell{cursor:default}
 .st .key b{display:inline-block;width:.8em;height:.8em;border-radius:3px;vertical-align:-1px;margin-right:4px}
 .st .key .kx{background:var(--x)}
 .st .key .ko{background:var(--o)}
+  /* ---- Gomoku (Five in a Row) ---- */
+.gom{--felt:#2f5d50;--paper:#f4efe3;--brass:#c9a24b;--ink:#26201a;max-width:360px;margin:0 auto}
+.gom .gom-board{display:grid;grid-template-columns:repeat(15,1fr);gap:0;
+  background:linear-gradient(160deg,#dcae6e,#c5894a 58%,#a86f37);
+  padding:9px;border-radius:10px;box-shadow:inset 0 0 0 2px #00000022,0 6px 16px #00000038}
+.gom .gom-cell{appearance:none;padding:0;margin:0;cursor:pointer;aspect-ratio:1;border:0;
+  background:transparent;position:relative;display:grid;place-items:center}
+.gom .gom-cell::before{content:"";position:absolute;inset:0;
+  box-shadow:inset 0 0 0 0.75px #5a3a1c55;pointer-events:none}
+.gom .gom-cell:disabled{cursor:default}
+.gom .gom-cell:focus-visible{outline:2px solid var(--ink);outline-offset:-2px;z-index:3}
+.gom .gom-stone{width:86%;height:86%;border-radius:50%;z-index:1}
+.gom .gom-stone.B{background:radial-gradient(circle at 36% 30%,#5b5048,#161210);
+  box-shadow:0 1px 2px #00000070,inset 0 1px 1px #ffffff26}
+.gom .gom-stone.W{background:radial-gradient(circle at 36% 30%,#ffffff,#d7cdb8);
+  box-shadow:0 1px 2px #00000055,inset 0 1px 1px #ffffff}
+.gom .gom-cell.last::after{content:"";position:absolute;width:34%;height:34%;
+  border:2px solid var(--brass);border-radius:50%;z-index:2;pointer-events:none}
+  /* Globle — daily geography proximity hunt */
+  .globe{--felt:#2f5d50;--paper:#f4efe3;--brass:#c9a24b;--ink:#26201a;max-width:420px;margin:0 auto}
+  .globe .grow{display:flex;gap:8px;align-items:center;margin:6px 0 2px}
+  .globe input{flex:1;min-width:0;font:inherit;font-size:1.05rem;padding:10px 12px;border-radius:10px;
+    border:2px solid #cdbfa3;background:var(--paper);color:var(--ink)}
+  .globe input::placeholder{color:var(--muted)}
+  .globe input:focus-visible{outline:3px solid var(--brass);outline-offset:1px}
+  .globe .guesses{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+  .globe .gitem{display:flex;align-items:center;gap:10px;background:var(--paper);
+    border:1px solid #00000018;border-radius:10px;padding:8px 12px}
+  .globe .gitem.correct{box-shadow:0 0 0 2px var(--brass) inset;background:#c9a24b1f}
+  .globe .gswatch{flex:0 0 auto;width:26px;height:26px;border-radius:50%;border:1px solid #00000033;
+    box-shadow:inset 0 0 0 1px #ffffff55}
+  .globe .gname{flex:1;font-weight:600;color:var(--ink)}
+  .globe .gkm{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.9rem;white-space:nowrap}
+  .globe .garrow{font-size:1.3rem;line-height:1;width:1.4em;text-align:center;color:var(--ink)}
+  .globe .gnote{text-align:center;color:var(--muted);font-size:.85rem;margin:10px 0 0}
+  .sud{max-width:430px;margin:0 auto;text-align:center}
+.sud-board{display:grid;grid-template-columns:repeat(9,1fr);width:100%;max-width:396px;margin:0 auto;
+  background:var(--paper);border:2px solid var(--ink);border-radius:8px;overflow:hidden;
+  box-shadow:0 8px 22px #0003}
+.sud-cell{appearance:none;cursor:pointer;border:1px solid var(--paper-edge);background:var(--paper);
+  aspect-ratio:1;padding:0;font:inherit;font-size:clamp(1rem,5.4vw,1.5rem);line-height:1;
+  color:var(--brass-deep);display:flex;align-items:center;justify-content:center}
+.sud-cell.given{color:var(--ink);font-weight:800}
+.sud-cell.bl{border-left:2px solid var(--ink)}
+.sud-cell.bt{border-top:2px solid var(--ink)}
+.sud-cell.br{border-right:2px solid var(--ink)}
+.sud-cell.bb{border-bottom:2px solid var(--ink)}
+.sud-cell.peer{background:#c9a24b1a}
+.sud-cell.sel{background:#c9a24b40;box-shadow:inset 0 0 0 2px var(--brass)}
+.sud-cell.conflict{color:var(--paper);background:var(--x)}
+.sud-cell:hover:not(.given):not(:disabled){background:#efe7d4}
+.sud-cell:focus-visible{outline:3px solid var(--brass);outline-offset:-3px;z-index:2}
+.sud-cell:disabled{cursor:default}
+.sud-pad{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;max-width:340px;margin:16px auto 0}
+.sud-num{appearance:none;cursor:pointer;border:1px solid #00000022;border-radius:10px;
+  background:var(--paper-edge);color:var(--ink);font:inherit;font-weight:700;font-size:1.25rem;padding:12px 0}
+.sud-num.erase{background:var(--felt);color:var(--paper)}
+.sud-num:hover:not(:disabled){background:var(--brass);color:var(--ink)}
+.sud-num:disabled{opacity:.4;cursor:default}
+.sud-num:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+.sud-diffs{display:inline-flex;gap:6px}
+.sud-diff{padding:8px 14px}
+  .klon{--felt:#2f5d50;--paper:#f4efe3;--brass:#c9a24b;--ink:#26201a;--x:#b8502f;--o:#2f6f8f;
+  --cw:clamp(34px,12.5vw,60px);--ch:calc(var(--cw)*1.42);--ov:calc(var(--ch)*-0.64);
+  display:flex;flex-direction:column;gap:14px;align-items:stretch}
+.klon .ktop{display:flex;gap:6px;align-items:flex-start;flex-wrap:wrap}
+.klon .kfoundations{display:flex;gap:6px;margin-left:auto}
+.klon .kslot{width:var(--cw);height:var(--ch);border-radius:8px;box-sizing:border-box;
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+  border:1.5px dashed #ffffff55;background:#ffffff14;color:#ffffffaa;
+  font-weight:700;font-size:calc(var(--cw)*0.5);cursor:pointer;user-select:none}
+.klon .kslot.kfound{color:var(--brass);border-color:var(--brass)}
+.klon .kstock.filled{background:linear-gradient(135deg,var(--o),#244e63);
+  border-style:solid;border-color:#00000033;color:var(--paper);font-size:calc(var(--cw)*0.42)}
+.klon .kwaste,.klon .kfound{padding:0}
+.klon .ktableau{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;align-items:start}
+.klon .kpile{display:flex;flex-direction:column;align-items:center;min-height:var(--ch)}
+.klon .kpile .kcard{margin-top:var(--ov)}
+.klon .kpile .kcard:first-child{margin-top:0}
+.klon .kpile .kslot.empty{font-size:0}
+.klon .kcard{width:var(--cw);height:var(--ch);border-radius:8px;box-sizing:border-box;
+  position:relative;cursor:pointer;border:1px solid #00000026;
+  background:linear-gradient(180deg,#ffffff,#f3eee2);color:var(--ink);
+  box-shadow:0 1px 2px #00000040;flex:0 0 auto}
+.klon .kcard.red{color:var(--x)}
+.klon .kcard.black{color:var(--ink)}
+.klon .kcard.down{background:
+  repeating-linear-gradient(45deg,var(--brass) 0 6px,#b8923f 6px 12px);
+  border-color:#00000033;color:transparent}
+.klon .kcard.sel{outline:3px solid var(--brass);outline-offset:1px;z-index:4;
+  box-shadow:0 3px 9px #00000055}
+.klon .kc-corner{position:absolute;top:3px;left:5px;font-size:calc(var(--cw)*0.34);
+  font-weight:800;line-height:1;letter-spacing:-0.5px}
+.klon .kc-pip{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:calc(var(--cw)*0.62);opacity:.5}
+.klon .kslot:focus-visible,.klon .kcard:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+  .chess{max-width:460px;margin:0 auto;--felt:#2f5d50;--paper:#f4efe3;--brass:#c9a24b;--ink:#26201a;--lt:#e9dcbf;--dk:#5e8475}
+  .chess .board{display:grid;grid-template-columns:repeat(8,1fr);gap:0;overflow:hidden;background:var(--brass);padding:7px;border-radius:12px;box-shadow:0 3px 12px #00000045}
+  .chess .sq{appearance:none;border:none;margin:0;padding:0;aspect-ratio:1;position:relative;display:grid;place-items:center;cursor:default;font-size:clamp(20px,7vw,40px);line-height:1}
+  .chess .sq.light{background:var(--lt)}
+  .chess .sq.dark{background:var(--dk)}
+  .chess .sq.play{cursor:pointer}
+  .chess .sq.last{box-shadow:inset 0 0 0 4px #c9a24baa}
+  .chess .sq.sel{box-shadow:inset 0 0 0 4px var(--brass)}
+  .chess .sq.dest::after{content:"";position:absolute;width:30%;height:30%;border-radius:50%;background:#2f5d5066}
+  .chess .sq.cap::before{content:"";position:absolute;inset:7%;border-radius:50%;box-shadow:inset 0 0 0 4px #2f5d5077}
+  .chess .sq:focus-visible{outline:3px solid var(--felt);outline-offset:-3px;z-index:2}
+  .chess .pc{z-index:1;user-select:none;pointer-events:none}
+  .chess .pc.w{color:#fbfaf6;text-shadow:0 0 1px #000,0 1px 2px #00000066,-1px 0 1px #0007,1px 0 1px #0007}
+  .chess .pc.b{color:#1b1612;text-shadow:0 0 1px #ffffffaa,0 1px 1px #ffffff40}
   /*__MORE_CSS__*/
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -543,6 +653,11 @@ const GAMES = [
   { id:'checkers', name:'Checkers', glyph:'⛀', blurb:'Forced jumps, multi-captures and kings on the back row — outplay the computer or pass-and-play.', badges:['1 player','2 players'], tier:2, mount: mountCheckers },
   { id:'quoridor', name:'Quoridor', glyph:'🧱', blurb:'Race your pawn to the far side — and drop fences to send your rival the long way round.', badges:['1 player','2 players'], tier:2, mount: mountQuoridor },
   { id:'stratego', name:'Stratego', glyph:'🎖️', blurb:'Set your army in secret, then duel across the lakes to capture the flag — hidden ranks, bombs, and a sneaky Spy.', badges:['2 players'], tier:2, mount: mountStratego },
+  { id:'gomoku', name:'Gomoku', glyph:'⚫', blurb:'Be first to line up five stones in a row — across, down or diagonally. Play the computer or pass-and-play.', badges:['1 player','2 players'], tier:1, mount: mountGomoku },
+  { id:'globle', name:'Globle', glyph:'🌍', blurb:'Guess today’s country — each guess shows how close you are and which way to go.', badges:['daily-le'], tier:1, mount: mountGloble },
+  { id:'sudoku', name:'Sudoku', glyph:'#️⃣', blurb:'Fill the 9x9 grid so every row, column and 3x3 box holds 1-9 — one unique solution.', badges:['solo'], tier:2, mount: mountSudoku },
+  { id:'klondike', name:'Solitaire', glyph:'🂡', blurb:'Patience, the classic one-player card game — turn the stock, build the tableau down in alternating colours, and send all 52 home A→K.', badges:['solo'], tier:3, mount: mountKlondike },
+  { id:'chess', name:'Chess', glyph:'♟', blurb:'Full legal chess — castling, en passant and promotion — against a thinking computer, or pass-and-play.', badges:['1 player','2 players'], tier:4, mount: mountChess },
   /*__MORE_GAMES__*/
 ];
 
@@ -2297,6 +2412,483 @@ function mountStratego(host, h){
   }
 
   newGame();
+}
+
+function mountGomoku(host, h){
+  const S=GOMOKU.SIZE;
+  let board, mode='ai', turn='B', over=false, busy=false, last=-1;
+  function newGame(){ board=GOMOKU.emptyBoard(); turn='B'; over=false; busy=false; last=-1; draw(); }
+  function play(idx){
+    if(over||busy) return;
+    if(mode==='ai'&&turn==='W') return;
+    const nb=GOMOKU.place(board,idx,turn);
+    if(!nb) return;
+    board=nb; last=idx; advance();
+  }
+  function advance(){
+    if(GOMOKU.winner(board)){ over=true; draw(); return; }
+    turn = turn==='B'?'W':'B'; draw();
+    if(mode==='ai'&&turn==='W'){
+      busy=true;
+      setTimeout(()=>{ if(over) return; const m=GOMOKU.bestMove(board,'W');
+        board=GOMOKU.place(board,m,'W'); last=m; busy=false; advance(); }, 300);
+    }
+  }
+  function draw(){
+    const w=GOMOKU.winner(board);
+    h.status(
+      w==='draw' ? 'A draw — the board is full.' :
+      w ? `${w==='B'?'Black':'White'} wins — five in a row!` :
+      mode==='ai' ? (turn==='B'?'Your turn — you’re black.':'Thinking…') :
+      `${turn==='B'?'Black':'White'} to play.`
+    );
+    host.className='gom'; host.innerHTML='';
+    const grid=document.createElement('div'); grid.className='gom-board';
+    for(let i=0;i<S*S;i++){
+      const v=board[i], r=Math.floor(i/S), c=i%S;
+      const cell=document.createElement('button'); cell.type='button'; cell.className='gom-cell';
+      if(v){ const st=document.createElement('span'); st.className='gom-stone '+v; cell.appendChild(st); }
+      if(i===last) cell.classList.add('last');
+      cell.setAttribute('aria-label', v?`${v==='B'?'black':'white'} stone at row ${r+1}, column ${c+1}`:`place a stone at row ${r+1}, column ${c+1}`);
+      cell.disabled = over||busy||v!=null||(mode==='ai'&&turn==='W');
+      cell.addEventListener('click',()=>play(i));
+      grid.appendChild(cell);
+    }
+    host.appendChild(grid);
+  }
+  const controls=h.controls; controls.innerHTML='';
+  const vsAi=ctrl('vs Computer',()=>{mode='ai';setModes();newGame();},true);
+  const vs2=ctrl('2 Players',()=>{mode='2p';setModes();newGame();});
+  const again=ctrl('New game',()=>newGame()); again.classList.add('ghost');
+  function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
+  function ctrl(label,fn,p){ const b=document.createElement('button'); b.className='btn'; b.type='button';
+    b.textContent=label; if(p)b.setAttribute('aria-pressed','true'); b.addEventListener('click',fn); controls.appendChild(b); return b; }
+  setModes(); newGame();
+}
+
+function mountGloble(host, h){
+  const now=new Date();
+  const seed=now.getFullYear()*10000+(now.getMonth()+1)*100+now.getDate();
+  const answer=GLOBLE.dailyAnswer(seed);
+  let guesses=[], done=false;
+  function submit(raw){
+    if(done) return;
+    const name=String(raw||'').trim();
+    if(!name){ h.status('Type a country name, then Guess.'); return; }
+    const r=GLOBLE.guess(answer, name);
+    if(!r){ h.status(`“${name}” isn’t a country I know — try another.`); return; }
+    if(guesses.some(g=>g.country.name===r.country.name)){ h.status(`You already guessed ${r.country.name}.`); return; }
+    guesses.push(r);
+    if(r.correct) done=true;
+    draw();
+  }
+  function draw(){
+    host.className='globe'; host.innerHTML='';
+    if(!done){
+      const row=document.createElement('div'); row.className='grow';
+      const inp=document.createElement('input'); inp.type='text'; inp.placeholder='Guess a country…';
+      inp.setAttribute('aria-label','country guess'); inp.autocomplete='off'; inp.autocapitalize='words'; inp.spellcheck=false;
+      inp.addEventListener('keydown',e=>{ if(e.key==='Enter') submit(inp.value); });
+      row.appendChild(inp); host.appendChild(row);
+      inp.focus();
+    }
+    const list=document.createElement('div'); list.className='guesses';
+    for(let i=guesses.length-1;i>=0;i--){
+      const g=guesses[i];
+      const item=document.createElement('div'); item.className='gitem'+(g.correct?' correct':'');
+      const sw=document.createElement('span'); sw.className='gswatch';
+      // proximity → hue: 100 (hot/close) = red, 0 (cold/far) = blue.
+      const hue=Math.round((1-g.proximity/100)*240);
+      sw.style.background=`hsl(${hue} 72% 50%)`;
+      sw.setAttribute('aria-label', g.correct ? 'correct' : `warmth ${g.proximity} of 100`);
+      const nm=document.createElement('span'); nm.className='gname'; nm.textContent=g.country.name;
+      const km=document.createElement('span'); km.className='gkm';
+      km.textContent = g.correct ? '0 km' : `${Math.round(g.km).toLocaleString()} km`;
+      const ar=document.createElement('span'); ar.className='garrow'; ar.setAttribute('aria-hidden','true');
+      ar.textContent = g.correct ? '🎯' : g.arrow;
+      item.append(sw, nm, km, ar);
+      list.appendChild(item);
+    }
+    host.appendChild(list);
+    const note=document.createElement('p'); note.className='gnote';
+    if(done){
+      h.status(`Solved in ${guesses.length}! Today’s country was ${answer.name}. 🌍`);
+      note.textContent='Come back tomorrow for a new country.';
+    } else if(guesses.length){
+      const best=guesses.reduce((a,b)=>b.proximity>a.proximity?b:a);
+      h.status(`${guesses.length} guess${guesses.length===1?'':'es'} · warmest: ${best.country.name} (${best.proximity}/100).`);
+      note.textContent='Redder = closer. The arrow points toward today’s country.';
+    } else {
+      h.status('Guess any country to begin.');
+      note.textContent='Each guess shows the distance, an arrow toward the answer, and a warmer/colder colour.';
+    }
+    host.appendChild(note);
+  }
+  const controls=h.controls; controls.innerHTML='';
+  const go=document.createElement('button'); go.className='btn'; go.type='button'; go.textContent='Guess';
+  go.addEventListener('click',()=>{ const inp=host.querySelector('input'); if(inp) submit(inp.value); });
+  controls.appendChild(go);
+  draw();
+}
+
+function mountSudoku(host, h){
+  let solution, givens, cells, sel=-1, diff='easy', won=false;
+
+  const controls=h.controls; controls.innerHTML='';
+  const diffWrap=document.createElement('div'); diffWrap.className='sud-diffs';
+  const diffBtns={};
+  [['easy','Easy'],['medium','Medium'],['hard','Hard']].forEach(([k,label])=>{
+    const b=document.createElement('button'); b.type='button'; b.className='btn ghost sud-diff';
+    b.textContent=label; b.setAttribute('aria-pressed', k===diff?'true':'false');
+    b.addEventListener('click',()=>{ diff=k; for(const kk in diffBtns) diffBtns[kk].setAttribute('aria-pressed', kk===diff?'true':'false'); start(); });
+    diffBtns[k]=b; diffWrap.appendChild(b);
+  });
+  const again=document.createElement('button'); again.type='button'; again.className='btn'; again.textContent='New puzzle';
+  again.addEventListener('click',start);
+  controls.appendChild(diffWrap); controls.appendChild(again);
+
+  function start(){
+    const g=SUDOKU.generate(Math.random, diff);
+    solution=g.solution; givens=g.givens; cells=g.puzzle.slice();
+    sel=-1; won=false; draw();
+  }
+  function select(i){ if(won||givens[i]) return; sel=(sel===i?-1:i); draw(); }
+  function place(v){ if(won||sel<0||givens[sel]) return; cells[sel]=v; if(SUDOKU.isComplete(cells)) won=true; draw(); }
+  function erase(){ if(won||sel<0||givens[sel]||!cells[sel]) return; cells[sel]=0; draw(); }
+
+  function draw(){
+    host.className='sud'; host.innerHTML='';
+    const conf=SUDOKU.conflicts(cells);
+    const filled=cells.filter(v=>v!==0).length;
+    const dname=diff[0].toUpperCase()+diff.slice(1);
+    if(won) h.status('Solved! Every row, column and box complete — nicely done. 🎉');
+    else h.status(dname+' · '+filled+' / 81 filled · tap a cell, then a number.');
+
+    const selVal=sel>=0?cells[sel]:0;
+    const board=document.createElement('div'); board.className='sud-board';
+    for(let i=0;i<81;i++){
+      const cell=document.createElement('button'); cell.type='button'; cell.className='sud-cell';
+      const r=Math.floor(i/9), c=i%9;
+      if(c%3===0) cell.classList.add('bl');
+      if(r%3===0) cell.classList.add('bt');
+      if(c===8) cell.classList.add('br');
+      if(r===8) cell.classList.add('bb');
+      const v=cells[i];
+      if(v) cell.textContent=v;
+      if(givens[i]) cell.classList.add('given');
+      if(selVal && v===selVal && i!==sel) cell.classList.add('peer');
+      if(conf.has(i)) cell.classList.add('conflict');
+      if(i===sel) cell.classList.add('sel');
+      cell.setAttribute('aria-label', (givens[i]?'given ':'cell ')+(i+1)+(v?', value '+v:', empty'));
+      cell.disabled=won;
+      cell.addEventListener('click',()=>select(i));
+      board.appendChild(cell);
+    }
+    host.appendChild(board);
+
+    const pad=document.createElement('div'); pad.className='sud-pad';
+    const locked=won||sel<0||givens[sel];
+    for(let n=1;n<=9;n++){
+      const b=document.createElement('button'); b.type='button'; b.className='sud-num';
+      b.textContent=n; b.disabled=locked; b.addEventListener('click',()=>place(n));
+      pad.appendChild(b);
+    }
+    const er=document.createElement('button'); er.type='button'; er.className='sud-num erase';
+    er.textContent='⌫'; er.setAttribute('aria-label','erase'); er.disabled=locked||!selVal;
+    er.addEventListener('click',erase);
+    pad.appendChild(er);
+    host.appendChild(pad);
+  }
+
+  start();
+}
+
+function mountKlondike(host, h){
+  const K = KLONDIKE;
+  let state = null;        // current game state
+  let sel = null;          // selection: null | {type:'waste'} | {type:'tableau', pile, idx}
+  const history = [];      // for Undo
+
+  const controls = h.controls; controls.innerHTML = '';
+  const mkBtn = (label, cls) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = cls; b.textContent = label;
+    return b;
+  };
+  const foundBtn = mkBtn('↑ Foundation', 'btn');
+  const undoBtn = mkBtn('↶ Undo', 'btn ghost');
+  const newBtn = mkBtn('New game', 'btn ghost');
+  newBtn.addEventListener('click', start);
+  foundBtn.addEventListener('click', () => { sendSelToFoundation(); render(); });
+  undoBtn.addEventListener('click', undo);
+  controls.appendChild(foundBtn); controls.appendChild(undoBtn); controls.appendChild(newBtn);
+
+  function shuffle(deck){
+    const d = deck.slice();
+    for (let i = d.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      const t = d[i]; d[i] = d[j]; d[j] = t;
+    }
+    return d;
+  }
+  function start(){
+    state = K.deal(shuffle(K.makeDeck()));
+    sel = null; history.length = 0;
+    render();
+  }
+  function commit(next){
+    if (next !== state){ history.push(state); state = next; sel = null; return true; }
+    return false;
+  }
+  function undo(){
+    if (history.length){ state = history.pop(); sel = null; render(); }
+  }
+  function clearSel(){ sel = null; }
+  function selectTableau(p, i){ sel = { type:'tableau', pile:p, idx:i }; }
+  function selectWaste(){ sel = { type:'waste' }; }
+
+  function moveSelToPile(toPile){
+    if (!sel) return false;
+    let next = state;
+    if (sel.type === 'waste') next = K.moveWasteToTableau(state, toPile);
+    else { const count = state.tableau[sel.pile].length - sel.idx; next = K.moveTableauToTableau(state, sel.pile, count, toPile); }
+    return commit(next);
+  }
+  function sendSelToFoundation(){
+    if (!sel) return false;
+    let next = state;
+    if (sel.type === 'waste') next = K.moveWasteToFoundation(state);
+    else { const count = state.tableau[sel.pile].length - sel.idx; if (count === 1) next = K.moveToFoundation(state, sel.pile); }
+    return commit(next);
+  }
+
+  // ---- interaction ----
+  function onStock(){
+    const next = K.drawFromStock(state);
+    if (next !== state){ history.push(state); state = next; }
+    sel = null; render();
+  }
+  function onWaste(){
+    if (!state.waste.length) return;
+    if (sel && sel.type === 'waste') clearSel(); else selectWaste();
+    render();
+  }
+  function onFoundation(){
+    if (sel) sendSelToFoundation();
+    render();
+  }
+  function onTableauCard(p, i){
+    const cardObj = state.tableau[p][i];
+    if (sel && (sel.type === 'waste' || sel.pile !== p)){
+      const moved = moveSelToPile(p);
+      if (!moved){ if (cardObj.faceUp) selectTableau(p, i); else clearSel(); }
+    } else {
+      if (sel && sel.type === 'tableau' && sel.pile === p && sel.idx === i) clearSel();
+      else if (cardObj.faceUp) selectTableau(p, i);
+      else clearSel();
+    }
+    render();
+  }
+  function onEmptyPile(p){
+    if (sel) moveSelToPile(p);
+    render();
+  }
+
+  // ---- rendering ----
+  function cardEl(c, isSel){
+    const el = document.createElement('div');
+    el.className = 'kcard ' + (c.faceUp ? (K.isRed(c.suit) ? 'red' : 'black') : 'down');
+    if (isSel) el.classList.add('sel');
+    if (c.faceUp){
+      const label = K.RANKS[c.rank - 1] + K.SUITS[c.suit];
+      el.innerHTML = '<span class="kc-corner">' + label + '</span>' +
+        '<span class="kc-pip">' + K.SUITS[c.suit] + '</span>';
+      el.setAttribute('aria-label', K.RANKS[c.rank - 1] + ' of ' + K.SUITS[c.suit]);
+    } else {
+      el.setAttribute('aria-label', 'face-down card');
+    }
+    return el;
+  }
+
+  function render(){
+    host.className = 'klon'; host.innerHTML = '';
+
+    if (K.isWon(state)) h.status('You won — every card is home. 🎉 New game?');
+    else if (sel) h.status('Now tap a pile to move there, a foundation to send up, or tap the card again to cancel.');
+    else h.status('Build the four foundations A→K. Tap the stock to draw; tap a card then a destination to move.');
+
+    // ---- top row: stock + waste (left), foundations (right) ----
+    const top = document.createElement('div'); top.className = 'ktop';
+
+    const stock = document.createElement('div');
+    stock.className = 'kslot kstock' + (state.stock.length ? ' filled' : '');
+    stock.setAttribute('role', 'button'); stock.tabIndex = 0;
+    if (state.stock.length){
+      stock.textContent = state.stock.length;
+      stock.setAttribute('aria-label', 'stock, ' + state.stock.length + ' cards, tap to draw');
+    } else {
+      stock.textContent = '↻';
+      stock.setAttribute('aria-label', state.waste.length ? 'empty stock, tap to recycle the waste' : 'empty stock');
+    }
+    stock.addEventListener('click', onStock);
+    stock.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); onStock(); } });
+    top.appendChild(stock);
+
+    const waste = document.createElement('div'); waste.className = 'kslot kwaste';
+    if (state.waste.length){
+      const el = cardEl(state.waste[state.waste.length - 1], sel && sel.type === 'waste');
+      el.addEventListener('click', (e) => { e.stopPropagation(); onWaste(); });
+      el.addEventListener('dblclick', (e) => { e.stopPropagation(); selectWaste(); sendSelToFoundation(); render(); });
+      waste.appendChild(el);
+    } else { waste.setAttribute('aria-label', 'waste, empty'); }
+    top.appendChild(waste);
+
+    const founds = document.createElement('div'); founds.className = 'kfoundations';
+    for (let f = 0; f < 4; f++){
+      const slot = document.createElement('div'); slot.className = 'kslot kfound';
+      const pile = state.foundations[f];
+      if (pile.length){ slot.appendChild(cardEl(pile[pile.length - 1], false)); }
+      else { slot.textContent = '♦'; slot.setAttribute('aria-label', 'empty foundation'); }
+      slot.addEventListener('click', onFoundation);
+      founds.appendChild(slot);
+    }
+    top.appendChild(founds);
+    host.appendChild(top);
+
+    // ---- tableau ----
+    const tab = document.createElement('div'); tab.className = 'ktableau';
+    for (let p = 0; p < 7; p++){
+      const col = document.createElement('div'); col.className = 'kpile';
+      const pile = state.tableau[p];
+      if (!pile.length){
+        const empty = document.createElement('div'); empty.className = 'kslot empty';
+        empty.setAttribute('aria-label', 'empty tableau pile ' + (p + 1));
+        empty.addEventListener('click', () => onEmptyPile(p));
+        col.appendChild(empty);
+      } else {
+        for (let i = 0; i < pile.length; i++){
+          const isSel = !!(sel && sel.type === 'tableau' && sel.pile === p && i >= sel.idx);
+          const el = cardEl(pile[i], isSel);
+          const idx = i;
+          el.addEventListener('click', (e) => { e.stopPropagation(); onTableauCard(p, idx); });
+          if (i === pile.length - 1 && pile[i].faceUp){
+            el.addEventListener('dblclick', (e) => { e.stopPropagation(); selectTableau(p, idx); sendSelToFoundation(); render(); });
+          }
+          col.appendChild(el);
+        }
+      }
+      tab.appendChild(col);
+    }
+    host.appendChild(tab);
+  }
+
+  start();
+}
+
+function mountChess(host, h){
+  let state, mode='ai', sel=null, over=false, busy=false, gen=0, last=null, note='';
+  const HUMAN='w', AI='b';
+  const GLYPH={K:'♔',Q:'♕',R:'♖',B:'♗',N:'♘',P:'♙',k:'♚',q:'♛',r:'♜',b:'♝',n:'♞',p:'♟'};
+  const NAMES={p:'pawn',n:'knight',b:'bishop',r:'rook',q:'queen',k:'king'};
+  const cOf=(p)=>p?(p<'a'?'w':'b'):null;
+
+  function newGame(){ gen++; state=CHESS.newGame(); sel=null; over=false; busy=false; last=null; note=''; resolve(); }
+  function myTurn(){ return mode==='2p' || state.turn===HUMAN; }
+
+  // After every board change: if the side to move has no move it is mate/stalemate;
+  // otherwise, vs the computer, schedule Black's reply on a short delay (guarded by
+  // a generation counter so a stale timer from a previous game is ignored).
+  function resolve(){
+    sel=null;
+    const st=CHESS.status(state);
+    over = st==='checkmate' || st==='stalemate';
+    draw();
+    if(over || !(mode==='ai' && state.turn===AI)) return;
+    busy=true; draw();
+    const myGen=gen;
+    setTimeout(()=>{
+      if(myGen!==gen || !host.isConnected){ busy=false; return; }
+      const m=CHESS.bestMove(state,3);
+      busy=false; note='';
+      if(m){ last={from:m.from,to:m.to}; state=CHESS.applyMove(state,m.from,m.to,m.promo); }
+      resolve();
+    }, 350);
+  }
+
+  function pick(i){
+    if(over||busy||!myTurn()) return;
+    if(sel!=null){
+      const mv=CHESS.legalMoves(state,sel).find(m=>m.to===i);
+      if(mv){
+        const pc=state.board[sel], tr=i>>3;
+        const promo=(pc && pc.toLowerCase()==='p' && (tr===0||tr===7)) ? 'q' : undefined;
+        last={from:sel,to:i};
+        state=CHESS.applyMove(state,sel,i,promo);
+        note = promo ? 'Pawn promoted to a queen.' : '';
+        resolve();
+        return;
+      }
+    }
+    const p=state.board[i];
+    if(p && cOf(p)===state.turn){ sel = sel===i ? null : i; note=''; draw(); return; }
+    if(sel!=null){ sel=null; draw(); }
+  }
+
+  function statusText(){
+    const st=CHESS.status(state);
+    if(over){
+      if(st==='checkmate'){
+        const winner = state.turn==='w' ? 'Black' : 'White';
+        if(mode==='ai') return winner==='White' ? 'Checkmate — you win! 🎉' : 'Checkmate — the computer wins.';
+        return 'Checkmate — '+winner+' wins!';
+      }
+      return 'Stalemate — it’s a draw.';
+    }
+    if(mode==='ai' && state.turn===AI) return (note?note+' ':'')+'Computer is thinking…';
+    let who = mode==='ai' ? 'Your move — you’re White.' : (state.turn==='w'?'White':'Black')+' to move.';
+    if(st==='check') who = (mode==='ai' ? 'You’re in check! ' : 'Check! ') + who;
+    return (note?note+' ':'')+who;
+  }
+
+  function label(i,p){
+    const sq='abcdefgh'[i&7]+(8-(i>>3));
+    if(!p) return sq;
+    return (p<'a'?'white ':'black ')+NAMES[p.toLowerCase()]+' on '+sq;
+  }
+
+  function draw(){
+    h.status(statusText());
+    host.className='chess'; host.innerHTML='';
+    const grid=document.createElement('div'); grid.className='board';
+    const active = !over && !busy && myTurn();
+    const dests = sel!=null ? CHESS.legalMoves(state,sel).map(m=>m.to) : [];
+    const movable = active ? new Set(CHESS.allMoves(state).map(m=>m.from)) : new Set();
+    for(let i=0;i<64;i++){
+      const r=i>>3, c=i&7, light=(r+c)%2===0, p=state.board[i];
+      const cell=document.createElement('button'); cell.type='button';
+      cell.className='sq '+(light?'light':'dark');
+      if(last && (i===last.from || i===last.to)) cell.classList.add('last');
+      if(i===sel) cell.classList.add('sel');
+      const isDest=dests.includes(i);
+      if(isDest) cell.classList.add(p?'cap':'dest');
+      if(p){ const sp=document.createElement('span'); sp.className='pc '+(p<'a'?'w':'b'); sp.textContent=GLYPH[p]; cell.appendChild(sp); }
+      cell.setAttribute('aria-label', label(i,p));
+      const selectable = active && movable.has(i);
+      if(selectable || isDest) cell.classList.add('play');
+      cell.disabled = !(active && (selectable || isDest || sel!=null));
+      cell.addEventListener('click',()=>pick(i));
+      grid.appendChild(cell);
+    }
+    host.appendChild(grid);
+  }
+
+  const controls=h.controls; controls.innerHTML='';
+  function mkBtn(text,fn,pressed){ const b=document.createElement('button'); b.className='btn'; b.type='button'; b.textContent=text; if(pressed) b.setAttribute('aria-pressed','true'); b.addEventListener('click',fn); controls.appendChild(b); return b; }
+  const vsAi=mkBtn('vs Computer',()=>{mode='ai';setModes();newGame();},true);
+  const vs2=mkBtn('2 Players',()=>{mode='2p';setModes();newGame();});
+  const again=mkBtn('New game',()=>newGame()); again.classList.add('ghost');
+  function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
+  setModes(); newGame();
 }
 
 /*__MORE_MOUNTS__*/
