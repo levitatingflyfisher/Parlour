@@ -369,3 +369,26 @@ test('hard refuses a bad trade (General for a Scout) that medium would take', ()
   assert.deepEqual(aiMove(b, 1, 'medium'), bad, 'medium grabs the scout');
   assert.notDeepEqual(aiMove(b, 1, 'hard'), bad, 'hard foresees the Marshal recapture');
 });
+
+test('hard ignores hidden enemy ranks (no info leak through the 1-ply lookahead)', () => {
+  // Identical *visible* position; only the hidden rank of the attacked enemy
+  // differs. The AI cannot see that rank, so its choice must be identical.
+  const make = (hiddenRank) => {
+    const b = emptyBoard();
+    b[at(4, 5)] = piece(1, 7);          // our Major — a natural prober
+    b[at(5, 5)] = piece(0, hiddenRank); // UNREVEALED enemy ahead
+    b[at(5, 6)] = piece(0, 10, true);   // revealed enemy Marshal nearby
+    return b;
+  };
+  assert.deepEqual(aiMove(make(3), 1, 'hard'), aiMove(make(9), 1, 'hard'));
+});
+
+test('hard never mutates the caller board or reveals pieces', () => {
+  const b = emptyBoard();
+  b[at(4, 5)] = piece(1, 8);
+  b[at(5, 5)] = piece(0, 5, true);
+  b[at(5, 6)] = piece(0, 2);
+  const snap = JSON.stringify(b);
+  aiMove(b, 1, 'hard');
+  assert.equal(JSON.stringify(b), snap, 'board + revealed flags must be untouched');
+});

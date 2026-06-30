@@ -273,24 +273,29 @@ function opponentThreat(board, owner) {
 function hardScore(board, from, to, owner) {
   const mover = board[from];
   const target = board[to];
+  // Blind attack on an unknown enemy: score by probe appetite ALONE. We must not
+  // run the 1-ply lookahead here — applyMove would resolve the fight with the
+  // hidden rank, leaking info the AI can't legitimately see (and a secretly-lost
+  // attack would even score *higher*, since the dead mover can't be threatened).
+  if (target && !target.revealed) {
+    const r = typeof mover.rank === 'number' ? mover.rank : 0;
+    return (r >= 6 && r <= 9) ? 1.5 : (r === MARSHAL || r === SPY) ? -2 : 0.5;
+  }
   let gain;
   if (target) {
-    if (target.revealed) {
-      if (target.rank === FLAG) return 100000;
-      const v = resolveCombat(mover.rank, target.rank);
-      gain = v === 'attacker' ? rankValue(target.rank)
-        : v === 'defender' ? -rankValue(mover.rank)
-        : rankValue(target.rank) - rankValue(mover.rank);
-    } else {
-      const r = typeof mover.rank === 'number' ? mover.rank : 0;
-      gain = (r >= 6 && r <= 9) ? 1.5 : (r === MARSHAL || r === SPY) ? -2 : 0.5;
-    }
+    if (target.rank === FLAG) return 100000;
+    const v = resolveCombat(mover.rank, target.rank); // target revealed → known outcome
+    gain = v === 'attacker' ? rankValue(target.rank)
+      : v === 'defender' ? -rankValue(mover.rank)
+      : rankValue(target.rank) - rankValue(mover.rank);
   } else {
     const adv = owner === 1
       ? Math.floor(to / SIZE) - Math.floor(from / SIZE)
       : Math.floor(from / SIZE) - Math.floor(to / SIZE);
     gain = adv * 0.5;
   }
+  // Lookahead only over KNOWN outcomes (revealed-target captures / plain moves):
+  // applyMove uses no hidden rank, so opponentThreat stays leak-free.
   return gain - opponentThreat(applyMove(board, from, to), owner);
 }
 
