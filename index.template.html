@@ -294,6 +294,43 @@
   .wordle .wkey.correct{background:#6aaa64;color:#fff}
   .wordle .wkey.present{background:var(--brass);color:#fff}
   .wordle .wkey.absent{background:#7d756a;color:#fff}
+  .c8{--felt:#2f5d50;--paper:#f4efe3;--paper-edge:#e6dcc6;--brass:#c9a24b;--ink:#26201a;--x:#b8502f;--o:#2f6f8f;
+    max-width:480px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+  .c8 .opp{display:flex;flex-direction:column;gap:6px;align-items:center}
+  .c8 .opp-label{font-size:.82rem;font-weight:600;color:var(--o)}
+  .c8 .backs{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;max-width:300px}
+  .c8 .back{width:20px;height:28px;border-radius:4px;
+    background:repeating-linear-gradient(45deg,var(--o),var(--o) 4px,#27607c 4px,#27607c 8px);
+    border:1px solid #00000026;box-shadow:0 1px 1px #00000022}
+  .c8 .mat{display:flex;gap:16px;align-items:center;justify-content:center;
+    background:var(--felt);padding:16px;border-radius:14px}
+  .c8 .info{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+  .c8 .suitchip{background:var(--paper);color:var(--ink);border-radius:999px;padding:5px 12px;
+    font-size:.82rem;font-weight:600;border:2px solid var(--o)}
+  .c8 .suitchip.red{color:var(--x)}
+  .c8 .suitchip b{font-size:1.05rem}
+  .c8 .pile{color:var(--paper);opacity:.85;font-size:.74rem;font-weight:600}
+  .c8 .handwrap{display:flex;flex-direction:column;gap:8px}
+  .c8 .you-label{font-size:.78rem;font-weight:700;color:var(--ink);opacity:.7;letter-spacing:.04em;text-transform:uppercase}
+  .c8 .hand{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .c8 .card{position:relative;width:50px;height:70px;border-radius:8px;
+    background:linear-gradient(160deg,#fff,var(--paper));border:1px solid var(--paper-edge);
+    color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;
+    box-shadow:0 1px 2px #00000026;padding:0;font-weight:700}
+  .c8 .card.red{color:var(--x)}
+  .c8 .card .rank{position:absolute;top:4px;left:5px;font-size:.82rem;line-height:1}
+  .c8 .card .pip{font-size:1.7rem;line-height:1}
+  .c8 .card.lg{width:72px;height:100px}
+  .c8 .card.lg .rank{font-size:1.05rem}
+  .c8 .card.lg .pip{font-size:2.5rem}
+  .c8 button.card{cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .c8 button.card.live{box-shadow:0 0 0 2px var(--brass),0 2px 4px #00000033}
+  .c8 button.card.live:hover{transform:translateY(-3px);transition:transform .08s}
+  .c8 button.card:disabled{cursor:default;opacity:.42;filter:saturate(.5)}
+  .c8 button.card:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+  .c8 .suit-ask{align-self:center;font-weight:600;color:var(--ink)}
+  .btn.suit{min-width:48px;font-size:1.25rem;line-height:1;background:var(--paper);color:var(--ink);border:1px solid var(--paper-edge)}
+  .btn.suit.red{color:var(--x)}
   /*__MORE_CSS__*/
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -370,6 +407,7 @@ const GAMES = [
   { id:'minesweeper', name:'Minesweeper', glyph:'💣', blurb:'Clear every safe square on the 9x9 grid without tripping a hidden mine.', badges:['solo'], tier:0, mount: mountMinesweeper },
   { id:'mastermind', name:'Mastermind', glyph:'🔴', blurb:'Crack the hidden four-peg colour code in ten guesses — black pegs for right colour and place, white for right colour only.', badges:['solo'], tier:0, mount: mountMastermind },
   { id:'wordle', name:'Wordle', glyph:'🟩', blurb:'Six tries to crack today’s five-letter word.', badges:['daily-le'], tier:0, mount: mountWordle },
+  { id:'crazyeights', name:'Crazy Eights', glyph:'🃏', blurb:'Shed your hand by matching rank or suit — eights are wild. You versus the computer.', badges:['1 player'], tier:3, mount: mountCrazyeights },
   /*__MORE_GAMES__*/
 ];
 
@@ -1271,6 +1309,172 @@ function mountWordle(host, h){
   window.addEventListener('keydown', onKey);
 
   drawGrid(); drawKeys(); setStatus();
+}
+
+// ---- Crazy Eights UI (logic from the CRAZYEIGHTS bundle) ----
+function mountCrazyeights(host, h){
+  let you, cpu, draw, discard, activeSuit, turn, over, busy, choosing, winner, gen=0;
+
+  const top = ()=>discard[discard.length-1];
+  const isRed = (s)=>s===1||s===2; // ♥ ♦
+  const canDraw = ()=>draw.length>0 || discard.length>1;
+
+  function newGame(){
+    gen++;
+    const dealt = CRAZYEIGHTS.deal(CRAZYEIGHTS.shuffle(CRAZYEIGHTS.makeDeck()), 7);
+    you=dealt.p0; cpu=dealt.p1; draw=dealt.draw; discard=dealt.discard;
+    activeSuit=dealt.activeSuit; turn=0; over=false; busy=false; choosing=false; winner=null;
+    render();
+  }
+
+  // Refill the draw pile from the discard pile (keeping its top) when it runs dry.
+  function reshuffle(){
+    if(draw.length===0 && discard.length>1){
+      const t=discard.pop();
+      const rest=discard;
+      for(let i=rest.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const x=rest[i]; rest[i]=rest[j]; rest[j]=x; }
+      draw=rest; discard=[t];
+    }
+  }
+  function drawCard(hand){ reshuffle(); if(draw.length){ hand.push(draw.pop()); return true; } return false; }
+
+  // ---- Human turn ----
+  function playYou(i){
+    if(over||busy||choosing||turn!==0) return;
+    const c=you[i];
+    if(!c || !CRAZYEIGHTS.canPlay(c, top(), activeSuit)) return;
+    you.splice(i,1); discard.push(c);
+    if(you.length===0){ over=true; winner=0; render(); return; } // emptied your hand — you win
+    if(c.rank===8){ choosing=true; render(); return; } // pick a suit before passing
+    activeSuit=c.suit; endTurn();
+  }
+  function chooseSuit(s){
+    if(!choosing) return;
+    activeSuit=s; choosing=false; endTurn();
+  }
+  function drawYou(){
+    if(over||busy||choosing||turn!==0) return;
+    if(!drawCard(you)){ passYou(); return; }
+    render(); // you may now have a legal play, or draw/pass again
+  }
+  function passYou(){
+    if(over||busy||choosing||turn!==0) return;
+    turn=1; render(); scheduleCpu();
+  }
+  function endTurn(){ turn=1; render(); scheduleCpu(); }
+
+  // ---- Computer turn ----
+  function scheduleCpu(){
+    if(over || turn!==1) return;
+    busy=true;
+    const myGen=gen;
+    setTimeout(()=>{
+      if(myGen!==gen || !host.isConnected) return; // restarted or closed
+      let card=CRAZYEIGHTS.aiPlay(cpu, top(), activeSuit);
+      let guard=0;
+      while(!card && canDraw() && guard<70){ drawCard(cpu); card=CRAZYEIGHTS.aiPlay(cpu, top(), activeSuit); guard++; }
+      if(card){
+        cpu.splice(cpu.indexOf(card),1); discard.push(card);
+        activeSuit = card.rank===8 ? CRAZYEIGHTS.aiSuit(cpu) : card.suit;
+        if(cpu.length===0){ over=true; winner=1; }
+        else turn=0;
+      } else {
+        turn=0; // could not play even after drawing — pass back to you
+      }
+      busy=false; render();
+    }, 650);
+  }
+
+  // ---- Rendering ----
+  function cardFace(c, variant){
+    const el=document.createElement(variant==='btn' ? 'button' : 'div');
+    el.className='card '+(isRed(c.suit)?'red':'black');
+    if(variant==='lg') el.classList.add('lg');
+    if(variant==='btn') el.type='button';
+    const r=document.createElement('span'); r.className='rank'; r.textContent=CRAZYEIGHTS.rankLabel(c.rank);
+    const p=document.createElement('span'); p.className='pip'; p.textContent=CRAZYEIGHTS.SUITS[c.suit];
+    el.appendChild(r); el.appendChild(p);
+    el.setAttribute('aria-label', CRAZYEIGHTS.rankLabel(c.rank)+' of '+['spades','hearts','diamonds','clubs'][c.suit]);
+    return el;
+  }
+
+  function render(){
+    if(over){ h.status(winner===0 ? 'You emptied your hand — you win!' : 'The computer went out first. Try again!'); }
+    else if(choosing){ h.status('You played an 8 — choose the new suit.'); }
+    else if(turn===1){ h.status('The computer is thinking…'); }
+    else {
+      const legal=CRAZYEIGHTS.legalPlays(you, top(), activeSuit);
+      h.status(legal.length ? 'Your turn — play a card.' : (canDraw()?'No play — draw a card.':'No play and no cards left — pass.'));
+    }
+
+    host.className='c8'; host.innerHTML='';
+
+    // opponent
+    const opp=document.createElement('div'); opp.className='opp';
+    const oppLabel=document.createElement('span'); oppLabel.className='opp-label';
+    oppLabel.textContent='Computer · '+cpu.length+(cpu.length===1?' card':' cards');
+    opp.appendChild(oppLabel);
+    const backs=document.createElement('div'); backs.className='backs';
+    for(let i=0;i<cpu.length;i++){ const b=document.createElement('span'); b.className='back'; b.setAttribute('aria-hidden','true'); backs.appendChild(b); }
+    opp.appendChild(backs);
+    host.appendChild(opp);
+
+    // table: discard top + active suit + draw count
+    const mat=document.createElement('div'); mat.className='mat';
+    mat.appendChild(cardFace(top(), 'lg'));
+    const info=document.createElement('div'); info.className='info';
+    const chip=document.createElement('span'); chip.className='suitchip '+(isRed(activeSuit)?'red':'black');
+    chip.innerHTML='Active suit <b>'+CRAZYEIGHTS.SUITS[activeSuit]+'</b>';
+    const pile=document.createElement('span'); pile.className='pile';
+    pile.textContent='Draw pile · '+draw.length;
+    info.appendChild(chip); info.appendChild(pile);
+    mat.appendChild(info);
+    host.appendChild(mat);
+
+    // your hand
+    const handWrap=document.createElement('div'); handWrap.className='handwrap';
+    const yourLabel=document.createElement('div'); yourLabel.className='you-label'; yourLabel.textContent='Your hand';
+    handWrap.appendChild(yourLabel);
+    const hand=document.createElement('div'); hand.className='hand';
+    const lockHand = over||busy||choosing||turn!==0;
+    you.forEach((c,i)=>{
+      const b=cardFace(c, 'btn');
+      const playable = !lockHand && CRAZYEIGHTS.canPlay(c, top(), activeSuit);
+      b.disabled = lockHand || !playable;
+      if(!b.disabled) b.classList.add('live');
+      b.addEventListener('click',()=>playYou(i));
+      hand.appendChild(b);
+    });
+    handWrap.appendChild(hand);
+    host.appendChild(handWrap);
+
+    // controls
+    const controls=h.controls; controls.innerHTML='';
+    if(choosing){
+      const ask=document.createElement('span'); ask.className='suit-ask'; ask.textContent='New suit:';
+      controls.appendChild(ask);
+      for(let s=0;s<4;s++){
+        const sb=document.createElement('button'); sb.type='button';
+        sb.className='btn suit '+(isRed(s)?'red':'black');
+        sb.textContent=CRAZYEIGHTS.SUITS[s];
+        sb.setAttribute('aria-label','choose '+['spades','hearts','diamonds','clubs'][s]);
+        sb.addEventListener('click',()=>chooseSuit(s));
+        controls.appendChild(sb);
+      }
+    } else if(!over && turn===0 && !busy){
+      const legal=CRAZYEIGHTS.legalPlays(you, top(), activeSuit);
+      if(legal.length===0){
+        const b=document.createElement('button'); b.type='button'; b.className='btn';
+        if(canDraw()){ b.textContent='Draw a card'; b.addEventListener('click',drawYou); }
+        else { b.textContent='Pass'; b.addEventListener('click',passYou); }
+        controls.appendChild(b);
+      }
+    }
+    const ng=document.createElement('button'); ng.type='button'; ng.className='btn ghost'; ng.textContent='New game';
+    ng.addEventListener('click',newGame); controls.appendChild(ng);
+  }
+
+  newGame();
 }
 
 /*__MORE_MOUNTS__*/
