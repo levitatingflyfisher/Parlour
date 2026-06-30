@@ -139,6 +139,83 @@
 
   .shelf-foot{color:#ffffffcc;text-align:center;margin-top:32px;font-size:.8rem;line-height:1.7}
   .shelf-foot a{color:var(--paper)}
+  /* ---- Reversi / Othello ---- */
+  .reversi{max-width:440px;margin:0 auto}
+  .reversi .board{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;
+    background:var(--felt);padding:8px;border-radius:12px}
+  .reversi .cell{appearance:none;cursor:pointer;border:none;padding:0;aspect-ratio:1;
+    border-radius:8px;background:#ffffff12;display:grid;place-items:center}
+  .reversi .cell:disabled{cursor:default}
+  .reversi .cell.hint{background:#c9a24b22}
+  .reversi .cell.hint::after{content:"";width:32%;height:32%;border-radius:50%;
+    background:var(--brass);opacity:.7}
+  .reversi .cell:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+  .reversi .disc{width:80%;height:80%;border-radius:50%}
+  .reversi .disc.B{background:radial-gradient(circle at 36% 30%,#62584e,#15100c);
+    box-shadow:0 1px 2px #00000070, inset 0 1px 1px #ffffff22}
+  .reversi .disc.W{background:radial-gradient(circle at 36% 30%,#ffffff,#dcd3c0);
+    box-shadow:0 1px 2px #00000055, inset 0 1px 1px #ffffff}
+  /* ---- Nim ---- */
+.nim{display:flex;flex-direction:column;gap:14px;max-width:480px;margin:0 auto;
+  background:var(--felt);padding:18px 16px;border-radius:16px}
+.nim-row{display:flex;align-items:center;gap:12px;min-height:46px}
+.nim-rowlabel{flex:0 0 54px;color:var(--paper);opacity:.72;font-size:.72rem;
+  font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.nim-track{display:flex;gap:8px;flex-wrap:wrap;flex:1}
+.nim-token{appearance:none;cursor:pointer;border:none;width:34px;height:34px;border-radius:50%;
+  background:radial-gradient(circle at 38% 30%, #fbe7b0, var(--brass) 58%, #a8842f);
+  box-shadow:0 2px 4px #00000045, 0 0 0 1px #00000022 inset;
+  transition:transform .1s ease, box-shadow .1s ease}
+.nim-token:not(:disabled):hover,
+.nim-token:not(:disabled):hover ~ .nim-token{
+  transform:translateY(-4px);
+  box-shadow:0 6px 12px #00000055, 0 0 0 2px var(--ink) inset}
+.nim-token:disabled{cursor:default}
+.nim-token:focus-visible{outline:3px solid var(--paper);outline-offset:2px}
+.nim-empty{color:var(--paper);opacity:.4;font-size:1.05rem;padding-left:2px;letter-spacing:.04em}
+  /* ---- Hangman ---- */
+  .hangman{display:flex;flex-direction:column;align-items:center;gap:14px}
+  .hangman .hm-figure{display:flex;justify-content:center}
+  .hangman .hm-svg{width:140px;height:auto;stroke:var(--felt);stroke-width:3.2;
+    stroke-linecap:round;stroke-linejoin:round;fill:none}
+  .hangman .hm-svg .b{stroke:var(--x)}
+  .hangman .hm-word{font-family:var(--serif);font-weight:700;color:var(--ink);
+    font-size:clamp(1.5rem,8vw,2.3rem);letter-spacing:.14em;text-align:center;
+    min-height:1.4em;word-break:break-word}
+  .hangman .hm-meter{font-weight:600;color:var(--muted);font-size:.92rem;text-align:center}
+  .hangman .hm-meter b{color:var(--x);letter-spacing:.08em;text-transform:uppercase}
+  .hangman .hm-keys{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;
+    max-width:340px;width:100%}
+  .hangman .hm-key{appearance:none;cursor:pointer;border:1px solid #00000018;border-radius:9px;
+    background:linear-gradient(180deg,var(--paper) 0%,var(--paper-edge) 100%);color:var(--ink);
+    font-family:var(--serif);font-weight:700;font-size:1.05rem;aspect-ratio:1;line-height:1;
+    display:grid;place-items:center;box-shadow:0 1px 0 #ffffff90 inset,0 2px 5px #00000022;
+    transition:transform .1s ease}
+  .hangman .hm-key:hover:not(:disabled){transform:translateY(-1px)}
+  .hangman .hm-key:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+  .hangman .hm-key:disabled{cursor:default;box-shadow:none}
+  .hangman .hm-key.hit{background:var(--o);color:var(--paper);border-color:transparent}
+  .hangman .hm-key.miss{background:var(--x);color:var(--paper);border-color:transparent;opacity:.55}
+  /* ---- Hex (the connection game) — root .hex2 to avoid the Hexcodle .hex clash ---- */
+.hex2{max-width:360px;margin:0 auto;text-align:center;overflow-x:auto}
+.hex2 .board{display:inline-block;padding:6px 6px 8px;min-width:max-content}
+.hex2 .hr{display:flex;gap:2px;margin-bottom:2px}
+.hex2 .cell{width:20px;height:20px;flex:0 0 20px;padding:0;border-radius:5px;
+  border:1px solid #00000026;background:#2f5d5012;cursor:pointer;appearance:none;
+  transition:background .12s ease}
+.hex2 .cell:hover:not(:disabled){background:#2f5d5026}
+.hex2 .cell.R{background:var(--x);border-color:#00000033}
+.hex2 .cell.B{background:var(--o);border-color:#00000033}
+.hex2 .cell:disabled{cursor:default}
+.hex2 .cell:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
+.hex2 .cell.et{border-top:3px solid var(--x)}
+.hex2 .cell.eb{border-bottom:3px solid var(--x)}
+.hex2 .cell.el{border-left:3px solid var(--o)}
+.hex2 .cell.er{border-right:3px solid var(--o)}
+.hex2 .legend{display:flex;gap:16px;justify-content:center;margin:12px 0 2px;font-size:.74rem;color:var(--muted)}
+.hex2 .legend .r{color:var(--x)}
+.hex2 .legend .b{color:var(--o)}
+  /*__MORE_CSS__*/
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -366,6 +443,201 @@ function spawn(grid, rng = Math.random) {
 
 return { slideLine, move, canMove, won, spawn };
 })();
+const HANGMAN = (function(){
+// Hangman — pure word logic (no DOM). A small offline word list is bundled so
+// the game works with no network and no server. The masking, win check, and
+// wrong-letter tally are all pure functions of (word, guessed-Set), so they're
+// fully deterministic and testable; the gallows/keyboard live in the UI.
+
+/// ~60 common, family-friendly words (4–8 letters, lowercase, no proper nouns).
+const WORDS = [
+  // 4 letters
+  'bear', 'frog', 'fish', 'star', 'moon', 'tree', 'ship', 'book', 'cake', 'lamp',
+  // 5 letters
+  'apple', 'bread', 'chair', 'cloud', 'eagle', 'grape', 'house', 'juice', 'lemon',
+  'ocean', 'piano', 'river', 'table', 'water', 'zebra',
+  // 6 letters
+  'basket', 'candle', 'flower', 'garden', 'hammer', 'island', 'jacket', 'kitten',
+  'ladder', 'orange', 'pencil', 'rabbit', 'turtle', 'yellow', 'button', 'carrot',
+  'cookie', 'pillow', 'rocket', 'winter',
+  // 7 letters
+  'dolphin', 'blanket', 'biscuit', 'kitchen', 'balloon', 'rainbow', 'pumpkin',
+  'sandals', 'cabbage', 'popcorn',
+  // 8 letters
+  'elephant', 'mountain', 'umbrella', 'starfish', 'dinosaur',
+];
+
+/// A word from WORDS, chosen with an injectable rng (default Math.random) so a
+/// fixed rng yields a deterministic pick.
+function pickWord(rng = Math.random) {
+  return WORDS[Math.floor(rng() * WORDS.length)];
+}
+
+/// The display string: letters in `guessed` (a Set) are shown, every other
+/// letter becomes '_', and characters are joined by spaces. Non-letters (e.g. a
+/// space or hyphen) are always revealed.
+function revealed(word, guessed) {
+  return word
+    .split('')
+    .map((ch) => (!/[a-z]/i.test(ch) || guessed.has(ch) ? ch : '_'))
+    .join(' ');
+}
+
+/// True only when every (distinct) letter of `word` is in `guessed`.
+function isWon(word, guessed) {
+  return word
+    .split('')
+    .every((ch) => !/[a-z]/i.test(ch) || guessed.has(ch));
+}
+
+/// The guessed letters that do NOT appear in `word`, in the order they were
+/// guessed (Set insertion order).
+function wrongGuesses(word, guessed) {
+  return [...guessed].filter((ch) => !word.includes(ch));
+}
+
+/// How many wrong guesses end the game.
+const MAX_WRONG = 6;
+
+return { WORDS, pickWord, revealed, isWon, wrongGuesses, MAX_WRONG };
+})();
+const HEX = (function(){
+// Hex — the classic connection game on an 11x11 rhombus. Pure logic, no DOM.
+// Board is a flat array of SIZE*SIZE, index = r*SIZE + c, each cell null/'R'/'B'.
+// Red joins the TOP edge (r=0) to the BOTTOM edge (r=SIZE-1); Blue joins the
+// LEFT edge (c=0) to the RIGHT edge (c=SIZE-1). On a hex grid each cell has six
+// neighbours; the two acute corners belong to both players, and — a lovely
+// property of Hex — exactly one side always connects, so a full board never draws.
+const SIZE = 11;
+
+// The six hex-grid neighbour offsets (in row,col). The diagonal pair
+// (-1,+1)/(+1,-1) is what turns a square array into a rhombic hex board.
+const NB = [[-1, 0], [1, 0], [0, -1], [0, 1], [-1, 1], [1, -1]];
+
+const other = (p) => (p === 'R' ? 'B' : 'R');
+
+function neighbours(idx) {
+  const r = (idx / SIZE) | 0;
+  const c = idx % SIZE;
+  const out = [];
+  for (const [dr, dc] of NB) {
+    const rr = r + dr;
+    const cc = c + dc;
+    if (rr >= 0 && rr < SIZE && cc >= 0 && cc < SIZE) out.push(rr * SIZE + cc);
+  }
+  return out;
+}
+function emptyBoard() {
+  return Array(SIZE * SIZE).fill(null);
+}
+function available(board) {
+  const out = [];
+  for (let i = 0; i < board.length; i++) if (board[i] == null) out.push(i);
+  return out;
+}
+
+/// Places `player` at `idx`; returns a NEW board, or null if the cell is taken.
+function place(board, idx, player) {
+  if (board[idx] != null) return null;
+  const next = board.slice();
+  next[idx] = player;
+  return next;
+}
+
+// Flood-fill from one of `player`'s edges through same-colour cells; true if the
+// far edge is reached. (Red: top→bottom by row; Blue: left→right by column.)
+function connects(board, player) {
+  const N = SIZE;
+  const seen = new Uint8Array(N * N);
+  const stack = [];
+  if (player === 'R') {
+    for (let c = 0; c < N; c++) if (board[c] === 'R') { seen[c] = 1; stack.push(c); }
+  } else {
+    for (let r = 0; r < N; r++) { const i = r * N; if (board[i] === 'B') { seen[i] = 1; stack.push(i); } }
+  }
+  while (stack.length) {
+    const idx = stack.pop();
+    const r = (idx / N) | 0;
+    const c = idx % N;
+    if (player === 'R' ? r === N - 1 : c === N - 1) return true;
+    for (const n of neighbours(idx)) {
+      if (!seen[n] && board[n] === player) { seen[n] = 1; stack.push(n); }
+    }
+  }
+  return false;
+}
+
+/// 'R' | 'B' | null. Hex can't draw, but a partial board has no winner yet.
+function winner(board) {
+  if (connects(board, 'R')) return 'R';
+  if (connects(board, 'B')) return 'B';
+  return null;
+}
+
+// Minimum number of empty cells `player` must still claim to join their two
+// edges: own stones cost 0, empties cost 1, the opponent's stones are walls.
+// A 0/1-weighted Dijkstra from the near edge to the far edge (∞ if walled off).
+function pathCost(board, player) {
+  const N = SIZE;
+  const M = N * N;
+  const opp = other(player);
+  const cost = (i) => (board[i] === player ? 0 : board[i] === opp ? Infinity : 1);
+  const dist = new Array(M).fill(Infinity);
+  const done = new Uint8Array(M);
+  const seed = (i) => { const w = cost(i); if (w < dist[i]) dist[i] = w; };
+  if (player === 'R') for (let c = 0; c < N; c++) seed(c);
+  else for (let r = 0; r < N; r++) seed(r * N);
+
+  for (let it = 0; it < M; it++) {
+    let u = -1;
+    let best = Infinity;
+    for (let i = 0; i < M; i++) if (!done[i] && dist[i] < best) { best = dist[i]; u = i; }
+    if (u === -1) break;
+    done[u] = 1;
+    const r = (u / N) | 0;
+    const c = u % N;
+    if (player === 'R' ? r === N - 1 : c === N - 1) return dist[u]; // first popped target is minimal
+    for (const n of neighbours(u)) {
+      const w = cost(n);
+      if (w === Infinity) continue;
+      const nd = dist[u] + w;
+      if (nd < dist[n]) dist[n] = nd;
+    }
+  }
+  return Infinity;
+}
+
+// Positive favours `me`: how much further the opponent must travel than we must.
+function evaluate(board, me) {
+  return pathCost(board, other(me)) - pathCost(board, me);
+}
+
+/// A reasonable, legal move for `player`: take an immediate win, else block the
+/// opponent's immediate win, else the empty cell that most improves our
+/// shortest-connection lead — with a gentle pull toward the strong centre.
+function bestMove(board, player) {
+  const opp = other(player);
+  const empties = available(board);
+  if (!empties.length) return -1;
+
+  for (const i of empties) { const b = place(board, i, player); if (winner(b) === player) return i; }
+  for (const i of empties) { const b = place(board, i, opp); if (winner(b) === opp) return i; }
+
+  const mid = (SIZE - 1) / 2;
+  let bestIdx = empties[0];
+  let bestScore = -Infinity;
+  for (const i of empties) {
+    const b = place(board, i, player);
+    const r = (i / SIZE) | 0;
+    const c = i % SIZE;
+    const score = evaluate(b, player) - (Math.abs(r - mid) + Math.abs(c - mid)) * 0.01;
+    if (score > bestScore) { bestScore = score; bestIdx = i; }
+  }
+  return bestIdx;
+}
+
+return { SIZE, emptyBoard, available, place, winner, bestMove };
+})();
 const HEXCODLE = (function(){
 // Hexcodle — guess the 6-digit hex colour. Each guess gets a *graded* signal:
 // every digit tells you whether to go higher or lower, so you can reason your
@@ -428,6 +700,183 @@ function newDeck(symbols, rng = Math.random) {
 }
 
 return { newDeck };
+})();
+const NIM = (function(){
+// Nim — pure game logic (no DOM). Normal play: the player who takes the LAST
+// object WINS. State is an array of heap sizes, e.g. [3, 5, 7]. The optimal
+// strategy is the classic nim-sum (the XOR of every heap): always move to a
+// position whose nim-sum is zero when you can — that hands a lost game to the
+// opponent under perfect play.
+function initialHeaps() {
+  return [3, 5, 7];
+}
+function isOver(heaps) {
+  return heaps.every((n) => n === 0);
+}
+
+/// The nim-sum: XOR of all heap sizes. Zero means the position is losing for
+/// the player about to move (a winning move only exists when this is non-zero).
+function nimSum(heaps) {
+  return heaps.reduce((acc, n) => acc ^ n, 0);
+}
+
+/// Every heap you could take from, with the most you could remove from it.
+function legalTakes(heaps) {
+  const out = [];
+  for (let i = 0; i < heaps.length; i++) {
+    if (heaps[i] > 0) out.push({ heap: i, max: heaps[i] });
+  }
+  return out;
+}
+
+/// Remove `count` objects from heap `heapIndex`. Returns a NEW heaps array,
+/// or null if the move is illegal (bad index, non-positive count, or asking
+/// for more than the heap holds). The input array is never mutated.
+function take(heaps, heapIndex, count) {
+  if (!Number.isInteger(heapIndex) || heapIndex < 0 || heapIndex >= heaps.length) return null;
+  if (!Number.isInteger(count) || count < 1 || count > heaps[heapIndex]) return null;
+  const next = heaps.slice();
+  next[heapIndex] -= count;
+  return next;
+}
+
+/// The optimal move as { heap, count }. From a non-zero nim-sum position this
+/// returns the winning move — the one that makes the XOR of all heaps zero.
+/// From a zero nim-sum (already losing) or no-win position it returns any
+/// legal move: take one from the first non-empty heap.
+function bestMove(heaps) {
+  const sum = nimSum(heaps);
+  if (sum !== 0) {
+    for (let i = 0; i < heaps.length; i++) {
+      const target = heaps[i] ^ sum;
+      if (target < heaps[i]) return { heap: i, count: heaps[i] - target };
+    }
+  }
+  for (let i = 0; i < heaps.length; i++) {
+    if (heaps[i] > 0) return { heap: i, count: 1 };
+  }
+  return null; // the game is already over
+}
+
+return { initialHeaps, isOver, nimSum, legalTakes, take, bestMove };
+})();
+const REVERSI = (function(){
+// Reversi / Othello — pure game logic (no DOM). Board is a flat 8x8 grid,
+// index = row*8 + col, each cell null | 'B' | 'W'. A move is legal when it
+// brackets one or more opponent discs between the placed disc and another of
+// your own; all bracketed discs flip. A side with no move passes; the game
+// ends only when neither side can move.
+const SIZE = 8;
+const at = (r, c) => r * SIZE + c;
+const other = (p) => (p === 'B' ? 'W' : 'B');
+const DIRS = [
+  [-1, -1], [-1, 0], [-1, 1],
+  [0, -1], [0, 1],
+  [1, -1], [1, 0], [1, 1],
+];
+
+// Positional weights: corners are prized, the squares next to them are traps.
+const WEIGHTS = [
+  120, -20, 20, 5, 5, 20, -20, 120,
+  -20, -40, -5, -5, -5, -5, -40, -20,
+  20, -5, 15, 3, 3, 15, -5, 20,
+  5, -5, 3, 3, 3, 3, -5, 5,
+  5, -5, 3, 3, 3, 3, -5, 5,
+  20, -5, 15, 3, 3, 15, -5, 20,
+  -20, -40, -5, -5, -5, -5, -40, -20,
+  120, -20, 20, 5, 5, 20, -20, 120,
+];
+
+/// Standard 4-disc opening: white on the main diagonal, black on the anti.
+function emptyBoard() {
+  const b = Array(SIZE * SIZE).fill(null);
+  b[at(3, 3)] = 'W';
+  b[at(3, 4)] = 'B';
+  b[at(4, 3)] = 'B';
+  b[at(4, 4)] = 'W';
+  return b;
+}
+
+// Indices that flip if `player` plays at empty cell `move`, across all rays.
+function flips(board, move, player) {
+  if (board[move] != null) return [];
+  const opp = other(player);
+  const r0 = Math.floor(move / SIZE);
+  const c0 = move % SIZE;
+  const out = [];
+  for (const [dr, dc] of DIRS) {
+    const run = [];
+    let r = r0 + dr;
+    let c = c0 + dc;
+    while (r >= 0 && r < SIZE && c >= 0 && c < SIZE && board[at(r, c)] === opp) {
+      run.push(at(r, c));
+      r += dr;
+      c += dc;
+    }
+    if (run.length && r >= 0 && r < SIZE && c >= 0 && c < SIZE && board[at(r, c)] === player) {
+      for (const i of run) out.push(i);
+    }
+  }
+  return out;
+}
+
+/// Indices of every legal move for `player` (those that flip at least one disc).
+function legalMoves(board, player) {
+  const out = [];
+  for (let i = 0; i < board.length; i++) {
+    if (board[i] == null && flips(board, i, player).length) out.push(i);
+  }
+  return out;
+}
+
+/// Returns a new board with `move` placed and all bracketed discs flipped.
+/// Assumes `move` is legal for `player`.
+function applyMove(board, move, player) {
+  const next = board.slice();
+  next[move] = player;
+  for (const i of flips(board, move, player)) next[i] = player;
+  return next;
+}
+
+/// Disc counts as { B, W }.
+function score(board) {
+  let B = 0;
+  let W = 0;
+  for (const v of board) {
+    if (v === 'B') B++;
+    else if (v === 'W') W++;
+  }
+  return { B, W };
+}
+
+/// 'B' | 'W' | 'draw' once neither side can move, else null. A side with no
+/// move passes, so the game is live while either side has a legal move.
+function winner(board) {
+  if (legalMoves(board, 'B').length || legalMoves(board, 'W').length) return null;
+  const { B, W } = score(board);
+  if (B > W) return 'B';
+  if (W > B) return 'W';
+  return 'draw';
+}
+
+/// Greedy + corner-weighted pick: maximise (discs flipped + square weight).
+/// Returns a legal move index, or -1 if `player` has no move (a pass).
+function bestMove(board, player) {
+  const moves = legalMoves(board, player);
+  if (!moves.length) return -1;
+  let best = -1;
+  let bestScore = -Infinity;
+  for (const m of moves) {
+    const s = flips(board, m, player).length + WEIGHTS[m];
+    if (s > bestScore) {
+      bestScore = s;
+      best = m;
+    }
+  }
+  return best;
+}
+
+return { SIZE, emptyBoard, legalMoves, applyMove, score, winner, bestMove };
 })();
 const TICTACTOE = (function(){
 // Tic-Tac-Toe — pure game logic (no DOM). The Parlour "scaffold" game: its
@@ -521,6 +970,20 @@ const GAMES = [
     badges:['daily-le'],
     mount: mountHexcodle,
   },
+  {
+    id:'reversi', name:'Reversi', glyph:'⚫⚪', tier:0,
+    blurb:'Outflank your rival to flip the board your colour — versus the computer or two players.',
+    badges:['1 player','2 players'],
+    mount: mountReversi,
+  },
+  { id:'nim', name:'Nim', glyph:'🪙', tier:2,
+    blurb:'Take tokens from the rows — claim the very last one to win.',
+    badges:['1 player','2 players'],
+    mount: mountNim,
+  },
+  { id:'hangman', name:'Hangman', glyph:'🔤', blurb:'Guess the hidden word letter by letter before the figure is drawn.', badges:['1 player'], tier:0, mount: mountHangman },
+  { id:'hex', name:'Hex', glyph:'⬡', blurb:'Link your two edges across the board before your rival bridges theirs.', badges:['1 player','2 players'], tier:4, mount: mountHex },
+  /*__MORE_GAMES__*/
 ];
 
 // ---- Cupboard + router ----
@@ -838,6 +1301,317 @@ function mountHexcodle(host, h){
   controls.appendChild(go);
   draw();
 }
+
+function mountReversi(host, h){
+  let board, mode='ai', turn='B', over=false, busy=false, note='';
+
+  function newGame(){ board=REVERSI.emptyBoard(); turn='B'; over=false; busy=false; note=''; resolve(); }
+
+  // Whose turn it is is `turn`. After any board change we resolve passes (a side
+  // with no move passes; winner()!==null only when neither side can move, so at
+  // most one pass happens here) and, in vs-Computer, schedule White's reply.
+  function resolve(){
+    over = REVERSI.winner(board)!==null;
+    if(!over && REVERSI.legalMoves(board, turn).length===0){
+      note = (turn==='B'?'Black':'White')+' has no move — passes.';
+      turn = turn==='B'?'W':'B';
+    } else {
+      note = '';
+    }
+    draw();
+    if(over) return;
+    if(mode==='ai' && turn==='W'){
+      busy=true;
+      setTimeout(()=>{
+        if(!host.isConnected || over){ busy=false; return; }
+        const m=REVERSI.bestMove(board,'W');
+        if(m>=0) board=REVERSI.applyMove(board, m, 'W');
+        busy=false; turn='B'; resolve();
+      }, 280);
+    }
+  }
+
+  function play(i){
+    if(over||busy) return;
+    if(mode==='ai' && turn==='W') return;
+    if(!REVERSI.legalMoves(board, turn).includes(i)) return;
+    board=REVERSI.applyMove(board, i, turn);
+    turn = turn==='B'?'W':'B';
+    resolve();
+  }
+
+  function draw(){
+    const sc=REVERSI.score(board);
+    const w=over ? REVERSI.winner(board) : null;
+    let status;
+    if(w==='draw') status=`An even board — ${sc.B}–${sc.W}. A draw.`;
+    else if(w) status=`${w==='B'?'Black':'White'} wins ${Math.max(sc.B,sc.W)}–${Math.min(sc.B,sc.W)}!`;
+    else {
+      const whose = mode==='ai'
+        ? (turn==='B'?'Your turn — you’re black.':'Thinking…')
+        : `${turn==='B'?'Black':'White'}’s turn.`;
+      status=`${note?note+' ':''}${whose}  ●${sc.B} ○${sc.W}`;
+    }
+    h.status(status);
+
+    host.className='reversi'; host.innerHTML='';
+    const grid=document.createElement('div'); grid.className='board';
+    const hints = (!over && !busy && !(mode==='ai'&&turn==='W'))
+      ? REVERSI.legalMoves(board, turn) : [];
+    for(let i=0;i<64;i++){
+      const v=board[i], r=Math.floor(i/8), c=i%8;
+      const cell=document.createElement('button'); cell.type='button'; cell.className='cell';
+      if(hints.includes(i)) cell.classList.add('hint');
+      if(v){ const d=document.createElement('span'); d.className='disc '+v; cell.appendChild(d); }
+      cell.setAttribute('aria-label',
+        v ? `${v==='B'?'black':'white'} disc at row ${r+1}, column ${c+1}`
+          : hints.includes(i) ? `play row ${r+1}, column ${c+1}`
+          : `empty row ${r+1}, column ${c+1}`);
+      cell.disabled = over||busy||!hints.includes(i);
+      cell.addEventListener('click',()=>play(i));
+      grid.appendChild(cell);
+    }
+    host.appendChild(grid);
+  }
+
+  const controls=h.controls; controls.innerHTML='';
+  const vsAi=ctrl('vs Computer',()=>{mode='ai';setModes();newGame();},true);
+  const vs2=ctrl('2 Players',()=>{mode='2p';setModes();newGame();});
+  const again=ctrl('New game',()=>newGame()); again.classList.add('ghost');
+  function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
+  function ctrl(label,fn,p){ const b=document.createElement('button'); b.className='btn'; b.type='button';
+    b.textContent=label; if(p)b.setAttribute('aria-pressed','true'); b.addEventListener('click',fn); controls.appendChild(b); return b; }
+  setModes(); newGame();
+}
+
+// ---- Nim UI (logic from the NIM bundle) ----
+function mountNim(host, h){
+  let heaps, mode='ai', turn=0, over=false, busy=false, gen=0;
+
+  function newGame(){ gen++; heaps=NIM.initialHeaps(); turn=0; over=false; busy=false; draw(); }
+
+  // A human move: take `count` from row `heapIndex`.
+  function play(heapIndex, count){
+    if(over||busy) return;
+    if(mode==='ai' && turn===1) return;
+    const next=NIM.take(heaps, heapIndex, count);
+    if(!next) return;
+    heaps=next; advance();
+  }
+
+  // After any move: end if the heaps are empty (mover took the last token and
+  // wins — we leave `turn` on them), otherwise pass the turn and, vs the
+  // computer, let it answer optimally.
+  function advance(){
+    if(NIM.isOver(heaps)){ over=true; draw(); return; }
+    turn = turn===0 ? 1 : 0; draw();
+    if(mode==='ai' && turn===1){
+      busy=true;
+      const myGen=gen;
+      setTimeout(()=>{
+        if(over || myGen!==gen || !host.isConnected) return; // stale: game ended, restarted, or closed
+        const m=NIM.bestMove(heaps);
+        heaps=NIM.take(heaps, m.heap, m.count);
+        busy=false; advance();
+      }, 300);
+    }
+  }
+
+  function draw(){
+    if(over){
+      const winner = mode==='ai' ? (turn===0?'You':'The computer') : 'Player '+(turn+1);
+      h.status(winner==='You'
+        ? 'You took the last token — you win!'
+        : winner+' took the last token and wins!');
+    } else if(mode==='ai'){
+      h.status(turn===0 ? 'Your turn — take any number from a single row.' : 'The computer is thinking…');
+    } else {
+      h.status('Player '+(turn+1)+'’s turn — take any number from a single row.');
+    }
+    host.className='nim'; host.innerHTML='';
+    const locked = over||busy||(mode==='ai'&&turn===1);
+    heaps.forEach((size, hi)=>{
+      const row=document.createElement('div'); row.className='nim-row';
+      const label=document.createElement('span'); label.className='nim-rowlabel';
+      label.textContent='Row '+(hi+1); label.setAttribute('aria-hidden','true');
+      row.appendChild(label);
+      const track=document.createElement('div'); track.className='nim-track';
+      track.setAttribute('aria-label', 'Row '+(hi+1)+': '+size+' token'+(size===1?'':'s'));
+      for(let i=0;i<size;i++){
+        const count=size-i; // this token plus every token after it in the row
+        const tok=document.createElement('button'); tok.type='button'; tok.className='nim-token';
+        tok.setAttribute('aria-label', 'Take '+count+' token'+(count===1?'':'s')+' from row '+(hi+1));
+        tok.disabled=locked;
+        tok.addEventListener('click',()=>play(hi, count));
+        track.appendChild(tok);
+      }
+      if(size===0){
+        const empty=document.createElement('span'); empty.className='nim-empty';
+        empty.textContent='— empty —'; empty.setAttribute('aria-hidden','true');
+        track.appendChild(empty);
+      }
+      row.appendChild(track);
+      host.appendChild(row);
+    });
+  }
+
+  const controls=h.controls; controls.innerHTML='';
+  const vsAi=ctrl('vs Computer',()=>{mode='ai';setModes();newGame();},true);
+  const vs2=ctrl('2 Players',()=>{mode='2p';setModes();newGame();});
+  const again=ctrl('New game',()=>newGame()); again.classList.add('ghost');
+  function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
+  function ctrl(label,fn,pressed){ const b=document.createElement('button'); b.className='btn'; b.type='button';
+    b.textContent=label; if(pressed)b.setAttribute('aria-pressed','true'); b.addEventListener('click',fn); controls.appendChild(b); return b; }
+  setModes(); newGame();
+}
+
+// ---- Hangman UI (word logic from the HANGMAN bundle) ----
+function mountHangman(host, h){
+  let word, guessed, over, won;
+  const KEYS='abcdefghijklmnopqrstuvwxyz';
+
+  function start(){
+    word=HANGMAN.pickWord();
+    guessed=new Set();
+    over=false; won=false;
+    draw();
+  }
+  function guess(ch){
+    if(over||guessed.has(ch)) return;
+    guessed.add(ch);
+    won=HANGMAN.isWon(word, guessed);
+    if(won || HANGMAN.wrongGuesses(word, guessed).length>=HANGMAN.MAX_WRONG) over=true;
+    draw();
+  }
+  // Gallows + figure: 4 fixed scaffold strokes, then one body part per wrong guess.
+  function gallows(n){
+    const part=(i,svg)=> n>=i ? svg : '';
+    return '<svg viewBox="0 0 120 140" class="hm-svg" role="img" aria-label="'+n+' of '+HANGMAN.MAX_WRONG+' wrong">'+
+      '<line x1="8" y1="134" x2="78" y2="134"/>'+
+      '<line x1="28" y1="134" x2="28" y2="8"/>'+
+      '<line x1="28" y1="8" x2="84" y2="8"/>'+
+      '<line x1="84" y1="8" x2="84" y2="22"/>'+
+      part(1,'<circle class="b" cx="84" cy="34" r="12"/>')+
+      part(2,'<line class="b" x1="84" y1="46" x2="84" y2="90"/>')+
+      part(3,'<line class="b" x1="84" y1="58" x2="66" y2="74"/>')+
+      part(4,'<line class="b" x1="84" y1="58" x2="102" y2="74"/>')+
+      part(5,'<line class="b" x1="84" y1="90" x2="68" y2="116"/>')+
+      part(6,'<line class="b" x1="84" y1="90" x2="100" y2="116"/>')+
+      '</svg>';
+  }
+  function draw(){
+    const wrong=HANGMAN.wrongGuesses(word, guessed);
+    host.className='hangman'; host.innerHTML='';
+
+    const fig=document.createElement('div'); fig.className='hm-figure';
+    fig.innerHTML=gallows(wrong.length); host.appendChild(fig);
+
+    const w=document.createElement('div'); w.className='hm-word';
+    w.textContent=HANGMAN.revealed(word, guessed);
+    w.setAttribute('aria-label', over&&!won ? 'The word was '+word : 'word to guess'); host.appendChild(w);
+
+    const meter=document.createElement('div'); meter.className='hm-meter';
+    meter.innerHTML=wrong.length+' of '+HANGMAN.MAX_WRONG+' wrong'+
+      (wrong.length ? ' · <b>'+wrong.join(' ')+'</b>' : ''); host.appendChild(meter);
+
+    const kb=document.createElement('div'); kb.className='hm-keys';
+    for(const ch of KEYS){
+      const used=guessed.has(ch);
+      const key=document.createElement('button'); key.type='button'; key.className='hm-key';
+      if(used) key.classList.add(word.includes(ch)?'hit':'miss');
+      key.textContent=ch.toUpperCase();
+      key.disabled=used||over;
+      key.setAttribute('aria-label','guess '+ch);
+      key.addEventListener('click',()=>guess(ch));
+      kb.appendChild(key);
+    }
+    host.appendChild(kb);
+
+    h.status(
+      won  ? 'You saved the day! The word was "'+word+'".' :
+      over ? 'Out of guesses — the word was "'+word+'".' :
+             'Guess the word · '+wrong.length+' of '+HANGMAN.MAX_WRONG+' wrong.'
+    );
+  }
+  // Physical-keyboard support; self-removes once the stage is torn down.
+  function onKey(e){
+    if(!host.isConnected){ window.removeEventListener('keydown', onKey); return; }
+    const ch=e.key.toLowerCase();
+    if(ch.length===1 && ch>='a' && ch<='z') guess(ch);
+  }
+  window.addEventListener('keydown', onKey);
+
+  const controls=h.controls; controls.innerHTML='';
+  const again=document.createElement('button'); again.className='btn'; again.type='button';
+  again.textContent='New word'; again.addEventListener('click',start); controls.appendChild(again);
+
+  start();
+}
+
+function mountHex(host, h){
+  const N=HEX.SIZE;
+  let board, mode='ai', turn='R', over=false, busy=false;
+
+  function newGame(){ board=HEX.emptyBoard(); turn='R'; over=false; busy=false; draw(); }
+  function play(i){
+    if(over||busy) return;
+    if(mode==='ai'&&turn==='B') return;
+    const b=HEX.place(board,i,turn);
+    if(!b) return;
+    board=b; advance();
+  }
+  function advance(){
+    if(HEX.winner(board)){ over=true; draw(); return; }
+    turn = turn==='R'?'B':'R'; draw();
+    if(mode==='ai'&&turn==='B'&&!over){
+      busy=true;
+      setTimeout(()=>{
+        if(over||!host.isConnected) return;
+        const m=HEX.bestMove(board,'B');
+        board=HEX.place(board,m,'B'); busy=false; advance();
+      }, 300);
+    }
+  }
+  function draw(){
+    const w=HEX.winner(board);
+    h.status(
+      w==='R' ? 'Red wins — joined top to bottom!' :
+      w==='B' ? 'Blue wins — joined left to right!' :
+      mode==='ai' ? (turn==='R' ? 'Your move — Red joins top ↕ bottom.' : 'Computer is thinking…') :
+      (turn==='R' ? 'Red’s move — join top ↕ bottom.' : 'Blue’s move — join left ↔ right.')
+    );
+    host.className='hex2'; host.innerHTML='';
+    const boardEl=document.createElement('div'); boardEl.className='board';
+    for(let r=0;r<N;r++){
+      const row=document.createElement('div'); row.className='hr';
+      row.style.marginLeft=(r*11)+'px';
+      for(let c=0;c<N;c++){
+        const i=r*N+c, v=board[i];
+        const cell=document.createElement('button'); cell.type='button';
+        cell.className='cell'+(v?' '+v:'')+(r===0?' et':'')+(r===N-1?' eb':'')+(c===0?' el':'')+(c===N-1?' er':'');
+        cell.setAttribute('aria-label', v ? (v==='R'?'red':'blue')+' stone at row '+(r+1)+', column '+(c+1) : 'play row '+(r+1)+', column '+(c+1));
+        cell.disabled = over||busy||!!v||(mode==='ai'&&turn==='B');
+        cell.addEventListener('click',()=>play(i));
+        row.appendChild(cell);
+      }
+      boardEl.appendChild(row);
+    }
+    host.appendChild(boardEl);
+    const legend=document.createElement('div'); legend.className='legend';
+    legend.innerHTML='<span class="r">● Red · top ↕ bottom</span><span class="b">● Blue · left ↔ right</span>';
+    host.appendChild(legend);
+  }
+  const controls=h.controls; controls.innerHTML='';
+  const vsAi=ctrl('vs Computer',()=>{mode='ai';setModes();newGame();},true);
+  const vs2=ctrl('2 Players',()=>{mode='2p';setModes();newGame();});
+  const again=ctrl('New game',()=>newGame()); again.classList.add('ghost');
+  function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
+  function ctrl(label,fn,p){ const b=document.createElement('button'); b.className='btn'; b.type='button';
+    b.textContent=label; if(p)b.setAttribute('aria-pressed','true'); b.addEventListener('click',fn); controls.appendChild(b); return b; }
+  setModes(); newGame();
+}
+
+/*__MORE_MOUNTS__*/
 
 renderCupboard();
 // Deep-link straight into a game if the URL carries a hash.
