@@ -2066,12 +2066,17 @@ function mountQuoridor(host, h){
 }
 
 function mountStratego(host, h){
-  // Pass-and-play Stratego. Two humans share one device; a "hide" interstitial
-  // between setups and between turns keeps each army secret. Logic: STRATEGO.
+  // Stratego. Two modes: vs Computer (you are Player 1; the AI sets up and plays
+  // itself, no hide screens, its pieces stay hidden until combat) and 2-player
+  // pass-and-play (a "hide" interstitial between setups and turns keeps each
+  // army secret). Logic + AI: STRATEGO.
   const N = STRATEGO.SIZE; // 10
   let board, phase, setupPlayer, current, sel, legal, handoff, lastCombat;
+  let mode='ai', busy=false; // 'ai' = vs Computer (default), '2p' = pass-and-play
 
-  const name = (o) => (o === 0 ? 'Player 1' : 'Player 2');
+  const name = (o) => mode==='ai'
+    ? (o===0 ? 'You' : 'The computer')
+    : (o===0 ? 'Player 1' : 'Player 2');
   const cls = (o) => (o === 0 ? 'p0' : 'p1');
 
   function shuffle(a){
@@ -2089,7 +2094,7 @@ function mountStratego(host, h){
   function newGame(){
     board=STRATEGO.emptyBoard();
     placeRandom(0);
-    setupPlayer=0; current=0; sel=null; legal=[]; handoff=null; lastCombat='';
+    setupPlayer=0; current=0; sel=null; legal=[]; handoff=null; lastCombat=''; busy=false;
     phase='setup';
     render();
   }
@@ -2119,6 +2124,12 @@ function mountStratego(host, h){
   }
   function ready(){
     sel=null;
+    if(mode==='ai'){
+      // The computer sets up its own army silently and play begins — no hide
+      // screen, since there's no second human to hand the device to.
+      placeRandom(1); current=0; phase='play'; render();
+      return;
+    }
     if(setupPlayer===0){
       goHide(1, name(0)+"'s army is set.", ()=>{
         placeRandom(1); setupPlayer=1; phase='setup'; render();
@@ -2130,9 +2141,20 @@ function mountStratego(host, h){
     }
   }
 
+  function combatNote(att, def){
+    if(!def) return '';
+    const v=STRATEGO.resolveCombat(att.rank, def.rank);
+    const a=STRATEGO.rankName(att.rank), d=STRATEGO.rankName(def.rank);
+    if(def.rank==='F') return name(att.owner)+"'s "+a+' captured the flag!';
+    if(v==='attacker') return name(att.owner)+"'s "+a+' beat '+name(def.owner)+"'s "+d+'.';
+    if(v==='defender') return name(att.owner)+"'s "+a+' lost to '+name(def.owner)+"'s "+d+'.';
+    return name(att.owner)+"'s "+a+' and '+name(def.owner)+"'s "+d+' traded off.';
+  }
+
   // ---- Play interaction. ----
   function playTap(i){
-    if(phase!=='play') return;
+    if(phase!=='play' || busy) return;
+    if(mode==='ai' && current!==0) return; // not your turn
     const p=board[i];
     if(sel!=null && legal.includes(i)){ doMove(sel, i); return; }
     if(p && p.owner===current){
@@ -2146,20 +2168,34 @@ function mountStratego(host, h){
   function doMove(from, to){
     const att=board[from], def=board[to];
     board=STRATEGO.applyMove(board, from, to);
-    let note='';
-    if(def){
-      const v=STRATEGO.resolveCombat(att.rank, def.rank);
-      const a=STRATEGO.rankName(att.rank), d=STRATEGO.rankName(def.rank);
-      if(def.rank==='F') note=name(att.owner)+"'s "+a+' captured the flag!';
-      else if(v==='attacker') note=name(att.owner)+"'s "+a+' beat '+name(def.owner)+"'s "+d+'.';
-      else if(v==='defender') note=name(att.owner)+"'s "+a+' lost to '+name(def.owner)+"'s "+d+'.';
-      else note=name(att.owner)+"'s "+a+' and '+name(def.owner)+"'s "+d+' traded off.';
-    }
+    const note=combatNote(att, def);
     sel=null; legal=[];
     const w=STRATEGO.winner(board);
     if(w!=null){ lastCombat=note; current=w; phase='over'; render(); return; }
-    const nxt = current===0?1:0;
-    goHide(nxt, note, ()=>{ current=nxt; phase='play'; render(); });
+    if(mode==='ai'){
+      lastCombat=note; current=1; aiTurn();
+    } else {
+      const nxt = current===0?1:0;
+      goHide(nxt, note, ()=>{ current=nxt; phase='play'; render(); });
+    }
+  }
+
+  // The computer's turn (vs-Computer mode): think briefly, then play its move.
+  function aiTurn(){
+    busy=true; render();
+    setTimeout(()=>{
+      if(!host.isConnected) return;
+      const mv=STRATEGO.aiMove(board, 1);
+      if(mv){
+        const att=board[mv.from], def=board[mv.to];
+        board=STRATEGO.applyMove(board, mv.from, mv.to);
+        lastCombat=combatNote(att, def);
+      }
+      busy=false;
+      const w=STRATEGO.winner(board);
+      if(w!=null){ current=w; phase='over'; render(); return; }
+      current=0; render();
+    }, 500);
   }
 
   // ---- Rendering ----
@@ -2203,6 +2239,10 @@ function mountStratego(host, h){
   function legendAndControls(){
     h.controls.innerHTML='';
     if(phase==='setup'){
+      const ai=ctrl('vs Computer', ()=>{ if(mode!=='ai'){ mode='ai'; newGame(); } });
+      const pp=ctrl('2 Players', ()=>{ if(mode!=='2p'){ mode='2p'; newGame(); } });
+      ai.setAttribute('aria-pressed', mode==='ai'?'true':'false');
+      pp.setAttribute('aria-pressed', mode==='2p'?'true':'false');
       ctrl('Shuffle my setup', ()=>{ placeRandom(setupPlayer); sel=null; render(); });
       ctrl('Ready ✓', ready);
     }
@@ -2234,10 +2274,17 @@ function mountStratego(host, h){
       card.appendChild(go);
       host.appendChild(card);
     } else if(phase==='play'){
-      h.status(sel!=null
-        ? name(current)+' — tap a highlighted square to move or attack, or your piece to reselect.'
-        : name(current)+"'s turn — tap one of your pieces.");
-      host.appendChild(buildBoard(current, playTap, false));
+      const viewer = mode==='ai' ? 0 : current;
+      const yourTurn = mode!=='ai' || (current===0 && !busy);
+      h.status(
+        (busy || (mode==='ai' && current===1))
+          ? 'The computer is thinking…'
+          : sel!=null
+            ? name(current)+' — tap a highlighted square to move or attack, or your piece to reselect.'
+            : (mode==='ai'
+                ? 'Your turn — tap one of your pieces.'
+                : name(current)+"'s turn — tap one of your pieces."));
+      host.appendChild(buildBoard(viewer, yourTurn ? playTap : null, false));
     } else if(phase==='over'){
       h.status(name(current)+' wins!');
       const card=document.createElement('div'); card.className='over';

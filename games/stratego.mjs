@@ -185,3 +185,76 @@ export function winner(board) {
   if (!hasAnyMove(board, 1)) return 0;
   return null;
 }
+
+const FLAG_VAL = 12;
+const BOMB_VAL = 11;
+const rankValue = (rank) =>
+  typeof rank === 'number' ? rank : (rank === FLAG ? FLAG_VAL : BOMB_VAL);
+
+// Would a revealed enemy adjacent to `idx` beat `piece` if it attacked next turn?
+function adjacentToBeatingEnemy(board, idx, piece, owner) {
+  if (typeof piece.rank !== 'number') return false;
+  const r = Math.floor(idx / SIZE);
+  const c = idx % SIZE;
+  for (const [dr, dc] of DIRS) {
+    const rr = r + dr;
+    const cc = c + dc;
+    if (!inBounds(rr, cc)) continue;
+    const e = board[at(rr, cc)];
+    if (e && e.owner !== owner && e.revealed && typeof e.rank === 'number'
+        && resolveCombat(e.rank, piece.rank) === 'attacker') {
+      return true;
+    }
+  }
+  return false;
+}
+
+function scoreMove(board, piece, from, to, owner) {
+  const target = board[to];
+  if (target) {
+    if (target.revealed) {
+      if (target.rank === FLAG) return 10000; // game-winning capture
+      const v = resolveCombat(piece.rank, target.rank);
+      if (v === 'attacker') return 100 + rankValue(target.rank); // prefer bigger scalps
+      if (v === 'both') return 6 - rankValue(piece.rank); // trade only when I'm cheap
+      return -100; // 'defender' — a known losing attack; avoid
+    }
+    // Unknown enemy: a gamble. Probe with mid-strength pieces; keep the
+    // irreplaceable Marshal and Spy out of blind fights.
+    const r = typeof piece.rank === 'number' ? piece.rank : 0;
+    if (r >= 6 && r <= 9) return 9;
+    if (r === MARSHAL || r === SPY) return -4;
+    return 3;
+  }
+  // Plain move: advance toward the opponent's home, dodging revealed predators.
+  const adv = owner === 1
+      ? Math.floor(to / SIZE) - Math.floor(from / SIZE)
+      : Math.floor(from / SIZE) - Math.floor(to / SIZE);
+  let s = adv * 2;
+  if (adjacentToBeatingEnemy(board, to, piece, owner)) s -= 30;
+  return s;
+}
+
+/// A heuristic move for the computer side. It uses only what it can legitimately
+/// know — its own pieces and any *revealed* enemy — never the hidden enemy
+/// ranks. It seizes a winning capture or the flag, refuses suicidal attacks,
+/// probes the unknown with mid-rank pieces, and otherwise advances while staying
+/// clear of revealed predators. Returns { from, to } or null if it cannot move.
+export function aiMove(board, owner) {
+  let best = null;
+  let bestScore = -Infinity;
+  for (let i = 0; i < board.length; i++) {
+    const p = board[i];
+    if (!p || p.owner !== owner) continue;
+    for (const to of legalMoves(board, i)) {
+      // A tiny deterministic spread varies equal-scoring choices by position so
+      // play isn't a rigid script, without breaking test determinism.
+      const score = scoreMove(board, p, i, to, owner) + ((i * 31 + to) % 7) * 0.01;
+      if (score > bestScore) {
+        bestScore = score;
+        best = { from: i, to };
+      }
+    }
+  }
+  return best;
+}

@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   SIZE, pieceCounts, isLake, legalMoves, resolveCombat, applyMove, winner,
-  emptyBoard, setupIndices, pieceBag, hasAnyMove,
+  emptyBoard, setupIndices, pieceBag, hasAnyMove, aiMove,
 } from '../games/stratego.mjs';
 
 const at = (r, c) => r * SIZE + c;
@@ -253,4 +253,43 @@ test('winner: a side with no legal move loses', () => {
   b[at(8, 5)] = piece(0, 6);
   assert.equal(hasAnyMove(b, 1), false);
   assert.equal(winner(b), 0);
+});
+
+// --- aiMove (single-player computer opponent) ---
+test('aiMove returns null when the side has no movable piece', () => {
+  const b = emptyBoard();
+  b[at(0, 0)] = piece(1, 'F');
+  b[at(0, 1)] = piece(1, 'B');
+  assert.equal(aiMove(b, 1), null);
+});
+
+test('aiMove returns a legal move for the side', () => {
+  const b = emptyBoard();
+  b[at(3, 5)] = piece(1, 6); // a Captain in open space
+  const mv = aiMove(b, 1);
+  assert.ok(mv, 'expected a move');
+  assert.ok(legalMoves(b, mv.from).includes(mv.to), 'move must be legal');
+});
+
+test('aiMove takes a winning capture of a revealed weaker enemy', () => {
+  const b = emptyBoard();
+  b[at(3, 5)] = piece(1, 8); // Colonel
+  b[at(4, 5)] = piece(0, 5, true); // revealed Lieutenant, directly below
+  assert.deepEqual(aiMove(b, 1), { from: at(3, 5), to: at(4, 5) });
+});
+
+test('aiMove captures the flag when it can reach it', () => {
+  const b = emptyBoard();
+  b[at(3, 5)] = piece(1, 2); // even a lowly Scout
+  b[at(4, 5)] = piece(0, 'F', true); // revealed flag below
+  assert.deepEqual(aiMove(b, 1), { from: at(3, 5), to: at(4, 5) });
+});
+
+test('aiMove will not charge a revealed stronger enemy when a safe move exists', () => {
+  const b = emptyBoard();
+  b[at(3, 5)] = piece(1, 3); // Miner
+  b[at(4, 5)] = piece(0, 10, true); // revealed Marshal below — suicide to attack
+  const mv = aiMove(b, 1);
+  assert.ok(mv);
+  assert.notDeepEqual(mv, { from: at(3, 5), to: at(4, 5) });
 });
