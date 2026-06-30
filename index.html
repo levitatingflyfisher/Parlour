@@ -347,6 +347,120 @@
 .dab .box{display:grid;place-items:center;font-family:var(--serif);font-weight:700;color:var(--paper);font-size:.85rem;border-radius:5px;margin:2px;background:#2f5d5010;transition:background .15s ease}
 .dab .box.p0{background:var(--x)}
 .dab .box.p1{background:var(--o)}
+
+  /* ---- Blokus ---- */
+  .bk{display:flex;flex-direction:column;gap:14px;align-items:center;
+    --felt:#2f5d50;--paper:#f4efe3;--brass:#c9a24b;--ink:#26201a;--x:#b8502f;--o:#2f6f8f}
+  .bk .bk-board{display:grid;grid-template-columns:repeat(14,1fr);gap:2px;
+    width:min(94vw,470px);aspect-ratio:1;background:var(--felt);padding:6px;border-radius:10px;
+    box-shadow:inset 0 0 0 2px #ffffff14,0 8px 24px #00000035}
+  .bk .bk-board button{appearance:none;border:none;margin:0;padding:0;border-radius:2px;
+    background:#ffffff14;aspect-ratio:1;cursor:pointer;transition:background .1s ease}
+  .bk .bk-board button:disabled{cursor:default}
+  .bk .bk-board button.x{background:var(--x)}
+  .bk .bk-board button.o{background:var(--o)}
+  .bk .bk-board button.start{box-shadow:inset 0 0 0 2px var(--brass)}
+  .bk .bk-board button.pv-ok{background:#7cba63}
+  .bk .bk-board button.pv-bad{background:#c0473a}
+  .bk .bk-board button:focus-visible{outline:2px solid var(--brass);outline-offset:1px;z-index:1}
+  .bk .bk-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;min-height:34px}
+  .bk .bk-hint{color:var(--ink);opacity:.65;font-size:.92rem}
+  .bk .bk-swatch{display:grid;gap:1px;background:#0000000d;padding:4px;border-radius:5px}
+  .bk .bk-swatch i{width:11px;height:11px;display:block;border-radius:1px}
+  .bk .bk-swatch i.on{background:var(--x)} .bk .bk-swatch.p1 i.on{background:var(--o)}
+  .bk .bk-swatch i.off{background:transparent}
+  .bk .bk-tray{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;max-width:470px}
+  .bk .bk-piece{appearance:none;cursor:pointer;border:1px solid #00000022;background:var(--paper);
+    border-radius:6px;padding:5px;display:grid;place-items:center;min-width:24px;min-height:24px}
+  .bk .bk-piece[aria-pressed=true]{outline:2px solid var(--brass);outline-offset:1px;background:#fff}
+  .bk .bk-piece:disabled{opacity:.45;cursor:default}
+  .bk .bk-piece:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
+  .bk .bk-mini{display:grid;gap:1px}
+  .bk .bk-mini i{width:8px;height:8px;display:block;border-radius:1px}
+  .bk .bk-mini i.on{background:var(--x)} .bk .bk-piece.p1 .bk-mini i.on{background:var(--o)}
+  .bk .bk-mini i.off{background:transparent}
+
+  /* ---- Checkers ---- */
+  .ck{max-width:440px;margin:0 auto;--x:#b8502f;--o:#2f6f8f}
+  .ck .board{display:grid;grid-template-columns:repeat(8,1fr);gap:0;overflow:hidden;
+    background:var(--brass);padding:6px;border-radius:12px;box-shadow:0 3px 12px #00000040}
+  .ck .sq{appearance:none;border:none;margin:0;padding:0;aspect-ratio:1;position:relative;
+    display:grid;place-items:center;cursor:default}
+  .ck .sq.light{background:#3c6f60}
+  .ck .sq.dark{background:#234a3f}
+  .ck .sq.play{cursor:pointer}
+  .ck .sq.sel{box-shadow:inset 0 0 0 3px var(--brass)}
+  .ck .sq.cap::before{content:"";position:absolute;inset:8%;border-radius:9px;
+    box-shadow:inset 0 0 0 3px var(--brass);opacity:.55}
+  .ck .sq.dest::after{content:"";width:30%;height:30%;border-radius:50%;
+    background:var(--brass);opacity:.78}
+  .ck .sq:focus-visible{outline:3px solid var(--brass);outline-offset:-3px;z-index:2}
+  .ck .pc{width:76%;height:76%;border-radius:50%;display:grid;place-items:center;z-index:1;
+    box-shadow:0 2px 3px #00000070, inset 0 2px 2px #ffffff3a, inset 0 -3px 5px #00000060}
+  .ck .pc.x{background:radial-gradient(circle at 36% 30%,#dd8e64,var(--x))}
+  .ck .pc.o{background:radial-gradient(circle at 36% 30%,#6aa6c6,var(--o))}
+  .ck .pc.king::after{content:"♚";font-size:1rem;line-height:1;color:#f4efe3;
+    text-shadow:0 1px 1px #00000088}
+  /* ---- Quoridor ---- */
+.qd{max-width:500px;margin:0 auto;
+  --cell:clamp(20px,7vw,40px);--gap:12px;
+  --felt:#2f5d50;--paper:#f4efe3;--brass:#c9a24b;--ink:#26201a;--x:#b8502f;--o:#2f6f8f}
+.qd .board{display:grid;
+  grid-template-columns:repeat(8,var(--cell) var(--gap)) var(--cell);
+  grid-template-rows:repeat(8,var(--cell) var(--gap)) var(--cell);
+  background:var(--felt);padding:12px;border-radius:14px;justify-content:center;margin:0 auto}
+.qd .cell{appearance:none;border:none;margin:0;padding:0;width:100%;height:100%;
+  background:var(--paper);border-radius:5px;display:grid;place-items:center;color:var(--ink)}
+div.qd .cell{cursor:default}
+.qd button.cell.hint{cursor:pointer;box-shadow:inset 0 0 0 2px var(--brass)}
+.qd .cell.hint::after{content:"";width:34%;height:34%;border-radius:50%;background:#c9a24b99}
+.qd .cell:focus-visible{outline:3px solid var(--brass);outline-offset:2px;z-index:4}
+.qd .pawn{width:74%;height:74%;border-radius:50%;
+  box-shadow:inset 0 -2px 3px #00000033,0 1px 2px #00000055}
+.qd .pawn.p0{background:radial-gradient(circle at 36% 30%,#e0937a,var(--x))}
+.qd .pawn.p1{background:radial-gradient(circle at 36% 30%,#7fb6cf,var(--o))}
+.qd .wall{background:var(--brass);border-radius:3px;width:100%;height:100%;z-index:2;
+  box-shadow:0 1px 2px #00000066}
+.qd .slot{appearance:none;border:none;padding:0;margin:0;width:100%;height:100%;
+  background:transparent;border-radius:3px;cursor:pointer;z-index:3}
+.qd .slot.sh{min-height:10px}
+.qd .slot.sv{min-width:10px}
+.qd .slot:hover,.qd .slot:focus-visible{background:#c9a24b88;outline:none}
+  .st{--x:#b8502f;--o:#2f6f8f;--felt:#2f5d50;--paper:#f4efe3;--brass:#c9a24b;--ink:#26201a;display:block}
+.st .board{display:grid;grid-template-columns:repeat(10,1fr);gap:2px;background:var(--felt);padding:6px;border-radius:12px;max-width:520px;margin:0 auto;touch-action:manipulation}
+.st .sq{aspect-ratio:1/1;display:grid;place-items:center;border:1px solid #00000018;border-radius:4px;background:#ece3cd;color:var(--ink);font:700 clamp(.6rem,2.4vw,.95rem)/1 var(--sans,system-ui);padding:0;cursor:default;position:relative;-webkit-tap-highlight-color:transparent}
+.st .sq.empty{background:#e7ddc4}
+.st .sq.water{background:linear-gradient(160deg,#6aa0c4,#3f7aa0 70%);border-color:#2c5a76;cursor:not-allowed;box-shadow:inset 0 1px 4px #0000003a}
+.st .sq.water::after{content:"~";color:#ffffff7a;font-weight:700}
+.st .sq.piece{cursor:pointer}
+.st .sq.p0{background:linear-gradient(180deg,#c45c39,var(--x));color:#fff;border-color:#7e3017;text-shadow:0 1px 1px #00000055}
+.st .sq.p1{background:linear-gradient(180deg,#3a7d9c,var(--o));color:#fff;border-color:#1f4d61;text-shadow:0 1px 1px #00000055}
+.st .sq.back{color:transparent;cursor:default}
+.st .sq.back.p0{background:repeating-linear-gradient(45deg,#9a4326,#9a4326 6px,#86391f 6px,#86391f 12px)}
+.st .sq.back.p1{background:repeating-linear-gradient(45deg,#27596f,#27596f 6px,#1f4a5d 6px,#1f4a5d 12px)}
+.st .sq.back::after{content:"";position:absolute;width:34%;height:34%;border-radius:50%;border:2px solid #ffffff40}
+.st .sq.seen{box-shadow:inset 0 0 0 2px var(--brass)}
+.st .sq.sel{outline:3px solid var(--brass);outline-offset:-3px;z-index:2}
+.st .sq.move{box-shadow:inset 0 0 0 3px var(--brass)}
+.st .sq.move.attack{box-shadow:inset 0 0 0 3px #d23b2c}
+.st .sq.move::before{content:"";position:absolute;width:30%;height:30%;border-radius:50%;background:#c9a24bcc}
+.st .sq.move.attack::before{background:#d23b2ccc;width:46%;height:46%;border-radius:50%;-webkit-mask:radial-gradient(circle,transparent 38%,#000 40%);mask:radial-gradient(circle,transparent 38%,#000 40%)}
+.st .sq:disabled{cursor:default}
+.st .sq:focus-visible,.st .sq:focus-visible{outline:3px solid var(--brass);outline-offset:-3px}
+.st .hide{max-width:420px;margin:0 auto;background:linear-gradient(180deg,#33635492,#23493f);color:var(--paper);border:1px solid #ffffff1f;border-radius:16px;padding:28px 22px;text-align:center}
+.st .hide h3{margin:0 0 6px;font-size:1.35rem;color:var(--paper)}
+.st .hide .who{color:var(--brass);font-weight:700}
+.st .hide p{margin:6px 0 18px;color:#f4efe3cc;font-size:.95rem;line-height:1.4}
+.st .hide .note{background:#0000002e;border-radius:10px;padding:8px 12px;margin:0 0 18px;font-size:.9rem}
+.st .bigbtn{appearance:none;cursor:pointer;font:inherit;font-weight:700;border:none;border-radius:999px;padding:14px 26px;background:var(--brass);color:var(--ink)}
+.st .bigbtn:focus-visible{outline:3px solid var(--paper);outline-offset:2px}
+.st .over{max-width:460px;margin:0 auto 12px;text-align:center;background:linear-gradient(180deg,var(--paper),#e6dcc6);border-radius:14px;padding:14px}
+.st .over h3{margin:0;color:var(--ink);font-size:1.25rem}
+.st .over .crown{font-size:2rem;display:block;margin-bottom:2px}
+.st .key{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:10px auto 0;color:var(--paper);font-size:.82rem;opacity:.92}
+.st .key b{display:inline-block;width:.8em;height:.8em;border-radius:3px;vertical-align:-1px;margin-right:4px}
+.st .key .kx{background:var(--x)}
+.st .key .ko{background:var(--o)}
   /*__MORE_CSS__*/
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -573,6 +687,208 @@ function aiMove(board, player, remainingPieceIds) {
 }
 
 return { SIZE, START, PIECES, ALL_PIECE_IDS, orientations, emptyBoard, score, canPlace, place, legalPlacementsExist, hasAnyMove, aiMove };
+})();
+const CHECKERS = (function(){
+// Checkers — American/English draughts, pure game logic (no DOM). Board is a
+// flat 8x8 grid, index = row*8 + col, each cell null | 'r' | 'b' | 'R' | 'B'.
+// Men are lower-case, kings upper-case. Red ('r') sits on rows 5–7 and moves UP
+// (decreasing row); Black ('b') sits on rows 0–2 and moves DOWN. Men step/jump
+// forward only; kings on any diagonal. Captures are forced and chain into a
+// single multi-jump move. Reaching the far row crowns a man and ends the move.
+const SIZE = 8;
+const at = (r, c) => r * SIZE + c;
+const inBounds = (r, c) => r >= 0 && r < SIZE && c >= 0 && c < SIZE;
+
+const owner = (v) => (v == null ? null : v.toLowerCase()); // 'r' | 'b' | null
+const isKing = (v) => v === 'R' || v === 'B';
+const other = (p) => (p === 'r' ? 'b' : 'r');
+
+// Forward (men) directions per colour; kings get all four diagonals.
+const RED_DIRS = [[-1, -1], [-1, 1]];
+const BLACK_DIRS = [[1, -1], [1, 1]];
+const KING_DIRS = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
+function dirsFor(v) {
+  if (isKing(v)) return KING_DIRS;
+  return owner(v) === 'r' ? RED_DIRS : BLACK_DIRS;
+}
+// A man of `v` crowns when it lands on the opponent's home row.
+function crowns(v, landR) {
+  if (isKing(v)) return false;
+  return owner(v) === 'r' ? landR === 0 : landR === SIZE - 1;
+}
+
+/// Standard 12-v-12 opening: black on the dark squares of rows 0–2, red on the
+/// dark squares of rows 5–7. Dark squares are those where (row + col) is odd.
+function emptyBoard() {
+  const b = Array(SIZE * SIZE).fill(null);
+  for (let r = 0; r < SIZE; r++) {
+    for (let c = 0; c < SIZE; c++) {
+      if ((r + c) % 2 !== 1) continue;
+      if (r <= 2) b[at(r, c)] = 'b';
+      else if (r >= 5) b[at(r, c)] = 'r';
+    }
+  }
+  return b;
+}
+
+// All maximal jump sequences for the piece `v` currently at `pos`, on a working
+// board where the piece has been lifted from its origin. Captured pieces stay on
+// `work` (so they block landings) and are tracked in `captured` to forbid
+// re-jumping them. A man that crowns mid-chain stops there (promotion ends the
+// move). Returns a list of { to, captures }.
+function jumpsFrom(work, pos, v, captured) {
+  const out = [];
+  const r = Math.floor(pos / SIZE);
+  const c = pos % SIZE;
+  for (const [dr, dc] of dirsFor(v)) {
+    const mr = r + dr;
+    const mc = c + dc;
+    const lr = r + 2 * dr;
+    const lc = c + 2 * dc;
+    if (!inBounds(lr, lc)) continue;
+    const mid = at(mr, mc);
+    const land = at(lr, lc);
+    if (captured.includes(mid)) continue;
+    const midV = work[mid];
+    if (midV == null || owner(midV) === owner(v)) continue;
+    if (work[land] != null) continue; // landing square must be empty
+    const nextCaptured = captured.concat([mid]);
+    if (crowns(v, lr)) {
+      out.push({ to: land, captures: nextCaptured });
+      continue;
+    }
+    const cont = jumpsFrom(work, land, v, nextCaptured);
+    if (cont.length === 0) out.push({ to: land, captures: nextCaptured });
+    else for (const seq of cont) out.push(seq);
+  }
+  return out;
+}
+
+/// Every legal move for `player` ('r' | 'b') as { from, to, captures:[indices] }.
+/// Captures are forced: if any jump exists for the player, only jump moves (the
+/// full multi-jump chains) are returned and simple steps are excluded.
+function legalMoves(board, player) {
+  const captures = [];
+  const steps = [];
+  for (let from = 0; from < board.length; from++) {
+    const v = board[from];
+    if (owner(v) !== player) continue;
+    const work = board.slice();
+    work[from] = null;
+    for (const seq of jumpsFrom(work, from, v, [])) {
+      captures.push({ from, to: seq.to, captures: seq.captures });
+    }
+    const r = Math.floor(from / SIZE);
+    const c = from % SIZE;
+    for (const [dr, dc] of dirsFor(v)) {
+      const tr = r + dr;
+      const tc = c + dc;
+      if (!inBounds(tr, tc)) continue;
+      const to = at(tr, tc);
+      if (board[to] == null) steps.push({ from, to, captures: [] });
+    }
+  }
+  return captures.length ? captures : steps;
+}
+
+/// Returns a NEW board with `move` applied: the piece leaves `from`, every
+/// captured index is cleared, the piece lands on `to`, and a man that reaches
+/// the far row is crowned. The input board is not mutated.
+function applyMove(board, move) {
+  const next = board.slice();
+  let v = next[move.from];
+  next[move.from] = null;
+  for (const cap of move.captures) next[cap] = null;
+  const landR = Math.floor(move.to / SIZE);
+  if (crowns(v, landR)) v = v === 'r' ? 'R' : 'B';
+  next[move.to] = v;
+  return next;
+}
+
+function count(board, player) {
+  let n = 0;
+  for (const v of board) if (owner(v) === player) n++;
+  return n;
+}
+
+/// 'r' | 'b' | null. A player with no pieces or no legal moves has lost, so the
+/// other player is the winner. null while both still have a move.
+function winner(board) {
+  const rDead = count(board, 'r') === 0 || legalMoves(board, 'r').length === 0;
+  const bDead = count(board, 'b') === 0 || legalMoves(board, 'b').length === 0;
+  if (rDead) return 'b';
+  if (bDead) return 'r';
+  return null;
+}
+
+// Static evaluation from `me`'s perspective: material with a small advancement
+// bonus for men nearing promotion and a centrality bonus for kings.
+function pieceValue(v, idx) {
+  const r = Math.floor(idx / SIZE);
+  const c = idx % SIZE;
+  if (v === 'r') return 100 + (SIZE - 1 - r) * 4; // red advances toward row 0
+  if (v === 'b') return 100 + r * 4; // black advances toward row 7
+  // king: prized, with a mild pull toward the centre.
+  const central = 8 - (Math.abs(r - 3.5) + Math.abs(c - 3.5));
+  return 185 + central;
+}
+function evaluate(board, me) {
+  let s = 0;
+  for (let i = 0; i < board.length; i++) {
+    const v = board[i];
+    if (!v) continue;
+    s += owner(v) === me ? pieceValue(v, i) : -pieceValue(v, i);
+  }
+  return s;
+}
+
+// Negamax-style alpha-beta. A side with no move at its turn has lost (this also
+// covers having no pieces), scored with depth so faster wins are preferred.
+function search(board, toMove, me, depth, alpha, beta) {
+  const moves = legalMoves(board, toMove);
+  if (moves.length === 0) return toMove === me ? -100000 - depth : 100000 + depth;
+  if (depth === 0) return evaluate(board, me);
+  moves.sort((x, y) => y.captures.length - x.captures.length);
+  const next = other(toMove);
+  if (toMove === me) {
+    let best = -Infinity;
+    for (const m of moves) {
+      best = Math.max(best, search(applyMove(board, m), next, me, depth - 1, alpha, beta));
+      alpha = Math.max(alpha, best);
+      if (alpha >= beta) break;
+    }
+    return best;
+  }
+  let best = Infinity;
+  for (const m of moves) {
+    best = Math.min(best, search(applyMove(board, m), next, me, depth - 1, alpha, beta));
+    beta = Math.min(beta, best);
+    if (alpha >= beta) break;
+  }
+  return best;
+}
+
+/// Best move object for `player` via alpha-beta (default depth 6), or null when
+/// the player has no legal move.
+function bestMove(board, player, depth = 6) {
+  const moves = legalMoves(board, player);
+  if (!moves.length) return null;
+  moves.sort((x, y) => y.captures.length - x.captures.length);
+  let best = moves[0];
+  let bestV = -Infinity;
+  let alpha = -Infinity;
+  for (const m of moves) {
+    const v = search(applyMove(board, m), other(player), player, depth - 1, alpha, Infinity);
+    if (v > bestV) {
+      bestV = v;
+      best = m;
+      alpha = Math.max(alpha, v);
+    }
+  }
+  return best;
+}
+
+return { SIZE, emptyBoard, legalMoves, applyMove, winner, bestMove };
 })();
 const CONNECT4 = (function(){
 // Connect Four — pure logic + a depth-limited alpha-beta computer opponent.
@@ -1502,6 +1818,243 @@ function bestMove(heaps) {
 
 return { initialHeaps, isOver, nimSum, legalTakes, take, bestMove };
 })();
+const QUORIDOR = (function(){
+// Quoridor — pure game logic (no DOM). A 9x9 board of cells (row 0 top, row 8
+// bottom). Pawn 0 starts bottom-middle (8,4) and races for row 0; pawn 1 starts
+// top-middle (0,4) and races for row 8. Each player has 10 walls. A wall fills a
+// 2-cell-long groove between cells — horizontal (blocks vertical movement) or
+// vertical (blocks horizontal movement) — at a slot (r,c) with r,c in 0..7.
+//
+// State: { pawns:[{r,c},{r,c}], walls:{h:Set, v:Set}, wallsLeft:[10,10], turn }
+// Wall slots are stored as the string key `"${r},${c}"` (see wallKey).
+
+const N = 9;            // cells per side
+const W = N - 1;        // wall-slot rows/cols (0..7)
+const DIRS = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+const GOAL = [0, N - 1]; // goal row for pawn 0 and pawn 1
+
+/// Canonical key for a wall slot at (r,c).
+function wallKey(r, c) { return r + ',' + c; }
+
+// Is a single orthogonal step from (r,c) to the adjacent (nr,nc) blocked by a
+// wall? A horizontal wall at slot (sr,sc) spans the boundary below row sr across
+// columns sc and sc+1; a vertical wall spans the boundary right of col sc across
+// rows sr and sr+1. Off-board slot keys are simply never present in the sets.
+function blocked(walls, r, c, nr, nc) {
+  if (nr === r - 1 && nc === c) {        // up
+    return walls.h.has(wallKey(r - 1, c)) || walls.h.has(wallKey(r - 1, c - 1));
+  }
+  if (nr === r + 1 && nc === c) {        // down
+    return walls.h.has(wallKey(r, c)) || walls.h.has(wallKey(r, c - 1));
+  }
+  if (nc === c - 1 && nr === r) {        // left
+    return walls.v.has(wallKey(r, c - 1)) || walls.v.has(wallKey(r - 1, c - 1));
+  }
+  if (nc === c + 1 && nr === r) {        // right
+    return walls.v.has(wallKey(r, c)) || walls.v.has(wallKey(r - 1, c));
+  }
+  return true; // not an orthogonal neighbour
+}
+
+const inBounds = (r, c) => r >= 0 && r < N && c >= 0 && c < N;
+
+/// A fresh game: pawns on their start cells, no walls, pawn 0 to move.
+function newGame() {
+  return {
+    pawns: [{ r: 8, c: 4 }, { r: 0, c: 4 }],
+    walls: { h: new Set(), v: new Set() },
+    wallsLeft: [10, 10],
+    turn: 0,
+  };
+}
+
+/// Legal pawn destinations for the player to move. Orthogonal steps not blocked
+/// by a wall; if the opponent is adjacent you may jump straight over it, or — when
+/// a wall or the board edge sits directly behind it — diagonally to either side.
+function pawnMoves(state) {
+  const me = state.pawns[state.turn];
+  const opp = state.pawns[1 - state.turn];
+  const out = [];
+  for (const [dr, dc] of DIRS) {
+    const nr = me.r + dr, nc = me.c + dc;
+    if (!inBounds(nr, nc)) continue;
+    if (blocked(state.walls, me.r, me.c, nr, nc)) continue;
+    if (!(opp.r === nr && opp.c === nc)) {
+      out.push({ r: nr, c: nc });
+      continue;
+    }
+    // Opponent is in the way — try to jump.
+    const br = nr + dr, bc = nc + dc;
+    const straightOk = inBounds(br, bc) && !blocked(state.walls, nr, nc, br, bc);
+    if (straightOk) {
+      out.push({ r: br, c: bc });
+    } else {
+      const perps = dr !== 0 ? [[0, -1], [0, 1]] : [[-1, 0], [1, 0]];
+      for (const [pr, pc] of perps) {
+        const dr2 = nr + pr, dc2 = nc + pc;
+        if (!inBounds(dr2, dc2)) continue;
+        if (blocked(state.walls, nr, nc, dr2, dc2)) continue;
+        out.push({ r: dr2, c: dc2 });
+      }
+    }
+  }
+  return out;
+}
+
+// Breadth-first reachability: can `start` reach any cell on `goalRow`?
+function hasPath(walls, start, goalRow) {
+  const seen = new Set([start.r * N + start.c]);
+  const q = [start];
+  for (let i = 0; i < q.length; i++) {
+    const cur = q[i];
+    if (cur.r === goalRow) return true;
+    for (const [dr, dc] of DIRS) {
+      const nr = cur.r + dr, nc = cur.c + dc;
+      if (!inBounds(nr, nc)) continue;
+      if (blocked(walls, cur.r, cur.c, nr, nc)) continue;
+      const k = nr * N + nc;
+      if (seen.has(k)) continue;
+      seen.add(k);
+      q.push({ r: nr, c: nc });
+    }
+  }
+  return false;
+}
+
+// Shortest-path distance from `start` to `goalRow`, or Infinity if walled off.
+function dist(walls, start, goalRow) {
+  const seen = new Set([start.r * N + start.c]);
+  let frontier = [start], d = 0;
+  while (frontier.length) {
+    const next = [];
+    for (const cur of frontier) {
+      if (cur.r === goalRow) return d;
+      for (const [dr, dc] of DIRS) {
+        const nr = cur.r + dr, nc = cur.c + dc;
+        if (!inBounds(nr, nc)) continue;
+        if (blocked(walls, cur.r, cur.c, nr, nc)) continue;
+        const k = nr * N + nc;
+        if (seen.has(k)) continue;
+        seen.add(k);
+        next.push({ r: nr, c: nc });
+      }
+    }
+    frontier = next; d++;
+  }
+  return Infinity;
+}
+
+// Geometry-only legality: slot in range, free, not overlapping a parallel wall,
+// not crossing a perpendicular one. (Does NOT check the path constraint.)
+function slotFree(walls, type, r, c) {
+  if (r < 0 || r >= W || c < 0 || c >= W) return false;
+  if (type === 'h') {
+    if (walls.h.has(wallKey(r, c)) || walls.h.has(wallKey(r, c - 1)) ||
+        walls.h.has(wallKey(r, c + 1))) return false;
+    if (walls.v.has(wallKey(r, c))) return false; // crossing
+    return true;
+  }
+  if (type === 'v') {
+    if (walls.v.has(wallKey(r, c)) || walls.v.has(wallKey(r - 1, c)) ||
+        walls.v.has(wallKey(r + 1, c))) return false;
+    if (walls.h.has(wallKey(r, c))) return false; // crossing
+    return true;
+  }
+  return false;
+}
+
+/// True when the player to move may legally place a `type` ('h'|'v') wall at
+/// slot (r,c): they have a wall left, the slot is free and non-crossing, and —
+/// crucially — BOTH pawns still have a path to their goal row afterwards.
+function canPlaceWall(state, type, r, c) {
+  if (state.wallsLeft[state.turn] <= 0) return false;
+  if (!slotFree(state.walls, type, r, c)) return false;
+  const nh = new Set(state.walls.h), nv = new Set(state.walls.v);
+  (type === 'h' ? nh : nv).add(wallKey(r, c));
+  const w = { h: nh, v: nv };
+  if (!hasPath(w, state.pawns[0], GOAL[0])) return false;
+  if (!hasPath(w, state.pawns[1], GOAL[1])) return false;
+  return true;
+}
+
+/// Place a wall and pass the turn, returning a new state. Assumes legality has
+/// been checked by the caller (canPlaceWall).
+function placeWall(state, type, r, c) {
+  const nh = new Set(state.walls.h), nv = new Set(state.walls.v);
+  (type === 'h' ? nh : nv).add(wallKey(r, c));
+  const wallsLeft = state.wallsLeft.slice();
+  wallsLeft[state.turn] -= 1;
+  return {
+    pawns: state.pawns.map((p) => ({ r: p.r, c: p.c })),
+    walls: { h: nh, v: nv },
+    wallsLeft,
+    turn: 1 - state.turn,
+  };
+}
+
+/// Move the active pawn to (r,c) and pass the turn, returning a new state.
+function movePawn(state, r, c) {
+  const pawns = state.pawns.map((p) => ({ r: p.r, c: p.c }));
+  pawns[state.turn] = { r, c };
+  return {
+    pawns,
+    walls: { h: new Set(state.walls.h), v: new Set(state.walls.v) },
+    wallsLeft: state.wallsLeft.slice(),
+    turn: 1 - state.turn,
+  };
+}
+
+/// 0 if pawn 0 has reached row 0, 1 if pawn 1 has reached row 8, else null.
+function winner(state) {
+  if (state.pawns[0].r === GOAL[0]) return 0;
+  if (state.pawns[1].r === GOAL[1]) return 1;
+  return null;
+}
+
+/// A simple but always-legal AI for the player to move. Usually it steps along
+/// its shortest path to goal; occasionally — when the opponent is doing at least
+/// as well and walls remain — it drops the wall that most slows the opponent
+/// without setting itself back. Returns {kind:'move',r,c} or {kind:'wall',type,r,c}.
+function aiMove(state) {
+  const me = state.turn;
+  const myGoal = GOAL[me];
+  const oppGoal = GOAL[1 - me];
+  const opp = state.pawns[1 - me];
+
+  const moves = pawnMoves(state);
+  let bestMove = null, bestD = Infinity;
+  for (const mv of moves) {
+    const d = dist(state.walls, mv, myGoal);
+    if (d < bestD) { bestD = d; bestMove = mv; }
+  }
+
+  const myD = dist(state.walls, state.pawns[me], myGoal);
+  const oppD = dist(state.walls, opp, oppGoal);
+
+  if (state.wallsLeft[me] > 0 && oppD <= myD && Math.random() < 0.4) {
+    let bestWall = null, bestGain = 0;
+    for (let r = 0; r < W; r++) {
+      for (let c = 0; c < W; c++) {
+        for (const t of ['h', 'v']) {
+          if (!canPlaceWall(state, t, r, c)) continue;
+          const nh = new Set(state.walls.h), nv = new Set(state.walls.v);
+          (t === 'h' ? nh : nv).add(wallKey(r, c));
+          const w = { h: nh, v: nv };
+          const gain = (dist(w, opp, oppGoal) - oppD) - (dist(w, state.pawns[me], myGoal) - myD);
+          if (gain > bestGain) { bestGain = gain; bestWall = { t, r, c }; }
+        }
+      }
+    }
+    if (bestWall) return { kind: 'wall', type: bestWall.t, r: bestWall.r, c: bestWall.c };
+  }
+
+  if (bestMove) return { kind: 'move', r: bestMove.r, c: bestMove.c };
+  if (moves.length) return { kind: 'move', r: moves[0].r, c: moves[0].c };
+  return null;
+}
+
+return { wallKey, newGame, pawnMoves, canPlaceWall, placeWall, movePawn, winner, aiMove };
+})();
 const REVERSI = (function(){
 // Reversi / Othello — pure game logic (no DOM). Board is a flat 8x8 grid,
 // index = row*8 + col, each cell null | 'B' | 'W'. A move is legal when it
@@ -1619,6 +2172,196 @@ function bestMove(board, player) {
 }
 
 return { SIZE, emptyBoard, legalMoves, applyMove, score, winner, bestMove };
+})();
+const STRATEGO = (function(){
+// Stratego — pure game logic (no DOM). A 10x10 board held as a flat array of
+// 100 cells, index = row*10 + col. Each cell is null or a piece object
+// {owner, rank, revealed}. owner is 0 (Player 1, bottom rows 6-9) or 1
+// (Player 2, top rows 0-3). rank is a number 1..10 or 'B' (Bomb) or 'F' (Flag).
+//
+// Ranks: Marshal 10, General 9, Colonel 8, Major 7, Captain 6, Lieutenant 5,
+// Sergeant 4, Miner 3, Scout 2, Spy 1, plus Bomb 'B' and Flag 'F'. Two 2x2
+// lakes sit in the centre (rows 4-5, cols 2-3 and cols 6-7) and are impassable.
+//
+// Combat: higher rank wins; equal ranks remove both; the Spy beats the Marshal
+// ONLY when the Spy attacks; a Miner defuses a Bomb, any other attacker loses to
+// a Bomb; attacking the Flag wins the game.
+const SIZE = 10;
+
+// Internal rank constants (kept in the IIFE scope, not part of the namespace).
+const MARSHAL = 10;
+const MINER = 3;
+const SCOUT = 2;
+const SPY = 1;
+const BOMB = 'B';
+const FLAG = 'F';
+
+const at = (r, c) => r * SIZE + c;
+const inBounds = (r, c) => r >= 0 && r < SIZE && c >= 0 && c < SIZE;
+const DIRS = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+
+// Long-form names, handy for the UI and for status lines.
+const NAMES = {
+  10: 'Marshal', 9: 'General', 8: 'Colonel', 7: 'Major', 6: 'Captain',
+  5: 'Lieutenant', 4: 'Sergeant', 3: 'Miner', 2: 'Scout', 1: 'Spy',
+  B: 'Bomb', F: 'Flag',
+};
+// Compact glyph shown on a board square.
+const GLYPHS = {
+  10: '10', 9: '9', 8: '8', 7: '7', 6: '6',
+  5: '5', 4: '4', 3: '3', 2: '2', 1: 'S',
+  B: '✸', F: '⚑',
+};
+
+/// The standard per-side piece census, keyed by rank. Sums to 40.
+function pieceCounts() {
+  return { 10: 1, 9: 1, 8: 2, 7: 3, 6: 4, 5: 4, 4: 4, 3: 5, 2: 8, 1: 1, B: 6, F: 1 };
+}
+
+/// Long-form rank name, e.g. rankName(10) === 'Marshal', rankName('B') === 'Bomb'.
+function rankName(rank) {
+  return NAMES[rank] || String(rank);
+}
+
+/// Compact board glyph for a rank.
+function rankGlyph(rank) {
+  return GLYPHS[rank] || String(rank);
+}
+
+/// True when (r,c) is one of the four lake squares — rows 4-5, cols 2-3 / 6-7.
+function isLake(r, c) {
+  return (r === 4 || r === 5) && ((c === 2 || c === 3) || (c === 6 || c === 7));
+}
+
+/// A fresh, empty 10x10 board.
+function emptyBoard() {
+  return Array(SIZE * SIZE).fill(null);
+}
+
+/// The flat indices of `owner`'s four home rows, front-to-back from the centre.
+/// Player 0 owns rows 9,8,7,6; Player 1 owns rows 0,1,2,3. None are lakes.
+function setupIndices(owner) {
+  const rows = owner === 0 ? [9, 8, 7, 6] : [0, 1, 2, 3];
+  const out = [];
+  for (const r of rows) for (let c = 0; c < SIZE; c++) out.push(at(r, c));
+  return out;
+}
+
+/// A bag of all 40 piece objects for `owner`, in census order (unshuffled).
+/// Callers shuffle this and zip it against setupIndices(owner) to place pieces.
+function pieceBag(owner) {
+  const counts = pieceCounts();
+  const bag = [];
+  for (const rank of Object.keys(counts)) {
+    const key = rank === 'B' || rank === 'F' ? rank : Number(rank);
+    for (let i = 0; i < counts[rank]; i++) bag.push({ owner, rank: key, revealed: false });
+  }
+  return bag;
+}
+
+const isFixed = (rank) => rank === BOMB || rank === FLAG;
+
+/// The destination indices a piece at `pos` may move or attack into. Bombs and
+/// the Flag never move. Scouts slide any number of clear orthogonal squares and
+/// may strike an enemy at the end of that run. Every other piece steps one
+/// orthogonal square. No piece may enter a lake or a square held by its owner.
+function legalMoves(board, pos) {
+  const piece = board[pos];
+  if (!piece || isFixed(piece.rank)) return [];
+  const r0 = Math.floor(pos / SIZE);
+  const c0 = pos % SIZE;
+  const out = [];
+  const maxStep = piece.rank === SCOUT ? SIZE : 1;
+  for (const [dr, dc] of DIRS) {
+    let r = r0 + dr;
+    let c = c0 + dc;
+    let step = 0;
+    while (step < maxStep && inBounds(r, c) && !isLake(r, c)) {
+      const target = board[at(r, c)];
+      if (!target) {
+        out.push(at(r, c)); // empty — slide on
+      } else {
+        if (target.owner !== piece.owner) out.push(at(r, c)); // enemy — attack, then stop
+        break; // any piece (friend or foe) blocks further travel
+      }
+      r += dr;
+      c += dc;
+      step++;
+    }
+  }
+  return out;
+}
+
+/// The verdict of an attack: 'attacker', 'defender', or 'both' (mutual loss).
+/// Resolution order matters: the Flag is captured by anyone; a Bomb is only
+/// defused by a Miner; the Spy uniquely fells the Marshal when it is the one
+/// attacking; equal ranks trade off; otherwise the higher rank prevails.
+function resolveCombat(attackerRank, defenderRank) {
+  if (defenderRank === FLAG) return 'attacker';
+  if (defenderRank === BOMB) return attackerRank === MINER ? 'attacker' : 'defender';
+  if (attackerRank === SPY && defenderRank === MARSHAL) return 'attacker';
+  if (attackerRank === defenderRank) return 'both';
+  return attackerRank > defenderRank ? 'attacker' : 'defender';
+}
+
+/// Apply a move or attack, returning a NEW board (the input is never mutated).
+/// A plain move relocates the piece. An attack runs resolveCombat: the winner
+/// ends up on the destination square and is marked revealed; on a mutual loss
+/// both squares clear; a Bomb that survives stays put and is revealed.
+function applyMove(board, from, to) {
+  const next = board.map((p) => (p ? { ...p } : null));
+  const mover = next[from];
+  if (!mover) return next;
+  const target = next[to];
+  if (!target) {
+    next[to] = mover;
+    next[from] = null;
+    return next;
+  }
+  const verdict = resolveCombat(mover.rank, target.rank);
+  if (verdict === 'attacker') {
+    mover.revealed = true;
+    next[to] = mover;
+    next[from] = null;
+  } else if (verdict === 'defender') {
+    target.revealed = true; // stays on `to`
+    next[from] = null;
+  } else {
+    next[from] = null;
+    next[to] = null;
+  }
+  return next;
+}
+
+/// True when `owner` has at least one piece with a legal move.
+function hasAnyMove(board, owner) {
+  for (let i = 0; i < board.length; i++) {
+    const p = board[i];
+    if (p && p.owner === owner && legalMoves(board, i).length) return true;
+  }
+  return false;
+}
+
+/// The winning owner (0 or 1) or null. A side wins by capturing the opponent's
+/// Flag, or when the opponent has no legal move left. Flag capture is checked
+/// first. Returns null while the game is still live.
+function winner(board) {
+  let flag0 = false;
+  let flag1 = false;
+  for (const p of board) {
+    if (p && p.rank === FLAG) {
+      if (p.owner === 0) flag0 = true;
+      else flag1 = true;
+    }
+  }
+  if (!flag0) return 1;
+  if (!flag1) return 0;
+  if (!hasAnyMove(board, 0)) return 1;
+  if (!hasAnyMove(board, 1)) return 0;
+  return null;
+}
+
+return { SIZE, pieceCounts, rankName, rankGlyph, isLake, emptyBoard, setupIndices, pieceBag, legalMoves, resolveCombat, applyMove, hasAnyMove, winner };
 })();
 const TICTACTOE = (function(){
 // Tic-Tac-Toe — pure game logic (no DOM). The Parlour "scaffold" game: its
@@ -1831,6 +2574,10 @@ const GAMES = [
   { id:'wordle', name:'Wordle', glyph:'🟩', blurb:'Six tries to crack today’s five-letter word.', badges:['daily-le'], tier:0, mount: mountWordle },
   { id:'crazyeights', name:'Crazy Eights', glyph:'🃏', blurb:'Shed your hand by matching rank or suit — eights are wild. You versus the computer.', badges:['1 player'], tier:3, mount: mountCrazyeights },
   { id:'dotsboxes', name:'Dots & Boxes', glyph:'⊞', blurb:'Seal the 4th wall of a box to claim it — and go again. Beat the computer or pass-and-play.', badges:['1 player','2 players'], tier:0, mount: mountDotsboxes },
+  { id:'blokus', name:'Blokus', glyph:'🟦', blurb:'Spread your 21 shapes from your corner, each new piece touching your own only at the corners. Most squares laid wins.', badges:['1 player','2 players'], tier:2, mount: mountBlokus },
+  { id:'checkers', name:'Checkers', glyph:'⛀', blurb:'Forced jumps, multi-captures and kings on the back row — outplay the computer or pass-and-play.', badges:['1 player','2 players'], tier:2, mount: mountCheckers },
+  { id:'quoridor', name:'Quoridor', glyph:'🧱', blurb:'Race your pawn to the far side — and drop fences to send your rival the long way round.', badges:['1 player','2 players'], tier:2, mount: mountQuoridor },
+  { id:'stratego', name:'Stratego', glyph:'🎖️', blurb:'Set your army in secret, then duel across the lakes to capture the flag — hidden ranks, bombs, and a sneaky Spy.', badges:['2 players'], tier:2, mount: mountStratego },
   /*__MORE_GAMES__*/
 ];
 
@@ -2996,6 +3743,548 @@ function mountDotsboxes(host, h){
   const again=ctrl('New game',()=>newGame()); again.classList.add('ghost');
   function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
   setModes(); newGame();
+}
+
+// ---- Blokus UI (logic from the BLOKUS bundle) ----
+function mountBlokus(host, h){
+  const B=BLOKUS, N=B.SIZE;
+  let board, mode='ai', turn=0, remaining, over=false, busy=false, note='', info='', selected=null, gen=0;
+  let cellEls=[], previewed=[];
+
+  const norm=(cs)=>{ const mr=Math.min(...cs.map(c=>c[0])), mc=Math.min(...cs.map(c=>c[1]));
+    return cs.map(([r,c])=>[r-mr,c-mc]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]); };
+  const humanTurn=()=> !over && !busy && !(mode==='ai' && turn===1);
+  const isFirst=()=> !board.some(v=>v===turn);
+
+  function newGame(){
+    gen++; board=B.emptyBoard();
+    remaining=[B.ALL_PIECE_IDS.slice(), B.ALL_PIECE_IDS.slice()];
+    turn=0; over=false; busy=false; note=''; info=''; selected=null;
+    resolve();
+  }
+
+  // After any change: end when neither side can move; auto-pass (permanently) a
+  // side with no legal move; in vs-Computer, let the AI answer after a beat.
+  function resolve(){
+    const can=[B.hasAnyMove(board,0,remaining[0]), B.hasAnyMove(board,1,remaining[1])];
+    if(!can[0] && !can[1]){ over=true; busy=false; draw(); return; }
+    if(!can[turn]){ note='Player '+(turn+1)+' has no legal move — passes.'; turn=turn===0?1:0; }
+    else note='';
+    if(selected && !remaining[turn].includes(selected.pieceId)) selected=null;
+    draw();
+    if(mode==='ai' && turn===1 && !over){
+      busy=true; const myGen=gen;
+      setTimeout(()=>{
+        if(myGen!==gen || over || !host.isConnected) return;
+        const mv=B.aiMove(board,1,remaining[1]); busy=false;
+        if(mv) commit(mv.pieceId, mv.cells, mv.row, mv.col); else resolve();
+      }, 350);
+    }
+  }
+
+  function commit(pieceId, cells, r, c){
+    board=B.place(board, turn, cells, r, c);
+    remaining[turn]=remaining[turn].filter(id=>id!==pieceId);
+    selected=null; info=''; note='';
+    turn=turn===0?1:0; resolve();
+  }
+
+  function tryPlace(r,c){
+    if(!humanTurn() || !selected) return;
+    if(B.canPlace(board,turn,selected.cells,r,c,isFirst())){ commit(selected.pieceId, selected.cells, r, c); }
+    else { info='That spot isn’t legal — corners only, never edges.'; draw(); }
+  }
+
+  function clearPreview(){ for(const el of previewed) el.classList.remove('pv-ok','pv-bad'); previewed=[]; }
+  function paintPreview(ar,ac){
+    clearPreview();
+    if(!humanTurn() || !selected) return;
+    const ok=B.canPlace(board,turn,selected.cells,ar,ac,isFirst());
+    for(const [dr,dc] of selected.cells){
+      const r=ar+dr, c=ac+dc;
+      if(r>=0&&r<N&&c>=0&&c<N){ const el=cellEls[r*N+c]; el.classList.add(ok?'pv-ok':'pv-bad'); previewed.push(el); }
+    }
+  }
+
+  function miniGrid(cells, cls){
+    const rows=Math.max(...cells.map(c=>c[0]))+1, cols=Math.max(...cells.map(c=>c[1]))+1;
+    const set=new Set(cells.map(c=>c[0]+','+c[1]));
+    const g=document.createElement('div'); g.className=cls; g.style.gridTemplateColumns='repeat('+cols+',1fr)';
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){ const dot=document.createElement('i');
+      dot.className=set.has(r+','+c)?'on':'off'; g.appendChild(dot); }
+    return g;
+  }
+
+  function mkBtn(label, fn){ const b=document.createElement('button'); b.className='btn ghost'; b.type='button';
+    b.textContent=label; b.addEventListener('click',fn); return b; }
+
+  function draw(){
+    const sc=[B.score(board,0), B.score(board,1)];
+    if(over){
+      const w= sc[0]>sc[1]?0 : sc[1]>sc[0]?1 : -1;
+      h.status(w<0 ? ('A tie — '+sc[0]+' squares each.')
+        : ((mode==='ai'?(w===0?'You win':'The computer wins'):'Player '+(w+1)+' wins')
+           +' — '+Math.max(sc[0],sc[1])+' squares to '+Math.min(sc[0],sc[1])+'.'));
+    } else {
+      const whose= mode==='ai' ? (turn===0?'Your turn':'Computer is thinking…') : 'Player '+(turn+1)+'’s turn';
+      const tally = mode==='ai' ? ('You '+sc[0]+' · Computer '+sc[1]) : ('P1 '+sc[0]+' · P2 '+sc[1]);
+      h.status((info?info+'  ':'')+(note?note+'  ':'')+whose+'  ·  '+tally);
+    }
+
+    host.className='bk'; host.innerHTML=''; cellEls=[]; previewed=[];
+    const grid=document.createElement('div'); grid.className='bk-board';
+    const live=humanTurn();
+    for(let i=0;i<N*N;i++){
+      const r=Math.floor(i/N), c=i%N, v=board[i];
+      const cell=document.createElement('button'); cell.type='button';
+      if(v===0) cell.className='x'; else if(v===1) cell.className='o';
+      if((r===4&&c===4)||(r===9&&c===9)) cell.classList.add('start');
+      cell.setAttribute('aria-label','row '+(r+1)+' column '+(c+1)+(v===0?', player one':v===1?', player two':', empty'));
+      cell.disabled=!live;
+      if(live){
+        cell.addEventListener('mouseenter',()=>paintPreview(r,c));
+        cell.addEventListener('focus',()=>paintPreview(r,c));
+        cell.addEventListener('click',()=>tryPlace(r,c));
+      }
+      cellEls.push(cell); grid.appendChild(cell);
+    }
+    grid.addEventListener('mouseleave', clearPreview);
+    host.appendChild(grid);
+
+    const tools=document.createElement('div'); tools.className='bk-tools';
+    if(selected){ tools.appendChild(miniGrid(selected.cells, 'bk-swatch'+(turn===1?' p1':''))); }
+    else { const hint=document.createElement('span'); hint.className='bk-hint'; hint.textContent='Pick a piece, then tap the board'; tools.appendChild(hint); }
+    const rot=mkBtn('⟳ Rotate',()=>{ if(selected){ selected={pieceId:selected.pieceId, cells:norm(selected.cells.map(([r,c])=>[c,-r]))}; info=''; draw(); } });
+    const flp=mkBtn('⇄ Flip',()=>{ if(selected){ selected={pieceId:selected.pieceId, cells:norm(selected.cells.map(([r,c])=>[r,-c]))}; info=''; draw(); } });
+    rot.disabled=flp.disabled=!selected||!humanTurn();
+    tools.appendChild(rot); tools.appendChild(flp);
+    host.appendChild(tools);
+
+    const tray=document.createElement('div'); tray.className='bk-tray';
+    for(const pid of remaining[turn]){
+      const p=B.PIECES[pid];
+      const btn=document.createElement('button'); btn.type='button'; btn.className='bk-piece'+(turn===1?' p1':'');
+      if(selected && selected.pieceId===pid) btn.setAttribute('aria-pressed','true');
+      btn.appendChild(miniGrid(norm(p.cells), 'bk-mini'));
+      btn.setAttribute('aria-label','piece '+p.name+', '+p.cells.length+' squares');
+      btn.disabled=!humanTurn();
+      btn.addEventListener('click',()=>{ selected={pieceId:pid, cells:norm(p.cells)}; info=''; draw(); });
+      tray.appendChild(btn);
+    }
+    if(!remaining[turn].length){ const d=document.createElement('span'); d.className='bk-hint'; d.textContent='No pieces left.'; tray.appendChild(d); }
+    host.appendChild(tray);
+  }
+
+  const controls=h.controls; controls.innerHTML='';
+  function ctrl(label,fn,p){ const b=document.createElement('button'); b.className='btn'; b.type='button';
+    b.textContent=label; if(p)b.setAttribute('aria-pressed','true'); b.addEventListener('click',fn); controls.appendChild(b); return b; }
+  const vsAi=ctrl('vs Computer',()=>{mode='ai';setModes();newGame();},true);
+  const vs2=ctrl('2 Players',()=>{mode='2p';setModes();newGame();});
+  const again=ctrl('New game',()=>newGame()); again.classList.add('ghost');
+  function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
+  setModes(); newGame();
+}
+
+function mountCheckers(host, h){
+  let board, mode='ai', turn='r', over=false, busy=false, sel=null, gen=0;
+  const HUMAN='r', AI='b';
+  const flip=(p)=>p==='r'?'b':'r';
+
+  function newGame(){ gen++; board=CHECKERS.emptyBoard(); turn='r'; over=false; busy=false; sel=null; resolve(); }
+
+  // After any board change, the side to move is `turn`. If it has no legal move
+  // it has lost (this also covers having no pieces). Vs the computer, schedule
+  // Black's reply on a short delay.
+  function resolve(){
+    sel=null;
+    over = CHECKERS.legalMoves(board, turn).length===0;
+    draw();
+    if(over) return;
+    if(mode==='ai' && turn===AI){
+      busy=true;
+      const myGen=gen;
+      setTimeout(()=>{
+        if(over || myGen!==gen || !host.isConnected){ busy=false; return; }
+        const m=CHECKERS.bestMove(board, AI, 6);
+        busy=false;
+        if(m){ board=CHECKERS.applyMove(board, m); turn=HUMAN; }
+        resolve();
+      }, 300);
+    }
+  }
+
+  function pick(i){
+    if(over||busy) return;
+    if(mode==='ai' && turn===AI) return;
+    const ms=CHECKERS.legalMoves(board, turn);
+    if(sel!=null){
+      const mv=ms.find(m=>m.from===sel && m.to===i);
+      if(mv){ board=CHECKERS.applyMove(board, mv); turn=flip(turn); resolve(); return; }
+    }
+    if(ms.some(m=>m.from===i)){ sel = sel===i ? null : i; draw(); return; }
+    if(sel!=null){ sel=null; draw(); }
+  }
+
+  function label(i,v,isDest){
+    const r=Math.floor(i/8)+1, c=i%8+1;
+    if(v){ const red=v==='r'||v==='R', king=v==='R'||v==='B';
+      return (red?'red':'black')+(king?' king':' man')+' at row '+r+', column '+c; }
+    if(isDest) return 'move to row '+r+', column '+c;
+    return 'row '+r+', column '+c;
+  }
+
+  function draw(){
+    const ms=(!over && !busy && !(mode==='ai'&&turn===AI)) ? CHECKERS.legalMoves(board, turn) : [];
+    const forced = ms.length>0 && ms[0].captures.length>0;
+    const movable = new Set(ms.map(m=>m.from));
+    const dests = sel!=null ? ms.filter(m=>m.from===sel).map(m=>m.to) : [];
+
+    let status;
+    if(over){ const v=flip(turn); status=(v==='r'?'Red':'Black')+' wins!'; }
+    else if(mode==='ai' && turn===AI){ status='Thinking…'; }
+    else {
+      const who = mode==='ai' ? 'Your turn — you’re red.' : (turn==='r'?'Red':'Black')+'’s turn.';
+      status = who + (forced ? ' Captures are forced — you must jump.' : '');
+    }
+    h.status(status);
+
+    host.className='ck'; host.innerHTML='';
+    const grid=document.createElement('div'); grid.className='board';
+    for(let i=0;i<64;i++){
+      const r=Math.floor(i/8), c=i%8, dark=(r+c)%2===1, v=board[i];
+      const cell=document.createElement('button'); cell.type='button';
+      cell.className='sq '+(dark?'dark':'light');
+      const isMovable = dark && !over && movable.has(i);
+      const isDest = dests.includes(i);
+      if(i===sel) cell.classList.add('sel');
+      if(isDest) cell.classList.add('dest');
+      if(forced && isMovable) cell.classList.add('cap');
+      if(isMovable || isDest) cell.classList.add('play');
+      if(v){ const p=document.createElement('span');
+        const red=v==='r'||v==='R';
+        p.className='pc '+(red?'x':'o')+((v==='R'||v==='B')?' king':'');
+        cell.appendChild(p); }
+      cell.setAttribute('aria-label', label(i,v,isDest));
+      cell.disabled = !dark || (!isMovable && !isDest);
+      cell.addEventListener('click',()=>pick(i));
+      grid.appendChild(cell);
+    }
+    host.appendChild(grid);
+  }
+
+  const controls=h.controls; controls.innerHTML='';
+  const vsAi=mkBtn('vs Computer',()=>{mode='ai';setModes();newGame();},true);
+  const vs2=mkBtn('2 Players',()=>{mode='2p';setModes();newGame();});
+  const again=mkBtn('New game',()=>newGame()); again.classList.add('ghost');
+  function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
+  function mkBtn(text,fn,pressed){ const b=document.createElement('button'); b.className='btn'; b.type='button';
+    b.textContent=text; if(pressed) b.setAttribute('aria-pressed','true'); b.addEventListener('click',fn); controls.appendChild(b); return b; }
+  setModes(); newGame();
+}
+
+function mountQuoridor(host, h){
+  let state, mode='ai', place='move', over=false, busy=false;
+  const HUMAN=0; // in vs-Computer you are pawn 0 (bottom, racing up)
+
+  function fresh(){ state=QUORIDOR.newGame(); over=false; busy=false; place='move'; setPlace(); draw(); maybeAi(); }
+
+  function myTurn(){ return mode==='2p' || state.turn===HUMAN; }
+
+  function maybeAi(){
+    if(over || mode!=='ai' || state.turn===HUMAN) return;
+    busy=true; draw();
+    setTimeout(()=>{
+      if(!host.isConnected || over){ busy=false; return; }
+      const act=QUORIDOR.aiMove(state);
+      if(act){
+        state = act.kind==='move'
+          ? QUORIDOR.movePawn(state, act.r, act.c)
+          : QUORIDOR.placeWall(state, act.type, act.r, act.c);
+      }
+      busy=false; over=QUORIDOR.winner(state)!==null; draw();
+    }, 320);
+  }
+
+  function doMove(r,c){
+    if(over||busy||!myTurn()) return;
+    if(!QUORIDOR.pawnMoves(state).some(m=>m.r===r&&m.c===c)) return;
+    state=QUORIDOR.movePawn(state,r,c);
+    over=QUORIDOR.winner(state)!==null; draw();
+    if(!over) maybeAi();
+  }
+
+  function doWall(type,r,c){
+    if(over||busy||!myTurn()) return;
+    if(!QUORIDOR.canPlaceWall(state,type,r,c)) return;
+    state=QUORIDOR.placeWall(state,type,r,c);
+    place='move'; setPlace();
+    over=QUORIDOR.winner(state)!==null; draw();
+    if(!over) maybeAi();
+  }
+
+  function draw(){
+    const w=QUORIDOR.winner(state);
+    let status;
+    if(w!==null){
+      status = mode==='ai'
+        ? (w===HUMAN?'You slipped through to the far side — you win! 🎉':'The computer reached home first. New game?')
+        : 'Player '+(w+1)+' wins!';
+    } else if(busy){
+      status='Computer is plotting…';
+    } else {
+      const whose = mode==='ai'
+        ? (state.turn===HUMAN?'Your move':'Computer’s move')
+        : 'Player '+(state.turn+1)+'’s move';
+      status=whose+' · walls ◆'+state.wallsLeft[0]+' / ◇'+state.wallsLeft[1]+' · '+(place==='wall'?'tap a groove to wall':'tap a dot to step');
+    }
+    h.status(status);
+
+    host.className='qd'; host.innerHTML='';
+    const board=document.createElement('div'); board.className='board';
+    const active = !over && !busy && myTurn();
+    const wallMode = place==='wall' && active;
+    const hints = (!wallMode && active) ? QUORIDOR.pawnMoves(state) : [];
+
+    for(let r=0;r<9;r++) for(let c=0;c<9;c++){
+      const isHint=hints.some(m=>m.r===r&&m.c===c);
+      const tag = isHint ? 'button' : 'div';
+      const cell=document.createElement(tag); cell.className='cell';
+      cell.style.gridColumn=(2*c+1); cell.style.gridRow=(2*r+1);
+      if(state.pawns[0].r===r&&state.pawns[0].c===c){ const p=document.createElement('span'); p.className='pawn p0'; cell.appendChild(p); }
+      else if(state.pawns[1].r===r&&state.pawns[1].c===c){ const p=document.createElement('span'); p.className='pawn p1'; cell.appendChild(p); }
+      if(tag==='button'){
+        cell.type='button'; cell.classList.add('hint');
+        cell.setAttribute('aria-label','step to row '+(r+1)+' column '+(c+1));
+        cell.addEventListener('click',()=>doMove(r,c));
+      }
+      board.appendChild(cell);
+    }
+
+    state.walls.h.forEach(kk=>{ const a=kk.split(',').map(Number);
+      const el=document.createElement('div'); el.className='wall wh';
+      el.style.gridRow=(2*a[0]+2); el.style.gridColumn=(2*a[1]+1)+' / '+(2*a[1]+4); board.appendChild(el); });
+    state.walls.v.forEach(kk=>{ const a=kk.split(',').map(Number);
+      const el=document.createElement('div'); el.className='wall wv';
+      el.style.gridColumn=(2*a[1]+2); el.style.gridRow=(2*a[0]+1)+' / '+(2*a[0]+4); board.appendChild(el); });
+
+    if(wallMode){
+      for(let r=0;r<8;r++) for(let c=0;c<8;c++){
+        if(QUORIDOR.canPlaceWall(state,'h',r,c)){
+          const s=document.createElement('button'); s.type='button'; s.className='slot sh';
+          s.style.gridRow=(2*r+2); s.style.gridColumn=(2*c+1);
+          s.setAttribute('aria-label','horizontal wall below row '+(r+1)+' at column '+(c+1));
+          s.addEventListener('click',()=>doWall('h',r,c)); board.appendChild(s);
+        }
+        if(QUORIDOR.canPlaceWall(state,'v',r,c)){
+          const s=document.createElement('button'); s.type='button'; s.className='slot sv';
+          s.style.gridColumn=(2*c+2); s.style.gridRow=(2*r+1);
+          s.setAttribute('aria-label','vertical wall right of column '+(c+1)+' at row '+(r+1));
+          s.addEventListener('click',()=>doWall('v',r,c)); board.appendChild(s);
+        }
+      }
+    }
+    host.appendChild(board);
+  }
+
+  const controls=h.controls; controls.innerHTML='';
+  function ctrl(label,fn,pressed){ const b=document.createElement('button'); b.className='btn'; b.type='button';
+    b.textContent=label; if(pressed)b.setAttribute('aria-pressed','true'); b.addEventListener('click',fn); controls.appendChild(b); return b; }
+  const vsAi=ctrl('vs Computer',()=>{mode='ai';setModes();fresh();},true);
+  const vs2=ctrl('2 Players',()=>{mode='2p';setModes();fresh();});
+  const again=ctrl('New game',()=>fresh()); again.classList.add('ghost');
+  const moveBtn=ctrl('Move',()=>{place='move';setPlace();draw();},true);
+  const wallBtn=ctrl('Wall',()=>{place='wall';setPlace();draw();});
+  moveBtn.classList.add('ghost'); wallBtn.classList.add('ghost');
+  function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
+  function setPlace(){ moveBtn.setAttribute('aria-pressed',place==='move'); wallBtn.setAttribute('aria-pressed',place==='wall'); }
+  setModes(); fresh();
+}
+
+function mountStratego(host, h){
+  // Pass-and-play Stratego. Two humans share one device; a "hide" interstitial
+  // between setups and between turns keeps each army secret. Logic: STRATEGO.
+  const N = STRATEGO.SIZE; // 10
+  let board, phase, setupPlayer, current, sel, legal, handoff, lastCombat;
+
+  const name = (o) => (o === 0 ? 'Player 1' : 'Player 2');
+  const cls = (o) => (o === 0 ? 'p0' : 'p1');
+
+  function shuffle(a){
+    for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=a[i]; a[i]=a[j]; a[j]=t; }
+    return a;
+  }
+  // Drop a fresh random army into `owner`'s four home rows (others untouched).
+  function placeRandom(owner){
+    const idxs=STRATEGO.setupIndices(owner);
+    for(const i of idxs) board[i]=null;
+    const bag=shuffle(STRATEGO.pieceBag(owner));
+    idxs.forEach((i,k)=>{ board[i]=bag[k]; });
+  }
+
+  function newGame(){
+    board=STRATEGO.emptyBoard();
+    placeRandom(0);
+    setupPlayer=0; current=0; sel=null; legal=[]; handoff=null; lastCombat='';
+    phase='setup';
+    render();
+  }
+
+  // Arrange a hide screen; `next` is applied when the receiver taps continue.
+  function goHide(to, note, next){
+    handoff={ to, note, next };
+    phase='hide';
+    render();
+  }
+  function proceed(){
+    const next=handoff.next; handoff=null;
+    next();
+  }
+
+  // ---- Setup interaction: tap two of your own pieces to swap them. ----
+  function setupTap(i){
+    if(phase!=='setup') return;
+    const p=board[i];
+    if(sel==null){
+      if(p && p.owner===setupPlayer){ sel=i; render(); }
+      return;
+    }
+    if(i===sel){ sel=null; render(); return; }
+    if(p && p.owner===setupPlayer){ const t=board[i]; board[i]=board[sel]; board[sel]=t; sel=null; render(); return; }
+    sel=null; render();
+  }
+  function ready(){
+    sel=null;
+    if(setupPlayer===0){
+      goHide(1, name(0)+"'s army is set.", ()=>{
+        placeRandom(1); setupPlayer=1; phase='setup'; render();
+      });
+    } else {
+      goHide(0, 'Both armies are set. '+name(0)+' moves first.', ()=>{
+        current=0; phase='play'; render();
+      });
+    }
+  }
+
+  // ---- Play interaction. ----
+  function playTap(i){
+    if(phase!=='play') return;
+    const p=board[i];
+    if(sel!=null && legal.includes(i)){ doMove(sel, i); return; }
+    if(p && p.owner===current){
+      if(i===sel){ sel=null; legal=[]; }
+      else { sel=i; legal=STRATEGO.legalMoves(board, i); }
+      render();
+      return;
+    }
+    if(sel!=null){ sel=null; legal=[]; render(); }
+  }
+  function doMove(from, to){
+    const att=board[from], def=board[to];
+    board=STRATEGO.applyMove(board, from, to);
+    let note='';
+    if(def){
+      const v=STRATEGO.resolveCombat(att.rank, def.rank);
+      const a=STRATEGO.rankName(att.rank), d=STRATEGO.rankName(def.rank);
+      if(def.rank==='F') note=name(att.owner)+"'s "+a+' captured the flag!';
+      else if(v==='attacker') note=name(att.owner)+"'s "+a+' beat '+name(def.owner)+"'s "+d+'.';
+      else if(v==='defender') note=name(att.owner)+"'s "+a+' lost to '+name(def.owner)+"'s "+d+'.';
+      else note=name(att.owner)+"'s "+a+' and '+name(def.owner)+"'s "+d+' traded off.';
+    }
+    sel=null; legal=[];
+    const w=STRATEGO.winner(board);
+    if(w!=null){ lastCombat=note; current=w; phase='over'; render(); return; }
+    const nxt = current===0?1:0;
+    goHide(nxt, note, ()=>{ current=nxt; phase='play'; render(); });
+  }
+
+  // ---- Rendering ----
+  // Build a board grid seen from `viewer`'s eyes (own faces up; foes hidden
+  // unless revealed). `onTap` handles clicks; `revealAll` shows every face.
+  function buildBoard(viewer, onTap, revealAll){
+    const grid=document.createElement('div'); grid.className='board';
+    for(let i=0;i<N*N;i++){
+      const r=Math.floor(i/N), c=i%N, p=board[i];
+      const cell=document.createElement('button'); cell.type='button'; cell.className='sq';
+      if(STRATEGO.isLake(r,c)){
+        cell.classList.add('water'); cell.disabled=true;
+        cell.setAttribute('aria-label','lake');
+      } else if(!p){
+        cell.classList.add('empty');
+        if(sel!=null && legal.includes(i)) cell.classList.add('move');
+        cell.disabled=!(sel!=null && legal.includes(i));
+        cell.setAttribute('aria-label','empty');
+      } else {
+        const mine = p.owner===viewer;
+        const show = revealAll || mine || p.revealed;
+        if(show){
+          cell.classList.add('piece', cls(p.owner));
+          if(!mine && (p.revealed||revealAll)) cell.classList.add('seen');
+          cell.textContent=STRATEGO.rankGlyph(p.rank);
+          cell.setAttribute('aria-label', name(p.owner)+' '+STRATEGO.rankName(p.rank));
+        } else {
+          cell.classList.add('back', cls(p.owner));
+          cell.setAttribute('aria-label', name(p.owner)+' hidden piece');
+        }
+        if(i===sel) cell.classList.add('sel');
+        if(sel!=null && legal.includes(i)) cell.classList.add('move','attack');
+        cell.disabled = !onTap;
+      }
+      if(onTap){ const k=i; cell.addEventListener('click',()=>onTap(k)); }
+      grid.appendChild(cell);
+    }
+    return grid;
+  }
+
+  function legendAndControls(){
+    h.controls.innerHTML='';
+    if(phase==='setup'){
+      ctrl('Shuffle my setup', ()=>{ placeRandom(setupPlayer); sel=null; render(); });
+      ctrl('Ready ✓', ready);
+    }
+    ctrl('New game', newGame, true);
+    const key=document.createElement('div'); key.className='key';
+    key.innerHTML='<span><b class="kx"></b>'+name(0)+'</span><span><b class="ko"></b>'+name(1)+'</span>';
+    host.appendChild(key);
+  }
+  function ctrl(label, fn, ghost){
+    const b=document.createElement('button'); b.className='btn'+(ghost?' ghost':''); b.type='button';
+    b.textContent=label; b.addEventListener('click',fn); h.controls.appendChild(b); return b;
+  }
+
+  function render(){
+    host.className='st'; host.innerHTML='';
+    if(phase==='setup'){
+      h.status(name(setupPlayer)+' — arrange your army, then press Ready. Tap two of your pieces to swap them.');
+      host.appendChild(buildBoard(setupPlayer, setupTap, false));
+    } else if(phase==='hide'){
+      h.status('Hand the device over.');
+      const card=document.createElement('div'); card.className='hide';
+      const ti=document.createElement('h3'); ti.innerHTML='Pass the device to <span class="who">'+name(handoff.to)+'</span>';
+      const sub=document.createElement('p'); sub.textContent='Keep the screen private until '+name(handoff.to)+' is holding it.';
+      card.appendChild(ti); card.appendChild(sub);
+      if(handoff.note){ const nt=document.createElement('div'); nt.className='note'; nt.textContent=handoff.note; card.appendChild(nt); }
+      const go=document.createElement('button'); go.className='bigbtn'; go.type='button';
+      go.textContent="I'm "+name(handoff.to)+' — continue';
+      go.addEventListener('click', proceed);
+      card.appendChild(go);
+      host.appendChild(card);
+    } else if(phase==='play'){
+      h.status(sel!=null
+        ? name(current)+' — tap a highlighted square to move or attack, or your piece to reselect.'
+        : name(current)+"'s turn — tap one of your pieces.");
+      host.appendChild(buildBoard(current, playTap, false));
+    } else if(phase==='over'){
+      h.status(name(current)+' wins!');
+      const card=document.createElement('div'); card.className='over';
+      card.innerHTML='<span class="crown" aria-hidden="true">🎖️</span><h3>'+name(current)+' wins!</h3>'
+        +(lastCombat?'<p>'+lastCombat+'</p>':'');
+      host.appendChild(card);
+      host.appendChild(buildBoard(current, null, true));
+    }
+    legendAndControls();
+  }
+
+  newGame();
 }
 
 /*__MORE_MOUNTS__*/

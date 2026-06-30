@@ -347,6 +347,120 @@
 .dab .box{display:grid;place-items:center;font-family:var(--serif);font-weight:700;color:var(--paper);font-size:.85rem;border-radius:5px;margin:2px;background:#2f5d5010;transition:background .15s ease}
 .dab .box.p0{background:var(--x)}
 .dab .box.p1{background:var(--o)}
+
+  /* ---- Blokus ---- */
+  .bk{display:flex;flex-direction:column;gap:14px;align-items:center;
+    --felt:#2f5d50;--paper:#f4efe3;--brass:#c9a24b;--ink:#26201a;--x:#b8502f;--o:#2f6f8f}
+  .bk .bk-board{display:grid;grid-template-columns:repeat(14,1fr);gap:2px;
+    width:min(94vw,470px);aspect-ratio:1;background:var(--felt);padding:6px;border-radius:10px;
+    box-shadow:inset 0 0 0 2px #ffffff14,0 8px 24px #00000035}
+  .bk .bk-board button{appearance:none;border:none;margin:0;padding:0;border-radius:2px;
+    background:#ffffff14;aspect-ratio:1;cursor:pointer;transition:background .1s ease}
+  .bk .bk-board button:disabled{cursor:default}
+  .bk .bk-board button.x{background:var(--x)}
+  .bk .bk-board button.o{background:var(--o)}
+  .bk .bk-board button.start{box-shadow:inset 0 0 0 2px var(--brass)}
+  .bk .bk-board button.pv-ok{background:#7cba63}
+  .bk .bk-board button.pv-bad{background:#c0473a}
+  .bk .bk-board button:focus-visible{outline:2px solid var(--brass);outline-offset:1px;z-index:1}
+  .bk .bk-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;min-height:34px}
+  .bk .bk-hint{color:var(--ink);opacity:.65;font-size:.92rem}
+  .bk .bk-swatch{display:grid;gap:1px;background:#0000000d;padding:4px;border-radius:5px}
+  .bk .bk-swatch i{width:11px;height:11px;display:block;border-radius:1px}
+  .bk .bk-swatch i.on{background:var(--x)} .bk .bk-swatch.p1 i.on{background:var(--o)}
+  .bk .bk-swatch i.off{background:transparent}
+  .bk .bk-tray{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;max-width:470px}
+  .bk .bk-piece{appearance:none;cursor:pointer;border:1px solid #00000022;background:var(--paper);
+    border-radius:6px;padding:5px;display:grid;place-items:center;min-width:24px;min-height:24px}
+  .bk .bk-piece[aria-pressed=true]{outline:2px solid var(--brass);outline-offset:1px;background:#fff}
+  .bk .bk-piece:disabled{opacity:.45;cursor:default}
+  .bk .bk-piece:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
+  .bk .bk-mini{display:grid;gap:1px}
+  .bk .bk-mini i{width:8px;height:8px;display:block;border-radius:1px}
+  .bk .bk-mini i.on{background:var(--x)} .bk .bk-piece.p1 .bk-mini i.on{background:var(--o)}
+  .bk .bk-mini i.off{background:transparent}
+
+  /* ---- Checkers ---- */
+  .ck{max-width:440px;margin:0 auto;--x:#b8502f;--o:#2f6f8f}
+  .ck .board{display:grid;grid-template-columns:repeat(8,1fr);gap:0;overflow:hidden;
+    background:var(--brass);padding:6px;border-radius:12px;box-shadow:0 3px 12px #00000040}
+  .ck .sq{appearance:none;border:none;margin:0;padding:0;aspect-ratio:1;position:relative;
+    display:grid;place-items:center;cursor:default}
+  .ck .sq.light{background:#3c6f60}
+  .ck .sq.dark{background:#234a3f}
+  .ck .sq.play{cursor:pointer}
+  .ck .sq.sel{box-shadow:inset 0 0 0 3px var(--brass)}
+  .ck .sq.cap::before{content:"";position:absolute;inset:8%;border-radius:9px;
+    box-shadow:inset 0 0 0 3px var(--brass);opacity:.55}
+  .ck .sq.dest::after{content:"";width:30%;height:30%;border-radius:50%;
+    background:var(--brass);opacity:.78}
+  .ck .sq:focus-visible{outline:3px solid var(--brass);outline-offset:-3px;z-index:2}
+  .ck .pc{width:76%;height:76%;border-radius:50%;display:grid;place-items:center;z-index:1;
+    box-shadow:0 2px 3px #00000070, inset 0 2px 2px #ffffff3a, inset 0 -3px 5px #00000060}
+  .ck .pc.x{background:radial-gradient(circle at 36% 30%,#dd8e64,var(--x))}
+  .ck .pc.o{background:radial-gradient(circle at 36% 30%,#6aa6c6,var(--o))}
+  .ck .pc.king::after{content:"♚";font-size:1rem;line-height:1;color:#f4efe3;
+    text-shadow:0 1px 1px #00000088}
+  /* ---- Quoridor ---- */
+.qd{max-width:500px;margin:0 auto;
+  --cell:clamp(20px,7vw,40px);--gap:12px;
+  --felt:#2f5d50;--paper:#f4efe3;--brass:#c9a24b;--ink:#26201a;--x:#b8502f;--o:#2f6f8f}
+.qd .board{display:grid;
+  grid-template-columns:repeat(8,var(--cell) var(--gap)) var(--cell);
+  grid-template-rows:repeat(8,var(--cell) var(--gap)) var(--cell);
+  background:var(--felt);padding:12px;border-radius:14px;justify-content:center;margin:0 auto}
+.qd .cell{appearance:none;border:none;margin:0;padding:0;width:100%;height:100%;
+  background:var(--paper);border-radius:5px;display:grid;place-items:center;color:var(--ink)}
+div.qd .cell{cursor:default}
+.qd button.cell.hint{cursor:pointer;box-shadow:inset 0 0 0 2px var(--brass)}
+.qd .cell.hint::after{content:"";width:34%;height:34%;border-radius:50%;background:#c9a24b99}
+.qd .cell:focus-visible{outline:3px solid var(--brass);outline-offset:2px;z-index:4}
+.qd .pawn{width:74%;height:74%;border-radius:50%;
+  box-shadow:inset 0 -2px 3px #00000033,0 1px 2px #00000055}
+.qd .pawn.p0{background:radial-gradient(circle at 36% 30%,#e0937a,var(--x))}
+.qd .pawn.p1{background:radial-gradient(circle at 36% 30%,#7fb6cf,var(--o))}
+.qd .wall{background:var(--brass);border-radius:3px;width:100%;height:100%;z-index:2;
+  box-shadow:0 1px 2px #00000066}
+.qd .slot{appearance:none;border:none;padding:0;margin:0;width:100%;height:100%;
+  background:transparent;border-radius:3px;cursor:pointer;z-index:3}
+.qd .slot.sh{min-height:10px}
+.qd .slot.sv{min-width:10px}
+.qd .slot:hover,.qd .slot:focus-visible{background:#c9a24b88;outline:none}
+  .st{--x:#b8502f;--o:#2f6f8f;--felt:#2f5d50;--paper:#f4efe3;--brass:#c9a24b;--ink:#26201a;display:block}
+.st .board{display:grid;grid-template-columns:repeat(10,1fr);gap:2px;background:var(--felt);padding:6px;border-radius:12px;max-width:520px;margin:0 auto;touch-action:manipulation}
+.st .sq{aspect-ratio:1/1;display:grid;place-items:center;border:1px solid #00000018;border-radius:4px;background:#ece3cd;color:var(--ink);font:700 clamp(.6rem,2.4vw,.95rem)/1 var(--sans,system-ui);padding:0;cursor:default;position:relative;-webkit-tap-highlight-color:transparent}
+.st .sq.empty{background:#e7ddc4}
+.st .sq.water{background:linear-gradient(160deg,#6aa0c4,#3f7aa0 70%);border-color:#2c5a76;cursor:not-allowed;box-shadow:inset 0 1px 4px #0000003a}
+.st .sq.water::after{content:"~";color:#ffffff7a;font-weight:700}
+.st .sq.piece{cursor:pointer}
+.st .sq.p0{background:linear-gradient(180deg,#c45c39,var(--x));color:#fff;border-color:#7e3017;text-shadow:0 1px 1px #00000055}
+.st .sq.p1{background:linear-gradient(180deg,#3a7d9c,var(--o));color:#fff;border-color:#1f4d61;text-shadow:0 1px 1px #00000055}
+.st .sq.back{color:transparent;cursor:default}
+.st .sq.back.p0{background:repeating-linear-gradient(45deg,#9a4326,#9a4326 6px,#86391f 6px,#86391f 12px)}
+.st .sq.back.p1{background:repeating-linear-gradient(45deg,#27596f,#27596f 6px,#1f4a5d 6px,#1f4a5d 12px)}
+.st .sq.back::after{content:"";position:absolute;width:34%;height:34%;border-radius:50%;border:2px solid #ffffff40}
+.st .sq.seen{box-shadow:inset 0 0 0 2px var(--brass)}
+.st .sq.sel{outline:3px solid var(--brass);outline-offset:-3px;z-index:2}
+.st .sq.move{box-shadow:inset 0 0 0 3px var(--brass)}
+.st .sq.move.attack{box-shadow:inset 0 0 0 3px #d23b2c}
+.st .sq.move::before{content:"";position:absolute;width:30%;height:30%;border-radius:50%;background:#c9a24bcc}
+.st .sq.move.attack::before{background:#d23b2ccc;width:46%;height:46%;border-radius:50%;-webkit-mask:radial-gradient(circle,transparent 38%,#000 40%);mask:radial-gradient(circle,transparent 38%,#000 40%)}
+.st .sq:disabled{cursor:default}
+.st .sq:focus-visible,.st .sq:focus-visible{outline:3px solid var(--brass);outline-offset:-3px}
+.st .hide{max-width:420px;margin:0 auto;background:linear-gradient(180deg,#33635492,#23493f);color:var(--paper);border:1px solid #ffffff1f;border-radius:16px;padding:28px 22px;text-align:center}
+.st .hide h3{margin:0 0 6px;font-size:1.35rem;color:var(--paper)}
+.st .hide .who{color:var(--brass);font-weight:700}
+.st .hide p{margin:6px 0 18px;color:#f4efe3cc;font-size:.95rem;line-height:1.4}
+.st .hide .note{background:#0000002e;border-radius:10px;padding:8px 12px;margin:0 0 18px;font-size:.9rem}
+.st .bigbtn{appearance:none;cursor:pointer;font:inherit;font-weight:700;border:none;border-radius:999px;padding:14px 26px;background:var(--brass);color:var(--ink)}
+.st .bigbtn:focus-visible{outline:3px solid var(--paper);outline-offset:2px}
+.st .over{max-width:460px;margin:0 auto 12px;text-align:center;background:linear-gradient(180deg,var(--paper),#e6dcc6);border-radius:14px;padding:14px}
+.st .over h3{margin:0;color:var(--ink);font-size:1.25rem}
+.st .over .crown{font-size:2rem;display:block;margin-bottom:2px}
+.st .key{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:10px auto 0;color:var(--paper);font-size:.82rem;opacity:.92}
+.st .key b{display:inline-block;width:.8em;height:.8em;border-radius:3px;vertical-align:-1px;margin-right:4px}
+.st .key .kx{background:var(--x)}
+.st .key .ko{background:var(--o)}
   /*__MORE_CSS__*/
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -425,6 +539,10 @@ const GAMES = [
   { id:'wordle', name:'Wordle', glyph:'🟩', blurb:'Six tries to crack today’s five-letter word.', badges:['daily-le'], tier:0, mount: mountWordle },
   { id:'crazyeights', name:'Crazy Eights', glyph:'🃏', blurb:'Shed your hand by matching rank or suit — eights are wild. You versus the computer.', badges:['1 player'], tier:3, mount: mountCrazyeights },
   { id:'dotsboxes', name:'Dots & Boxes', glyph:'⊞', blurb:'Seal the 4th wall of a box to claim it — and go again. Beat the computer or pass-and-play.', badges:['1 player','2 players'], tier:0, mount: mountDotsboxes },
+  { id:'blokus', name:'Blokus', glyph:'🟦', blurb:'Spread your 21 shapes from your corner, each new piece touching your own only at the corners. Most squares laid wins.', badges:['1 player','2 players'], tier:2, mount: mountBlokus },
+  { id:'checkers', name:'Checkers', glyph:'⛀', blurb:'Forced jumps, multi-captures and kings on the back row — outplay the computer or pass-and-play.', badges:['1 player','2 players'], tier:2, mount: mountCheckers },
+  { id:'quoridor', name:'Quoridor', glyph:'🧱', blurb:'Race your pawn to the far side — and drop fences to send your rival the long way round.', badges:['1 player','2 players'], tier:2, mount: mountQuoridor },
+  { id:'stratego', name:'Stratego', glyph:'🎖️', blurb:'Set your army in secret, then duel across the lakes to capture the flag — hidden ranks, bombs, and a sneaky Spy.', badges:['2 players'], tier:2, mount: mountStratego },
   /*__MORE_GAMES__*/
 ];
 
@@ -1590,6 +1708,548 @@ function mountDotsboxes(host, h){
   const again=ctrl('New game',()=>newGame()); again.classList.add('ghost');
   function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
   setModes(); newGame();
+}
+
+// ---- Blokus UI (logic from the BLOKUS bundle) ----
+function mountBlokus(host, h){
+  const B=BLOKUS, N=B.SIZE;
+  let board, mode='ai', turn=0, remaining, over=false, busy=false, note='', info='', selected=null, gen=0;
+  let cellEls=[], previewed=[];
+
+  const norm=(cs)=>{ const mr=Math.min(...cs.map(c=>c[0])), mc=Math.min(...cs.map(c=>c[1]));
+    return cs.map(([r,c])=>[r-mr,c-mc]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]); };
+  const humanTurn=()=> !over && !busy && !(mode==='ai' && turn===1);
+  const isFirst=()=> !board.some(v=>v===turn);
+
+  function newGame(){
+    gen++; board=B.emptyBoard();
+    remaining=[B.ALL_PIECE_IDS.slice(), B.ALL_PIECE_IDS.slice()];
+    turn=0; over=false; busy=false; note=''; info=''; selected=null;
+    resolve();
+  }
+
+  // After any change: end when neither side can move; auto-pass (permanently) a
+  // side with no legal move; in vs-Computer, let the AI answer after a beat.
+  function resolve(){
+    const can=[B.hasAnyMove(board,0,remaining[0]), B.hasAnyMove(board,1,remaining[1])];
+    if(!can[0] && !can[1]){ over=true; busy=false; draw(); return; }
+    if(!can[turn]){ note='Player '+(turn+1)+' has no legal move — passes.'; turn=turn===0?1:0; }
+    else note='';
+    if(selected && !remaining[turn].includes(selected.pieceId)) selected=null;
+    draw();
+    if(mode==='ai' && turn===1 && !over){
+      busy=true; const myGen=gen;
+      setTimeout(()=>{
+        if(myGen!==gen || over || !host.isConnected) return;
+        const mv=B.aiMove(board,1,remaining[1]); busy=false;
+        if(mv) commit(mv.pieceId, mv.cells, mv.row, mv.col); else resolve();
+      }, 350);
+    }
+  }
+
+  function commit(pieceId, cells, r, c){
+    board=B.place(board, turn, cells, r, c);
+    remaining[turn]=remaining[turn].filter(id=>id!==pieceId);
+    selected=null; info=''; note='';
+    turn=turn===0?1:0; resolve();
+  }
+
+  function tryPlace(r,c){
+    if(!humanTurn() || !selected) return;
+    if(B.canPlace(board,turn,selected.cells,r,c,isFirst())){ commit(selected.pieceId, selected.cells, r, c); }
+    else { info='That spot isn’t legal — corners only, never edges.'; draw(); }
+  }
+
+  function clearPreview(){ for(const el of previewed) el.classList.remove('pv-ok','pv-bad'); previewed=[]; }
+  function paintPreview(ar,ac){
+    clearPreview();
+    if(!humanTurn() || !selected) return;
+    const ok=B.canPlace(board,turn,selected.cells,ar,ac,isFirst());
+    for(const [dr,dc] of selected.cells){
+      const r=ar+dr, c=ac+dc;
+      if(r>=0&&r<N&&c>=0&&c<N){ const el=cellEls[r*N+c]; el.classList.add(ok?'pv-ok':'pv-bad'); previewed.push(el); }
+    }
+  }
+
+  function miniGrid(cells, cls){
+    const rows=Math.max(...cells.map(c=>c[0]))+1, cols=Math.max(...cells.map(c=>c[1]))+1;
+    const set=new Set(cells.map(c=>c[0]+','+c[1]));
+    const g=document.createElement('div'); g.className=cls; g.style.gridTemplateColumns='repeat('+cols+',1fr)';
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){ const dot=document.createElement('i');
+      dot.className=set.has(r+','+c)?'on':'off'; g.appendChild(dot); }
+    return g;
+  }
+
+  function mkBtn(label, fn){ const b=document.createElement('button'); b.className='btn ghost'; b.type='button';
+    b.textContent=label; b.addEventListener('click',fn); return b; }
+
+  function draw(){
+    const sc=[B.score(board,0), B.score(board,1)];
+    if(over){
+      const w= sc[0]>sc[1]?0 : sc[1]>sc[0]?1 : -1;
+      h.status(w<0 ? ('A tie — '+sc[0]+' squares each.')
+        : ((mode==='ai'?(w===0?'You win':'The computer wins'):'Player '+(w+1)+' wins')
+           +' — '+Math.max(sc[0],sc[1])+' squares to '+Math.min(sc[0],sc[1])+'.'));
+    } else {
+      const whose= mode==='ai' ? (turn===0?'Your turn':'Computer is thinking…') : 'Player '+(turn+1)+'’s turn';
+      const tally = mode==='ai' ? ('You '+sc[0]+' · Computer '+sc[1]) : ('P1 '+sc[0]+' · P2 '+sc[1]);
+      h.status((info?info+'  ':'')+(note?note+'  ':'')+whose+'  ·  '+tally);
+    }
+
+    host.className='bk'; host.innerHTML=''; cellEls=[]; previewed=[];
+    const grid=document.createElement('div'); grid.className='bk-board';
+    const live=humanTurn();
+    for(let i=0;i<N*N;i++){
+      const r=Math.floor(i/N), c=i%N, v=board[i];
+      const cell=document.createElement('button'); cell.type='button';
+      if(v===0) cell.className='x'; else if(v===1) cell.className='o';
+      if((r===4&&c===4)||(r===9&&c===9)) cell.classList.add('start');
+      cell.setAttribute('aria-label','row '+(r+1)+' column '+(c+1)+(v===0?', player one':v===1?', player two':', empty'));
+      cell.disabled=!live;
+      if(live){
+        cell.addEventListener('mouseenter',()=>paintPreview(r,c));
+        cell.addEventListener('focus',()=>paintPreview(r,c));
+        cell.addEventListener('click',()=>tryPlace(r,c));
+      }
+      cellEls.push(cell); grid.appendChild(cell);
+    }
+    grid.addEventListener('mouseleave', clearPreview);
+    host.appendChild(grid);
+
+    const tools=document.createElement('div'); tools.className='bk-tools';
+    if(selected){ tools.appendChild(miniGrid(selected.cells, 'bk-swatch'+(turn===1?' p1':''))); }
+    else { const hint=document.createElement('span'); hint.className='bk-hint'; hint.textContent='Pick a piece, then tap the board'; tools.appendChild(hint); }
+    const rot=mkBtn('⟳ Rotate',()=>{ if(selected){ selected={pieceId:selected.pieceId, cells:norm(selected.cells.map(([r,c])=>[c,-r]))}; info=''; draw(); } });
+    const flp=mkBtn('⇄ Flip',()=>{ if(selected){ selected={pieceId:selected.pieceId, cells:norm(selected.cells.map(([r,c])=>[r,-c]))}; info=''; draw(); } });
+    rot.disabled=flp.disabled=!selected||!humanTurn();
+    tools.appendChild(rot); tools.appendChild(flp);
+    host.appendChild(tools);
+
+    const tray=document.createElement('div'); tray.className='bk-tray';
+    for(const pid of remaining[turn]){
+      const p=B.PIECES[pid];
+      const btn=document.createElement('button'); btn.type='button'; btn.className='bk-piece'+(turn===1?' p1':'');
+      if(selected && selected.pieceId===pid) btn.setAttribute('aria-pressed','true');
+      btn.appendChild(miniGrid(norm(p.cells), 'bk-mini'));
+      btn.setAttribute('aria-label','piece '+p.name+', '+p.cells.length+' squares');
+      btn.disabled=!humanTurn();
+      btn.addEventListener('click',()=>{ selected={pieceId:pid, cells:norm(p.cells)}; info=''; draw(); });
+      tray.appendChild(btn);
+    }
+    if(!remaining[turn].length){ const d=document.createElement('span'); d.className='bk-hint'; d.textContent='No pieces left.'; tray.appendChild(d); }
+    host.appendChild(tray);
+  }
+
+  const controls=h.controls; controls.innerHTML='';
+  function ctrl(label,fn,p){ const b=document.createElement('button'); b.className='btn'; b.type='button';
+    b.textContent=label; if(p)b.setAttribute('aria-pressed','true'); b.addEventListener('click',fn); controls.appendChild(b); return b; }
+  const vsAi=ctrl('vs Computer',()=>{mode='ai';setModes();newGame();},true);
+  const vs2=ctrl('2 Players',()=>{mode='2p';setModes();newGame();});
+  const again=ctrl('New game',()=>newGame()); again.classList.add('ghost');
+  function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
+  setModes(); newGame();
+}
+
+function mountCheckers(host, h){
+  let board, mode='ai', turn='r', over=false, busy=false, sel=null, gen=0;
+  const HUMAN='r', AI='b';
+  const flip=(p)=>p==='r'?'b':'r';
+
+  function newGame(){ gen++; board=CHECKERS.emptyBoard(); turn='r'; over=false; busy=false; sel=null; resolve(); }
+
+  // After any board change, the side to move is `turn`. If it has no legal move
+  // it has lost (this also covers having no pieces). Vs the computer, schedule
+  // Black's reply on a short delay.
+  function resolve(){
+    sel=null;
+    over = CHECKERS.legalMoves(board, turn).length===0;
+    draw();
+    if(over) return;
+    if(mode==='ai' && turn===AI){
+      busy=true;
+      const myGen=gen;
+      setTimeout(()=>{
+        if(over || myGen!==gen || !host.isConnected){ busy=false; return; }
+        const m=CHECKERS.bestMove(board, AI, 6);
+        busy=false;
+        if(m){ board=CHECKERS.applyMove(board, m); turn=HUMAN; }
+        resolve();
+      }, 300);
+    }
+  }
+
+  function pick(i){
+    if(over||busy) return;
+    if(mode==='ai' && turn===AI) return;
+    const ms=CHECKERS.legalMoves(board, turn);
+    if(sel!=null){
+      const mv=ms.find(m=>m.from===sel && m.to===i);
+      if(mv){ board=CHECKERS.applyMove(board, mv); turn=flip(turn); resolve(); return; }
+    }
+    if(ms.some(m=>m.from===i)){ sel = sel===i ? null : i; draw(); return; }
+    if(sel!=null){ sel=null; draw(); }
+  }
+
+  function label(i,v,isDest){
+    const r=Math.floor(i/8)+1, c=i%8+1;
+    if(v){ const red=v==='r'||v==='R', king=v==='R'||v==='B';
+      return (red?'red':'black')+(king?' king':' man')+' at row '+r+', column '+c; }
+    if(isDest) return 'move to row '+r+', column '+c;
+    return 'row '+r+', column '+c;
+  }
+
+  function draw(){
+    const ms=(!over && !busy && !(mode==='ai'&&turn===AI)) ? CHECKERS.legalMoves(board, turn) : [];
+    const forced = ms.length>0 && ms[0].captures.length>0;
+    const movable = new Set(ms.map(m=>m.from));
+    const dests = sel!=null ? ms.filter(m=>m.from===sel).map(m=>m.to) : [];
+
+    let status;
+    if(over){ const v=flip(turn); status=(v==='r'?'Red':'Black')+' wins!'; }
+    else if(mode==='ai' && turn===AI){ status='Thinking…'; }
+    else {
+      const who = mode==='ai' ? 'Your turn — you’re red.' : (turn==='r'?'Red':'Black')+'’s turn.';
+      status = who + (forced ? ' Captures are forced — you must jump.' : '');
+    }
+    h.status(status);
+
+    host.className='ck'; host.innerHTML='';
+    const grid=document.createElement('div'); grid.className='board';
+    for(let i=0;i<64;i++){
+      const r=Math.floor(i/8), c=i%8, dark=(r+c)%2===1, v=board[i];
+      const cell=document.createElement('button'); cell.type='button';
+      cell.className='sq '+(dark?'dark':'light');
+      const isMovable = dark && !over && movable.has(i);
+      const isDest = dests.includes(i);
+      if(i===sel) cell.classList.add('sel');
+      if(isDest) cell.classList.add('dest');
+      if(forced && isMovable) cell.classList.add('cap');
+      if(isMovable || isDest) cell.classList.add('play');
+      if(v){ const p=document.createElement('span');
+        const red=v==='r'||v==='R';
+        p.className='pc '+(red?'x':'o')+((v==='R'||v==='B')?' king':'');
+        cell.appendChild(p); }
+      cell.setAttribute('aria-label', label(i,v,isDest));
+      cell.disabled = !dark || (!isMovable && !isDest);
+      cell.addEventListener('click',()=>pick(i));
+      grid.appendChild(cell);
+    }
+    host.appendChild(grid);
+  }
+
+  const controls=h.controls; controls.innerHTML='';
+  const vsAi=mkBtn('vs Computer',()=>{mode='ai';setModes();newGame();},true);
+  const vs2=mkBtn('2 Players',()=>{mode='2p';setModes();newGame();});
+  const again=mkBtn('New game',()=>newGame()); again.classList.add('ghost');
+  function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
+  function mkBtn(text,fn,pressed){ const b=document.createElement('button'); b.className='btn'; b.type='button';
+    b.textContent=text; if(pressed) b.setAttribute('aria-pressed','true'); b.addEventListener('click',fn); controls.appendChild(b); return b; }
+  setModes(); newGame();
+}
+
+function mountQuoridor(host, h){
+  let state, mode='ai', place='move', over=false, busy=false;
+  const HUMAN=0; // in vs-Computer you are pawn 0 (bottom, racing up)
+
+  function fresh(){ state=QUORIDOR.newGame(); over=false; busy=false; place='move'; setPlace(); draw(); maybeAi(); }
+
+  function myTurn(){ return mode==='2p' || state.turn===HUMAN; }
+
+  function maybeAi(){
+    if(over || mode!=='ai' || state.turn===HUMAN) return;
+    busy=true; draw();
+    setTimeout(()=>{
+      if(!host.isConnected || over){ busy=false; return; }
+      const act=QUORIDOR.aiMove(state);
+      if(act){
+        state = act.kind==='move'
+          ? QUORIDOR.movePawn(state, act.r, act.c)
+          : QUORIDOR.placeWall(state, act.type, act.r, act.c);
+      }
+      busy=false; over=QUORIDOR.winner(state)!==null; draw();
+    }, 320);
+  }
+
+  function doMove(r,c){
+    if(over||busy||!myTurn()) return;
+    if(!QUORIDOR.pawnMoves(state).some(m=>m.r===r&&m.c===c)) return;
+    state=QUORIDOR.movePawn(state,r,c);
+    over=QUORIDOR.winner(state)!==null; draw();
+    if(!over) maybeAi();
+  }
+
+  function doWall(type,r,c){
+    if(over||busy||!myTurn()) return;
+    if(!QUORIDOR.canPlaceWall(state,type,r,c)) return;
+    state=QUORIDOR.placeWall(state,type,r,c);
+    place='move'; setPlace();
+    over=QUORIDOR.winner(state)!==null; draw();
+    if(!over) maybeAi();
+  }
+
+  function draw(){
+    const w=QUORIDOR.winner(state);
+    let status;
+    if(w!==null){
+      status = mode==='ai'
+        ? (w===HUMAN?'You slipped through to the far side — you win! 🎉':'The computer reached home first. New game?')
+        : 'Player '+(w+1)+' wins!';
+    } else if(busy){
+      status='Computer is plotting…';
+    } else {
+      const whose = mode==='ai'
+        ? (state.turn===HUMAN?'Your move':'Computer’s move')
+        : 'Player '+(state.turn+1)+'’s move';
+      status=whose+' · walls ◆'+state.wallsLeft[0]+' / ◇'+state.wallsLeft[1]+' · '+(place==='wall'?'tap a groove to wall':'tap a dot to step');
+    }
+    h.status(status);
+
+    host.className='qd'; host.innerHTML='';
+    const board=document.createElement('div'); board.className='board';
+    const active = !over && !busy && myTurn();
+    const wallMode = place==='wall' && active;
+    const hints = (!wallMode && active) ? QUORIDOR.pawnMoves(state) : [];
+
+    for(let r=0;r<9;r++) for(let c=0;c<9;c++){
+      const isHint=hints.some(m=>m.r===r&&m.c===c);
+      const tag = isHint ? 'button' : 'div';
+      const cell=document.createElement(tag); cell.className='cell';
+      cell.style.gridColumn=(2*c+1); cell.style.gridRow=(2*r+1);
+      if(state.pawns[0].r===r&&state.pawns[0].c===c){ const p=document.createElement('span'); p.className='pawn p0'; cell.appendChild(p); }
+      else if(state.pawns[1].r===r&&state.pawns[1].c===c){ const p=document.createElement('span'); p.className='pawn p1'; cell.appendChild(p); }
+      if(tag==='button'){
+        cell.type='button'; cell.classList.add('hint');
+        cell.setAttribute('aria-label','step to row '+(r+1)+' column '+(c+1));
+        cell.addEventListener('click',()=>doMove(r,c));
+      }
+      board.appendChild(cell);
+    }
+
+    state.walls.h.forEach(kk=>{ const a=kk.split(',').map(Number);
+      const el=document.createElement('div'); el.className='wall wh';
+      el.style.gridRow=(2*a[0]+2); el.style.gridColumn=(2*a[1]+1)+' / '+(2*a[1]+4); board.appendChild(el); });
+    state.walls.v.forEach(kk=>{ const a=kk.split(',').map(Number);
+      const el=document.createElement('div'); el.className='wall wv';
+      el.style.gridColumn=(2*a[1]+2); el.style.gridRow=(2*a[0]+1)+' / '+(2*a[0]+4); board.appendChild(el); });
+
+    if(wallMode){
+      for(let r=0;r<8;r++) for(let c=0;c<8;c++){
+        if(QUORIDOR.canPlaceWall(state,'h',r,c)){
+          const s=document.createElement('button'); s.type='button'; s.className='slot sh';
+          s.style.gridRow=(2*r+2); s.style.gridColumn=(2*c+1);
+          s.setAttribute('aria-label','horizontal wall below row '+(r+1)+' at column '+(c+1));
+          s.addEventListener('click',()=>doWall('h',r,c)); board.appendChild(s);
+        }
+        if(QUORIDOR.canPlaceWall(state,'v',r,c)){
+          const s=document.createElement('button'); s.type='button'; s.className='slot sv';
+          s.style.gridColumn=(2*c+2); s.style.gridRow=(2*r+1);
+          s.setAttribute('aria-label','vertical wall right of column '+(c+1)+' at row '+(r+1));
+          s.addEventListener('click',()=>doWall('v',r,c)); board.appendChild(s);
+        }
+      }
+    }
+    host.appendChild(board);
+  }
+
+  const controls=h.controls; controls.innerHTML='';
+  function ctrl(label,fn,pressed){ const b=document.createElement('button'); b.className='btn'; b.type='button';
+    b.textContent=label; if(pressed)b.setAttribute('aria-pressed','true'); b.addEventListener('click',fn); controls.appendChild(b); return b; }
+  const vsAi=ctrl('vs Computer',()=>{mode='ai';setModes();fresh();},true);
+  const vs2=ctrl('2 Players',()=>{mode='2p';setModes();fresh();});
+  const again=ctrl('New game',()=>fresh()); again.classList.add('ghost');
+  const moveBtn=ctrl('Move',()=>{place='move';setPlace();draw();},true);
+  const wallBtn=ctrl('Wall',()=>{place='wall';setPlace();draw();});
+  moveBtn.classList.add('ghost'); wallBtn.classList.add('ghost');
+  function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
+  function setPlace(){ moveBtn.setAttribute('aria-pressed',place==='move'); wallBtn.setAttribute('aria-pressed',place==='wall'); }
+  setModes(); fresh();
+}
+
+function mountStratego(host, h){
+  // Pass-and-play Stratego. Two humans share one device; a "hide" interstitial
+  // between setups and between turns keeps each army secret. Logic: STRATEGO.
+  const N = STRATEGO.SIZE; // 10
+  let board, phase, setupPlayer, current, sel, legal, handoff, lastCombat;
+
+  const name = (o) => (o === 0 ? 'Player 1' : 'Player 2');
+  const cls = (o) => (o === 0 ? 'p0' : 'p1');
+
+  function shuffle(a){
+    for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=a[i]; a[i]=a[j]; a[j]=t; }
+    return a;
+  }
+  // Drop a fresh random army into `owner`'s four home rows (others untouched).
+  function placeRandom(owner){
+    const idxs=STRATEGO.setupIndices(owner);
+    for(const i of idxs) board[i]=null;
+    const bag=shuffle(STRATEGO.pieceBag(owner));
+    idxs.forEach((i,k)=>{ board[i]=bag[k]; });
+  }
+
+  function newGame(){
+    board=STRATEGO.emptyBoard();
+    placeRandom(0);
+    setupPlayer=0; current=0; sel=null; legal=[]; handoff=null; lastCombat='';
+    phase='setup';
+    render();
+  }
+
+  // Arrange a hide screen; `next` is applied when the receiver taps continue.
+  function goHide(to, note, next){
+    handoff={ to, note, next };
+    phase='hide';
+    render();
+  }
+  function proceed(){
+    const next=handoff.next; handoff=null;
+    next();
+  }
+
+  // ---- Setup interaction: tap two of your own pieces to swap them. ----
+  function setupTap(i){
+    if(phase!=='setup') return;
+    const p=board[i];
+    if(sel==null){
+      if(p && p.owner===setupPlayer){ sel=i; render(); }
+      return;
+    }
+    if(i===sel){ sel=null; render(); return; }
+    if(p && p.owner===setupPlayer){ const t=board[i]; board[i]=board[sel]; board[sel]=t; sel=null; render(); return; }
+    sel=null; render();
+  }
+  function ready(){
+    sel=null;
+    if(setupPlayer===0){
+      goHide(1, name(0)+"'s army is set.", ()=>{
+        placeRandom(1); setupPlayer=1; phase='setup'; render();
+      });
+    } else {
+      goHide(0, 'Both armies are set. '+name(0)+' moves first.', ()=>{
+        current=0; phase='play'; render();
+      });
+    }
+  }
+
+  // ---- Play interaction. ----
+  function playTap(i){
+    if(phase!=='play') return;
+    const p=board[i];
+    if(sel!=null && legal.includes(i)){ doMove(sel, i); return; }
+    if(p && p.owner===current){
+      if(i===sel){ sel=null; legal=[]; }
+      else { sel=i; legal=STRATEGO.legalMoves(board, i); }
+      render();
+      return;
+    }
+    if(sel!=null){ sel=null; legal=[]; render(); }
+  }
+  function doMove(from, to){
+    const att=board[from], def=board[to];
+    board=STRATEGO.applyMove(board, from, to);
+    let note='';
+    if(def){
+      const v=STRATEGO.resolveCombat(att.rank, def.rank);
+      const a=STRATEGO.rankName(att.rank), d=STRATEGO.rankName(def.rank);
+      if(def.rank==='F') note=name(att.owner)+"'s "+a+' captured the flag!';
+      else if(v==='attacker') note=name(att.owner)+"'s "+a+' beat '+name(def.owner)+"'s "+d+'.';
+      else if(v==='defender') note=name(att.owner)+"'s "+a+' lost to '+name(def.owner)+"'s "+d+'.';
+      else note=name(att.owner)+"'s "+a+' and '+name(def.owner)+"'s "+d+' traded off.';
+    }
+    sel=null; legal=[];
+    const w=STRATEGO.winner(board);
+    if(w!=null){ lastCombat=note; current=w; phase='over'; render(); return; }
+    const nxt = current===0?1:0;
+    goHide(nxt, note, ()=>{ current=nxt; phase='play'; render(); });
+  }
+
+  // ---- Rendering ----
+  // Build a board grid seen from `viewer`'s eyes (own faces up; foes hidden
+  // unless revealed). `onTap` handles clicks; `revealAll` shows every face.
+  function buildBoard(viewer, onTap, revealAll){
+    const grid=document.createElement('div'); grid.className='board';
+    for(let i=0;i<N*N;i++){
+      const r=Math.floor(i/N), c=i%N, p=board[i];
+      const cell=document.createElement('button'); cell.type='button'; cell.className='sq';
+      if(STRATEGO.isLake(r,c)){
+        cell.classList.add('water'); cell.disabled=true;
+        cell.setAttribute('aria-label','lake');
+      } else if(!p){
+        cell.classList.add('empty');
+        if(sel!=null && legal.includes(i)) cell.classList.add('move');
+        cell.disabled=!(sel!=null && legal.includes(i));
+        cell.setAttribute('aria-label','empty');
+      } else {
+        const mine = p.owner===viewer;
+        const show = revealAll || mine || p.revealed;
+        if(show){
+          cell.classList.add('piece', cls(p.owner));
+          if(!mine && (p.revealed||revealAll)) cell.classList.add('seen');
+          cell.textContent=STRATEGO.rankGlyph(p.rank);
+          cell.setAttribute('aria-label', name(p.owner)+' '+STRATEGO.rankName(p.rank));
+        } else {
+          cell.classList.add('back', cls(p.owner));
+          cell.setAttribute('aria-label', name(p.owner)+' hidden piece');
+        }
+        if(i===sel) cell.classList.add('sel');
+        if(sel!=null && legal.includes(i)) cell.classList.add('move','attack');
+        cell.disabled = !onTap;
+      }
+      if(onTap){ const k=i; cell.addEventListener('click',()=>onTap(k)); }
+      grid.appendChild(cell);
+    }
+    return grid;
+  }
+
+  function legendAndControls(){
+    h.controls.innerHTML='';
+    if(phase==='setup'){
+      ctrl('Shuffle my setup', ()=>{ placeRandom(setupPlayer); sel=null; render(); });
+      ctrl('Ready ✓', ready);
+    }
+    ctrl('New game', newGame, true);
+    const key=document.createElement('div'); key.className='key';
+    key.innerHTML='<span><b class="kx"></b>'+name(0)+'</span><span><b class="ko"></b>'+name(1)+'</span>';
+    host.appendChild(key);
+  }
+  function ctrl(label, fn, ghost){
+    const b=document.createElement('button'); b.className='btn'+(ghost?' ghost':''); b.type='button';
+    b.textContent=label; b.addEventListener('click',fn); h.controls.appendChild(b); return b;
+  }
+
+  function render(){
+    host.className='st'; host.innerHTML='';
+    if(phase==='setup'){
+      h.status(name(setupPlayer)+' — arrange your army, then press Ready. Tap two of your pieces to swap them.');
+      host.appendChild(buildBoard(setupPlayer, setupTap, false));
+    } else if(phase==='hide'){
+      h.status('Hand the device over.');
+      const card=document.createElement('div'); card.className='hide';
+      const ti=document.createElement('h3'); ti.innerHTML='Pass the device to <span class="who">'+name(handoff.to)+'</span>';
+      const sub=document.createElement('p'); sub.textContent='Keep the screen private until '+name(handoff.to)+' is holding it.';
+      card.appendChild(ti); card.appendChild(sub);
+      if(handoff.note){ const nt=document.createElement('div'); nt.className='note'; nt.textContent=handoff.note; card.appendChild(nt); }
+      const go=document.createElement('button'); go.className='bigbtn'; go.type='button';
+      go.textContent="I'm "+name(handoff.to)+' — continue';
+      go.addEventListener('click', proceed);
+      card.appendChild(go);
+      host.appendChild(card);
+    } else if(phase==='play'){
+      h.status(sel!=null
+        ? name(current)+' — tap a highlighted square to move or attack, or your piece to reselect.'
+        : name(current)+"'s turn — tap one of your pieces.");
+      host.appendChild(buildBoard(current, playTap, false));
+    } else if(phase==='over'){
+      h.status(name(current)+' wins!');
+      const card=document.createElement('div'); card.className='over';
+      card.innerHTML='<span class="crown" aria-hidden="true">🎖️</span><h3>'+name(current)+' wins!</h3>'
+        +(lastCombat?'<p>'+lastCombat+'</p>':'');
+      host.appendChild(card);
+      host.appendChild(buildBoard(current, null, true));
+    }
+    legendAndControls();
+  }
+
+  newGame();
 }
 
 /*__MORE_MOUNTS__*/
