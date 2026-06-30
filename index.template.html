@@ -136,6 +136,8 @@
   .hex input{font:inherit;font-family:var(--serif);font-size:1.15rem;letter-spacing:.22em;
     text-transform:lowercase;width:180px;text-align:center;padding:9px;border-radius:8px;border:1px solid #00000022}
   .hex .swatch{height:46px;border-radius:10px;margin:10px auto;border:1px solid #00000022}
+  .hex .swatch.target{height:84px;margin:2px auto 4px;box-shadow:0 2px 10px #00000033}
+  .hex .hexcap{font-size:.85rem;color:var(--muted);margin:0 0 12px;letter-spacing:.02em}
 
   .shelf-foot{color:#ffffffcc;text-align:center;margin-top:32px;font-size:.8rem;line-height:1.7}
   .shelf-foot a{color:var(--paper)}
@@ -711,6 +713,14 @@ function mountHexcodle(host, h){
   }
   function draw(){
     host.className='hex'; host.innerHTML='';
+    // Show the colour from the start — you can see it and you're guessing its
+    // hex code (that's the whole game). Only the digits stay hidden until done.
+    const sw=document.createElement('div'); sw.className='swatch target';
+    sw.style.background='#'+target; sw.setAttribute('aria-label','the colour to match');
+    host.appendChild(sw);
+    const cap=document.createElement('div'); cap.className='hexcap';
+    cap.textContent = done ? '#'+target : 'Match this colour’s hex code';
+    host.appendChild(cap);
     for(const g of guesses){
       const row=document.createElement('div'); row.className='row';
       g.val.split('').forEach((ch,i)=>{
@@ -722,11 +732,9 @@ function mountHexcodle(host, h){
     }
     if(done){
       const win=guesses.length && guesses[guesses.length-1].fb.every(f=>f==='ok');
-      const sw=document.createElement('div'); sw.className='swatch'; sw.style.background='#'+target;
-      host.appendChild(sw);
       h.status(win ? `Got it in ${guesses.length}! It was #${target}.` : `Out of guesses — it was #${target}.`);
     } else {
-      h.status(`Guess today’s colour · ${guesses.length}/${MAX}. ▲ go higher, ▼ go lower.`);
+      h.status(`${guesses.length}/${MAX} guesses · ▲ go higher, ▼ go lower per digit.`);
       const row=document.createElement('div'); row.className='row';
       const inp=document.createElement('input'); inp.maxLength=7; inp.placeholder='a1b2c3';
       inp.setAttribute('aria-label','hex colour guess'); inp.spellcheck=false;

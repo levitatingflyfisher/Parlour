@@ -60,11 +60,14 @@ test('score is case-insensitive', () => {
   assert.deepEqual(score('CRANE', 'crane'), ['correct', 'correct', 'correct', 'correct', 'correct']);
 });
 
-test('isAllowed accepts every answer word and rejects junk', () => {
+test('isAllowed accepts any 5-letter word, rejects wrong shapes', () => {
   for (const w of ANSWERS) assert.equal(isAllowed(w), true, `${w} should be allowed`);
-  assert.equal(isAllowed('zzzzz'), false);
-  assert.equal(isAllowed('cat'), false);
+  assert.equal(isAllowed('hello'), true); // common word that isn't in the curated list
   assert.equal(isAllowed('GREAT'), true); // case-insensitive
+  assert.equal(isAllowed('zzzzz'), true); // lenient on purpose — never reject a real word
+  assert.equal(isAllowed('cat'), false); // too short
+  assert.equal(isAllowed('lovely'), false); // too long
+  assert.equal(isAllowed('hell!'), false); // non-letters
 });
 
 test('the allowed set is a superset of the answers and larger', () => {

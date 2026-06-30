@@ -59,9 +59,12 @@ export function dailyAnswer(seed) {
   return ANSWERS[a % ANSWERS.length];
 }
 
-/// True when `word` is a permitted guess (case-insensitive).
+/// True when `word` is a permitted guess. Deliberately lenient — any five
+/// letters are accepted (case-insensitive) so a real word the curated list
+/// simply doesn't know (e.g. "hello") is never rejected. [ALLOWED] remains the
+/// curated reference set, but membership is no longer required to guess.
 export function isAllowed(word) {
-  return ALLOWED.has(String(word).toLowerCase());
+  return /^[a-z]{5}$/.test(String(word).toLowerCase());
 }
 
 /// Grade `guess` against `answer`, returning five verdicts of
