@@ -215,6 +215,85 @@
 .hex2 .legend{display:flex;gap:16px;justify-content:center;margin:12px 0 2px;font-size:.74rem;color:var(--muted)}
 .hex2 .legend .r{color:var(--x)}
 .hex2 .legend .b{color:var(--o)}
+  .mines{max-width:380px;margin:0 auto;text-align:center}
+.mines .board{display:grid;grid-template-columns:repeat(9,1fr);gap:3px;max-width:360px;
+  margin:0 auto;background:var(--felt);padding:8px;border-radius:12px;touch-action:manipulation;user-select:none}
+.mines .cell{appearance:none;cursor:pointer;border:none;padding:0;aspect-ratio:1;border-radius:6px;
+  background:var(--paper-edge);color:var(--ink);display:grid;place-items:center;line-height:1;
+  font-family:var(--serif);font-weight:700;font-size:clamp(.8rem,4vw,1.2rem);
+  box-shadow:inset 0 1px 0 #ffffff80,inset 0 -2px 0 #00000014}
+.mines .cell:hover:not(:disabled):not(.open){background:#efe7d4}
+.mines .cell:focus-visible{outline:3px solid var(--brass);outline-offset:1px;z-index:1}
+.mines .cell:disabled{cursor:default}
+.mines .cell.open{background:var(--paper);box-shadow:inset 0 0 0 1px #00000014}
+.mines .cell.flag{background:#ece0c5}
+.mines .cell.mine{background:var(--x);color:var(--paper);box-shadow:none}
+.mines .cell.n1{color:var(--o)} .mines .cell.n2{color:#2f7a4a}
+.mines .cell.n3{color:var(--x)} .mines .cell.n4{color:#3b3b8a}
+.mines .cell.n5{color:#8a3b24} .mines .cell.n6{color:#2f8f8f}
+.mines .cell.n7{color:var(--ink)} .mines .cell.n8{color:var(--muted)}
+  /* ---- Mastermind (solo code-breaker) — root .mm ---- */
+  .mm{display:flex;flex-direction:column;align-items:center;gap:16px;
+    --mm-r:#cf4d54;--mm-o:#df8a3b;--mm-y:#e6bd3e;--mm-g:#4f9d6b;--mm-b:#3f80ac;--mm-p:#8d6fb3}
+  .mm .mm-board{display:flex;flex-direction:column;gap:8px;width:100%;max-width:340px}
+  .mm .mm-row{display:flex;align-items:center;gap:12px;
+    background:#ffffff5c;border:1px solid #00000014;border-radius:13px;padding:7px 11px}
+  .mm .mm-row.active{background:#2f5d500f;border-style:dashed;border-color:#2f5d5040}
+  .mm .mm-num{flex:0 0 16px;text-align:center;font-weight:700;color:var(--muted);font-size:.78rem}
+  .mm .mm-pegs{display:flex;gap:9px;flex:1}
+  .mm .mm-peg{width:30px;height:30px;flex:0 0 30px;border-radius:50%;padding:0;border:none;
+    box-shadow:0 1px 0 #ffffff80 inset,0 2px 4px #00000026}
+  .mm button.mm-peg{cursor:pointer}
+  .mm .mm-peg.slot{background:#0000000d;box-sizing:border-box;border:1px dashed #00000026;
+    box-shadow:inset 0 1px 3px #0000001a}
+  .mm .c-r{background:radial-gradient(circle at 34% 30%,#ffffff70,transparent 58%),var(--mm-r)}
+  .mm .c-o{background:radial-gradient(circle at 34% 30%,#ffffff70,transparent 58%),var(--mm-o)}
+  .mm .c-y{background:radial-gradient(circle at 34% 30%,#ffffff70,transparent 58%),var(--mm-y)}
+  .mm .c-g{background:radial-gradient(circle at 34% 30%,#ffffff70,transparent 58%),var(--mm-g)}
+  .mm .c-b{background:radial-gradient(circle at 34% 30%,#ffffff70,transparent 58%),var(--mm-b)}
+  .mm .c-p{background:radial-gradient(circle at 34% 30%,#ffffff70,transparent 58%),var(--mm-p)}
+  .mm .mm-feedback{flex:0 0 auto;display:grid;grid-template-columns:repeat(2,9px);
+    grid-auto-rows:9px;gap:4px;padding:2px}
+  .mm .mm-fb{width:9px;height:9px;border-radius:50%;box-sizing:border-box}
+  .mm .mm-fb.black{background:var(--ink);box-shadow:0 0 0 1px #0000001a}
+  .mm .mm-fb.white{background:var(--paper);border:1px solid #00000059}
+  .mm .mm-fb.none{background:#00000010;border:1px solid #0000000d}
+  .mm .mm-reveal{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center}
+  .mm .mm-revlabel{font-weight:600;color:var(--muted);font-size:.9rem}
+  .mm .mm-palette{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .mm .mm-swatch{width:40px;height:40px;border-radius:50%;padding:0;border:none;cursor:pointer;
+    box-shadow:0 1px 0 #ffffff80 inset,0 3px 6px #00000033;transition:transform .1s ease}
+  .mm .mm-swatch:hover{transform:translateY(-2px)}
+  .mm .mm-swatch:focus-visible,.mm button.mm-peg:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+  .mm .mm-actions{display:flex;gap:10px}
+  .mm .mm-act{appearance:none;cursor:pointer;font:inherit;font-weight:600;border-radius:999px;
+    padding:9px 18px;border:1px solid #00000022;background:var(--paper-edge);color:var(--ink)}
+  .mm .mm-act.primary{background:var(--felt);color:var(--paper);border-color:transparent}
+  .mm .mm-act:disabled{opacity:.4;cursor:default}
+  .mm .mm-act:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+  /* ---- Wordle ---- */
+  .wordle{--felt:#2f5d50;--paper:#f4efe3;--paper-edge:#e6dcc6;--brass:#c9a24b;--ink:#26201a;
+    max-width:360px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:18px}
+  .wordle .wgrid{display:flex;flex-direction:column;gap:6px}
+  .wordle .wrow{display:flex;gap:6px;justify-content:center}
+  .wordle .wcell{width:52px;height:52px;display:grid;place-items:center;background:var(--paper);
+    border:2px solid var(--paper-edge);border-radius:7px;color:var(--ink);text-transform:uppercase;
+    font-family:var(--serif);font-weight:700;font-size:1.7rem;line-height:1;transition:transform .08s ease}
+  .wordle .wcell.typed{border-color:#b6aa8f}
+  .wordle .wcell.correct{background:#6aaa64;border-color:#6aaa64;color:#fff}
+  .wordle .wcell.present{background:var(--brass);border-color:var(--brass);color:#fff}
+  .wordle .wcell.absent{background:#7d756a;border-color:#7d756a;color:#fff}
+  .wordle .wkeys{display:flex;flex-direction:column;gap:6px;width:100%}
+  .wordle .wkrow{display:flex;gap:5px;justify-content:center}
+  .wordle .wkey{appearance:none;cursor:pointer;font:inherit;font-weight:700;font-size:.95rem;color:var(--ink);
+    background:#d8cfbb;border:none;border-radius:6px;height:50px;flex:1;min-width:0;padding:0;
+    display:grid;place-items:center;text-transform:uppercase}
+  .wordle .wkey.wide{flex:1.5;font-size:.72rem}
+  .wordle .wkey:active{transform:translateY(1px)}
+  .wordle .wkey:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+  .wordle .wkey.correct{background:#6aaa64;color:#fff}
+  .wordle .wkey.present{background:var(--brass);color:#fff}
+  .wordle .wkey.absent{background:#7d756a;color:#fff}
   /*__MORE_CSS__*/
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -288,6 +367,9 @@ const GAMES = [
   },
   { id:'hangman', name:'Hangman', glyph:'🔤', blurb:'Guess the hidden word letter by letter before the figure is drawn.', badges:['1 player'], tier:0, mount: mountHangman },
   { id:'hex', name:'Hex', glyph:'⬡', blurb:'Link your two edges across the board before your rival bridges theirs.', badges:['1 player','2 players'], tier:4, mount: mountHex },
+  { id:'minesweeper', name:'Minesweeper', glyph:'💣', blurb:'Clear every safe square on the 9x9 grid without tripping a hidden mine.', badges:['solo'], tier:0, mount: mountMinesweeper },
+  { id:'mastermind', name:'Mastermind', glyph:'🔴', blurb:'Crack the hidden four-peg colour code in ten guesses — black pegs for right colour and place, white for right colour only.', badges:['solo'], tier:0, mount: mountMastermind },
+  { id:'wordle', name:'Wordle', glyph:'🟩', blurb:'Six tries to crack today’s five-letter word.', badges:['daily-le'], tier:0, mount: mountWordle },
   /*__MORE_GAMES__*/
 ];
 
@@ -914,6 +996,281 @@ function mountHex(host, h){
   function ctrl(label,fn,p){ const b=document.createElement('button'); b.className='btn'; b.type='button';
     b.textContent=label; if(p)b.setAttribute('aria-pressed','true'); b.addEventListener('click',fn); controls.appendChild(b); return b; }
   setModes(); newGame();
+}
+
+function mountMinesweeper(host, h){
+  const R=MINESWEEPER.ROWS, C=MINESWEEPER.COLS, M=MINESWEEPER.MINES;
+  let model=null, over=false, won=false, flagMode=false;
+  const controls=h.controls; controls.innerHTML='';
+  const flagBtn=document.createElement('button');
+  flagBtn.className='btn'; flagBtn.type='button'; flagBtn.textContent='🚩 Flag mode';
+  flagBtn.setAttribute('aria-pressed','false');
+  flagBtn.addEventListener('click',()=>{
+    flagMode=!flagMode;
+    flagBtn.setAttribute('aria-pressed', flagMode?'true':'false');
+  });
+  const again=document.createElement('button');
+  again.className='btn ghost'; again.type='button'; again.textContent='New game';
+  again.addEventListener('click',start);
+  controls.appendChild(flagBtn); controls.appendChild(again);
+
+  function start(){
+    model=null; over=false; won=false;
+    flagMode=false; flagBtn.setAttribute('aria-pressed','false');
+    draw();
+  }
+  function tap(i){
+    if(over) return;
+    if(model===null) model=MINESWEEPER.newGame(Math.random, i); // first tap is always safe
+    if(flagMode){
+      model=MINESWEEPER.toggleFlag(model, i);
+    } else {
+      if(model.flagged.has(i)) return;
+      model=MINESWEEPER.reveal(model, i);
+      if(model.dead) over=true;
+      else if(MINESWEEPER.isWon(model)){ over=true; won=true; }
+    }
+    draw();
+  }
+  function draw(){
+    const flags = model ? model.flagged.size : 0;
+    if(over && won) h.status('Swept the board — every mine avoided! 🎉');
+    else if(over) h.status('Boom — you hit a mine. 💥 New game?');
+    else if(model===null) h.status('Tap any square to begin — your first tap is always safe.');
+    else h.status('Mines: '+M+' · 🚩 '+flags+' flagged · '+(M-flags)+' to find');
+    host.className='mines'; host.innerHTML='';
+    const board=document.createElement('div'); board.className='board';
+    for(let i=0;i<R*C;i++){
+      const cell=document.createElement('button'); cell.type='button'; cell.className='cell';
+      let label='hidden square '+(i+1);
+      if(model){
+        const rev=model.revealed.has(i), fl=model.flagged.has(i), mine=model.mines.has(i);
+        if(rev){
+          cell.classList.add('open');
+          if(mine){ cell.classList.add('mine'); cell.textContent='💣'; label='mine'; }
+          else { const n=model.counts[i]; if(n>0){ cell.textContent=n; cell.classList.add('n'+n); label=n+' adjacent'; } else { label='empty'; } }
+        } else if(over && mine){
+          cell.classList.add('open','mine'); cell.textContent='💣'; label='mine';
+        } else if(fl){
+          cell.classList.add('flag'); cell.textContent='🚩'; label='flag';
+        }
+      }
+      cell.setAttribute('aria-label', label);
+      cell.disabled = over;
+      cell.addEventListener('click',()=>tap(i));
+      board.appendChild(cell);
+    }
+    host.appendChild(board);
+  }
+  start();
+}
+
+function mountMastermind(host, h){
+  const COLORS=MASTERMIND.COLORS, LEN=MASTERMIND.CODE_LEN, MAX=MASTERMIND.MAX_GUESSES;
+  const NAMES={r:'red',o:'orange',y:'yellow',g:'green',b:'blue',p:'purple'};
+  let code, rows, current, over, won;
+
+  function start(){ code=MASTERMIND.secret(); rows=[]; current=[]; over=false; won=false; draw(); }
+  function place(c){ if(over||current.length>=LEN) return; current.push(c); draw(); }
+  function removeAt(i){ if(over||i>=current.length) return; current.splice(i,1); draw(); }
+  function clearLast(){ if(over||!current.length) return; current.pop(); draw(); }
+  function submit(){
+    if(over||current.length!==LEN) return;
+    const res=MASTERMIND.score(current, code);
+    rows.push({guess:current.slice(), black:res.black, white:res.white});
+    current=[];
+    if(MASTERMIND.isWin(res)){ won=true; over=true; }
+    else if(rows.length>=MAX){ over=true; }
+    draw();
+  }
+
+  function peg(c, onClick){
+    const el=document.createElement(onClick?'button':'div');
+    el.className='mm-peg'+(c?' c-'+c:' slot');
+    if(onClick){ el.type='button'; el.addEventListener('click', onClick); }
+    el.setAttribute('aria-label', c?NAMES[c]:'empty slot');
+    return el;
+  }
+  function feedback(black, white){
+    const fb=document.createElement('div'); fb.className='mm-feedback';
+    fb.setAttribute('aria-label', black+' black, '+white+' white');
+    for(let i=0;i<LEN;i++){
+      const d=document.createElement('div');
+      d.className='mm-fb '+(i<black?'black':(i<black+white?'white':'none'));
+      fb.appendChild(d);
+    }
+    return fb;
+  }
+  function pegRow(){ const p=document.createElement('div'); p.className='mm-pegs'; return p; }
+  function row(n, pegs, fb){
+    const r=document.createElement('div'); r.className='mm-row'+(fb?'':' active');
+    const num=document.createElement('div'); num.className='mm-num'; num.textContent=n; r.appendChild(num);
+    r.appendChild(pegs);
+    r.appendChild(fb||feedback(0,0));
+    return r;
+  }
+
+  function draw(){
+    host.className='mm'; host.innerHTML='';
+    const board=document.createElement('div'); board.className='mm-board';
+
+    rows.forEach((rw,i)=>{
+      const pegs=pegRow(); rw.guess.forEach(c=>pegs.appendChild(peg(c)));
+      board.appendChild(row(i+1, pegs, feedback(rw.black, rw.white)));
+    });
+
+    if(!over){
+      const pegs=pegRow();
+      for(let i=0;i<LEN;i++){
+        const c=current[i];
+        pegs.appendChild(c ? peg(c, ()=>removeAt(i)) : peg(null));
+      }
+      board.appendChild(row(rows.length+1, pegs, null));
+    }
+    host.appendChild(board);
+
+    if(over && !won){
+      const rev=document.createElement('div'); rev.className='mm-reveal';
+      const label=document.createElement('span'); label.className='mm-revlabel'; label.textContent='The code was'; rev.appendChild(label);
+      const pegs=pegRow(); code.forEach(c=>pegs.appendChild(peg(c))); rev.appendChild(pegs);
+      host.appendChild(rev);
+    }
+
+    if(!over){
+      const pal=document.createElement('div'); pal.className='mm-palette';
+      COLORS.forEach(c=>{
+        const sw=document.createElement('button'); sw.type='button'; sw.className='mm-swatch c-'+c;
+        sw.setAttribute('aria-label','add '+NAMES[c]);
+        sw.addEventListener('click',()=>place(c));
+        pal.appendChild(sw);
+      });
+      host.appendChild(pal);
+
+      const acts=document.createElement('div'); acts.className='mm-actions';
+      const undo=document.createElement('button'); undo.type='button'; undo.className='mm-act';
+      undo.textContent='⌫ Undo'; undo.disabled=!current.length; undo.addEventListener('click', clearLast);
+      const go=document.createElement('button'); go.type='button'; go.className='mm-act primary';
+      go.textContent='Guess'; go.disabled=current.length!==LEN; go.addEventListener('click', submit);
+      acts.appendChild(undo); acts.appendChild(go);
+      host.appendChild(acts);
+    }
+
+    const remaining=MAX-rows.length;
+    h.status(
+      won  ? 'Cracked it in '+rows.length+' '+(rows.length===1?'guess':'guesses')+'!' :
+      over ? 'Out of guesses — the code was '+code.map(c=>NAMES[c]).join(', ')+'.' :
+             remaining+' guess'+(remaining===1?'':'es')+' left · tap colours, then Guess.'
+    );
+  }
+
+  const controls=h.controls; controls.innerHTML='';
+  const again=document.createElement('button'); again.className='btn'; again.type='button';
+  again.textContent='New game'; again.addEventListener('click', start); controls.appendChild(again);
+
+  start();
+}
+
+function mountWordle(host, h){
+  host.className='wordle'; host.innerHTML='';
+  const now=new Date();
+  const seed=now.getFullYear()*10000+(now.getMonth()+1)*100+now.getDate();
+  const answer=WORDLE.dailyAnswer(seed);
+  const LEN=WORDLE.WORD_LEN, MAX=WORDLE.MAX_GUESSES;
+  let rows=[], cur='', done=false, win=false;
+
+  const gridEl=document.createElement('div'); gridEl.className='wgrid';
+  const kbEl=document.createElement('div'); kbEl.className='wkeys';
+  host.appendChild(gridEl); host.appendChild(kbEl);
+
+  const rank={correct:3, present:2, absent:1};
+  function keyState(){
+    const m={};
+    for(const r of rows){
+      for(let i=0;i<LEN;i++){
+        const ch=r.word[i], st=r.marks[i];
+        if(!m[ch] || rank[st]>rank[m[ch]]) m[ch]=st;
+      }
+    }
+    return m;
+  }
+
+  function drawGrid(){
+    gridEl.innerHTML='';
+    for(let r=0;r<MAX;r++){
+      const filled=rows[r];
+      const typing=!done && r===rows.length;
+      const row=document.createElement('div'); row.className='wrow';
+      for(let c=0;c<LEN;c++){
+        const cell=document.createElement('div'); cell.className='wcell';
+        if(filled){ cell.textContent=filled.word[c]; cell.classList.add(filled.marks[c]); }
+        else if(typing && c<cur.length){ cell.textContent=cur[c]; cell.classList.add('typed'); }
+        row.appendChild(cell);
+      }
+      gridEl.appendChild(row);
+    }
+  }
+
+  const KB=[ 'qwertyuiop'.split(''), 'asdfghjkl'.split(''), ['enter',...'zxcvbnm'.split(''),'back'] ];
+  function drawKeys(){
+    kbEl.innerHTML='';
+    const ks=keyState();
+    for(const line of KB){
+      const rowEl=document.createElement('div'); rowEl.className='wkrow';
+      for(const k of line){
+        const b=document.createElement('button'); b.type='button'; b.className='wkey';
+        if(k==='enter'){ b.classList.add('wide'); b.textContent='Enter'; }
+        else if(k==='back'){ b.classList.add('wide'); b.textContent='⌫'; b.setAttribute('aria-label','Backspace'); }
+        else { b.textContent=k; if(ks[k]) b.classList.add(ks[k]); }
+        b.addEventListener('click',()=>press(k));
+        rowEl.appendChild(b);
+      }
+      kbEl.appendChild(rowEl);
+    }
+  }
+
+  function setStatus(){
+    if(done) h.status(win
+      ? `Solved in ${rows.length}/${MAX}! Today’s word was ${answer.toUpperCase()}.`
+      : `Out of guesses — today’s word was ${answer.toUpperCase()}.`);
+    else h.status(`Guess today’s word · row ${rows.length+1} of ${MAX}.`);
+  }
+
+  let flash=0;
+  function note(msg){
+    h.status(msg);
+    const id=++flash;
+    setTimeout(()=>{ if(id===flash && !done) setStatus(); }, 1500);
+  }
+
+  function press(k){
+    if(done) return;
+    if(k==='back'){ if(cur.length){ cur=cur.slice(0,-1); drawGrid(); } return; }
+    if(k==='enter'){ submit(); return; }
+    if(/^[a-z]$/.test(k) && cur.length<LEN){ cur+=k; drawGrid(); }
+  }
+
+  function submit(){
+    if(cur.length<LEN){ note('Not enough letters.'); return; }
+    if(!WORDLE.isAllowed(cur)){ note(`“${cur.toUpperCase()}” isn’t in the word list.`); return; }
+    const marks=WORDLE.score(cur, answer);
+    rows.push({word:cur, marks});
+    const solved=marks.every(m=>m==='correct');
+    cur='';
+    if(solved){ done=true; win=true; }
+    else if(rows.length>=MAX){ done=true; win=false; }
+    drawGrid(); drawKeys(); setStatus();
+  }
+
+  function onKey(e){
+    if(!host.isConnected){ window.removeEventListener('keydown', onKey); return; }
+    if(e.metaKey||e.ctrlKey||e.altKey) return;
+    if(e.key==='Enter'){ e.preventDefault(); press('enter'); }
+    else if(e.key==='Backspace'){ e.preventDefault(); press('back'); }
+    else if(/^[a-zA-Z]$/.test(e.key)) press(e.key.toLowerCase());
+  }
+  window.addEventListener('keydown', onKey);
+
+  drawGrid(); drawKeys(); setStatus();
 }
 
 /*__MORE_MOUNTS__*/

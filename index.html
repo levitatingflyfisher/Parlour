@@ -215,6 +215,85 @@
 .hex2 .legend{display:flex;gap:16px;justify-content:center;margin:12px 0 2px;font-size:.74rem;color:var(--muted)}
 .hex2 .legend .r{color:var(--x)}
 .hex2 .legend .b{color:var(--o)}
+  .mines{max-width:380px;margin:0 auto;text-align:center}
+.mines .board{display:grid;grid-template-columns:repeat(9,1fr);gap:3px;max-width:360px;
+  margin:0 auto;background:var(--felt);padding:8px;border-radius:12px;touch-action:manipulation;user-select:none}
+.mines .cell{appearance:none;cursor:pointer;border:none;padding:0;aspect-ratio:1;border-radius:6px;
+  background:var(--paper-edge);color:var(--ink);display:grid;place-items:center;line-height:1;
+  font-family:var(--serif);font-weight:700;font-size:clamp(.8rem,4vw,1.2rem);
+  box-shadow:inset 0 1px 0 #ffffff80,inset 0 -2px 0 #00000014}
+.mines .cell:hover:not(:disabled):not(.open){background:#efe7d4}
+.mines .cell:focus-visible{outline:3px solid var(--brass);outline-offset:1px;z-index:1}
+.mines .cell:disabled{cursor:default}
+.mines .cell.open{background:var(--paper);box-shadow:inset 0 0 0 1px #00000014}
+.mines .cell.flag{background:#ece0c5}
+.mines .cell.mine{background:var(--x);color:var(--paper);box-shadow:none}
+.mines .cell.n1{color:var(--o)} .mines .cell.n2{color:#2f7a4a}
+.mines .cell.n3{color:var(--x)} .mines .cell.n4{color:#3b3b8a}
+.mines .cell.n5{color:#8a3b24} .mines .cell.n6{color:#2f8f8f}
+.mines .cell.n7{color:var(--ink)} .mines .cell.n8{color:var(--muted)}
+  /* ---- Mastermind (solo code-breaker) — root .mm ---- */
+  .mm{display:flex;flex-direction:column;align-items:center;gap:16px;
+    --mm-r:#cf4d54;--mm-o:#df8a3b;--mm-y:#e6bd3e;--mm-g:#4f9d6b;--mm-b:#3f80ac;--mm-p:#8d6fb3}
+  .mm .mm-board{display:flex;flex-direction:column;gap:8px;width:100%;max-width:340px}
+  .mm .mm-row{display:flex;align-items:center;gap:12px;
+    background:#ffffff5c;border:1px solid #00000014;border-radius:13px;padding:7px 11px}
+  .mm .mm-row.active{background:#2f5d500f;border-style:dashed;border-color:#2f5d5040}
+  .mm .mm-num{flex:0 0 16px;text-align:center;font-weight:700;color:var(--muted);font-size:.78rem}
+  .mm .mm-pegs{display:flex;gap:9px;flex:1}
+  .mm .mm-peg{width:30px;height:30px;flex:0 0 30px;border-radius:50%;padding:0;border:none;
+    box-shadow:0 1px 0 #ffffff80 inset,0 2px 4px #00000026}
+  .mm button.mm-peg{cursor:pointer}
+  .mm .mm-peg.slot{background:#0000000d;box-sizing:border-box;border:1px dashed #00000026;
+    box-shadow:inset 0 1px 3px #0000001a}
+  .mm .c-r{background:radial-gradient(circle at 34% 30%,#ffffff70,transparent 58%),var(--mm-r)}
+  .mm .c-o{background:radial-gradient(circle at 34% 30%,#ffffff70,transparent 58%),var(--mm-o)}
+  .mm .c-y{background:radial-gradient(circle at 34% 30%,#ffffff70,transparent 58%),var(--mm-y)}
+  .mm .c-g{background:radial-gradient(circle at 34% 30%,#ffffff70,transparent 58%),var(--mm-g)}
+  .mm .c-b{background:radial-gradient(circle at 34% 30%,#ffffff70,transparent 58%),var(--mm-b)}
+  .mm .c-p{background:radial-gradient(circle at 34% 30%,#ffffff70,transparent 58%),var(--mm-p)}
+  .mm .mm-feedback{flex:0 0 auto;display:grid;grid-template-columns:repeat(2,9px);
+    grid-auto-rows:9px;gap:4px;padding:2px}
+  .mm .mm-fb{width:9px;height:9px;border-radius:50%;box-sizing:border-box}
+  .mm .mm-fb.black{background:var(--ink);box-shadow:0 0 0 1px #0000001a}
+  .mm .mm-fb.white{background:var(--paper);border:1px solid #00000059}
+  .mm .mm-fb.none{background:#00000010;border:1px solid #0000000d}
+  .mm .mm-reveal{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center}
+  .mm .mm-revlabel{font-weight:600;color:var(--muted);font-size:.9rem}
+  .mm .mm-palette{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .mm .mm-swatch{width:40px;height:40px;border-radius:50%;padding:0;border:none;cursor:pointer;
+    box-shadow:0 1px 0 #ffffff80 inset,0 3px 6px #00000033;transition:transform .1s ease}
+  .mm .mm-swatch:hover{transform:translateY(-2px)}
+  .mm .mm-swatch:focus-visible,.mm button.mm-peg:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+  .mm .mm-actions{display:flex;gap:10px}
+  .mm .mm-act{appearance:none;cursor:pointer;font:inherit;font-weight:600;border-radius:999px;
+    padding:9px 18px;border:1px solid #00000022;background:var(--paper-edge);color:var(--ink)}
+  .mm .mm-act.primary{background:var(--felt);color:var(--paper);border-color:transparent}
+  .mm .mm-act:disabled{opacity:.4;cursor:default}
+  .mm .mm-act:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+  /* ---- Wordle ---- */
+  .wordle{--felt:#2f5d50;--paper:#f4efe3;--paper-edge:#e6dcc6;--brass:#c9a24b;--ink:#26201a;
+    max-width:360px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:18px}
+  .wordle .wgrid{display:flex;flex-direction:column;gap:6px}
+  .wordle .wrow{display:flex;gap:6px;justify-content:center}
+  .wordle .wcell{width:52px;height:52px;display:grid;place-items:center;background:var(--paper);
+    border:2px solid var(--paper-edge);border-radius:7px;color:var(--ink);text-transform:uppercase;
+    font-family:var(--serif);font-weight:700;font-size:1.7rem;line-height:1;transition:transform .08s ease}
+  .wordle .wcell.typed{border-color:#b6aa8f}
+  .wordle .wcell.correct{background:#6aaa64;border-color:#6aaa64;color:#fff}
+  .wordle .wcell.present{background:var(--brass);border-color:var(--brass);color:#fff}
+  .wordle .wcell.absent{background:#7d756a;border-color:#7d756a;color:#fff}
+  .wordle .wkeys{display:flex;flex-direction:column;gap:6px;width:100%}
+  .wordle .wkrow{display:flex;gap:5px;justify-content:center}
+  .wordle .wkey{appearance:none;cursor:pointer;font:inherit;font-weight:700;font-size:.95rem;color:var(--ink);
+    background:#d8cfbb;border:none;border-radius:6px;height:50px;flex:1;min-width:0;padding:0;
+    display:grid;place-items:center;text-transform:uppercase}
+  .wordle .wkey.wide{flex:1.5;font-size:.72rem}
+  .wordle .wkey:active{transform:translateY(1px)}
+  .wordle .wkey:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+  .wordle .wkey.correct{background:#6aaa64;color:#fff}
+  .wordle .wkey.present{background:var(--brass);color:#fff}
+  .wordle .wkey.absent{background:#7d756a;color:#fff}
   /*__MORE_CSS__*/
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -361,6 +440,241 @@ function bestMove(board, player, depth = 5) {
 }
 
 return { ROWS, COLS, emptyBoard, available, drop, winner, bestMove };
+})();
+const CRAZYEIGHTS = (function(){
+// Crazy Eights — pure game logic (no DOM). A standard 52-card deck; a card is
+// { rank, suit } where rank is 2..14 (11=J, 12=Q, 13=K, 14=A) and suit is an
+// index 0..3 into '♠♥♦♣'. You may play a card on the discard pile when it is an
+// eight (wild), matches the top card's rank, or matches the currently active
+// suit. After an eight is played the player names a new active suit, so the
+// active suit can differ from the printed suit of the top card.
+const SUITS = ['♠', '♥', '♦', '♣'];
+
+/// Display label for a rank: numbers as-is, then J/Q/K/A for 11..14.
+function rankLabel(rank) {
+  if (rank <= 10) return String(rank);
+  return { 11: 'J', 12: 'Q', 13: 'K', 14: 'A' }[rank];
+}
+
+/// A fresh ordered 52-card deck: every rank 2..14 in every suit 0..3.
+function makeDeck() {
+  const deck = [];
+  for (let suit = 0; suit < 4; suit++) {
+    for (let rank = 2; rank <= 14; rank++) {
+      deck.push({ rank, suit });
+    }
+  }
+  return deck;
+}
+
+/// Fisher-Yates shuffle into a NEW array (the input is never mutated). `rng`
+/// is injectable and must return a float in [0, 1); defaults to Math.random.
+function shuffle(deck, rng = Math.random) {
+  const a = deck.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    const t = a[i];
+    a[i] = a[j];
+    a[j] = t;
+  }
+  return a;
+}
+
+/// Deal `handSize` cards to each of two players from the (already shuffled)
+/// deck, turn the next card face-up as the discard pile, and keep the rest as
+/// the draw pile. Returns { p0, p1, draw, discard:[topCard], activeSuit }.
+/// The active suit starts as the top card's printed suit.
+function deal(deck, handSize = 7) {
+  const p0 = deck.slice(0, handSize);
+  const p1 = deck.slice(handSize, handSize * 2);
+  const top = deck[handSize * 2];
+  const draw = deck.slice(handSize * 2 + 1);
+  return { p0, p1, draw, discard: [top], activeSuit: top.suit };
+}
+
+/// True when `card` may be played onto `topCard`: any eight is wild, otherwise
+/// the rank must match the top card or the suit must match the active suit.
+function canPlay(card, topCard, activeSuit) {
+  return card.rank === 8 || card.rank === topCard.rank || card.suit === activeSuit;
+}
+
+/// Every card in `hand` that is currently legal to play.
+function legalPlays(hand, topCard, activeSuit) {
+  return hand.filter((c) => canPlay(c, topCard, activeSuit));
+}
+
+/// The card the computer should play, or null when it must draw. Prefers a
+/// legal non-eight (saving its wild eights for later), then a legal eight,
+/// then null when nothing at all is legal.
+function aiPlay(hand, topCard, activeSuit) {
+  const legal = legalPlays(hand, topCard, activeSuit);
+  if (!legal.length) return null;
+  const nonEight = legal.find((c) => c.rank !== 8);
+  return nonEight || legal[0];
+}
+
+/// The suit the computer should declare after playing an eight: whichever suit
+/// it holds the most of (lowest suit index breaks ties). Returns 0 for an empty
+/// hand (where the choice is moot — the player has already emptied their hand).
+function aiSuit(hand) {
+  const counts = [0, 0, 0, 0];
+  for (const c of hand) counts[c.suit]++;
+  let best = 0;
+  for (let s = 1; s < 4; s++) {
+    if (counts[s] > counts[best]) best = s;
+  }
+  return best;
+}
+
+return { SUITS, rankLabel, makeDeck, shuffle, deal, canPlay, legalPlays, aiPlay, aiSuit };
+})();
+const DOTSBOXES = (function(){
+// Dots & Boxes — pure game logic (no DOM). A 5×5 lattice of dots frames a 4×4
+// grid of boxes joined by edges. Edges live in two sets: `h` (horizontal, drawn
+// between two side-by-side dots) and `v` (vertical, between two stacked dots). A
+// move fills one empty edge; sealing the 4th side of a box claims it for the
+// mover, who then plays again. The game ends once every box is owned — the most
+// boxes wins. The same files are import-able by node:test and inlined for the
+// browser as the DOTSBOXES namespace.
+const DOTS = 5;        // dots per side
+const N = DOTS - 1;           // boxes per side (also h-edges per row, v-edge rows)
+
+// Horizontal edges: DOTS rows × N cols, index = r*N + c.
+// Vertical   edges: N rows × DOTS cols, index = r*DOTS + c.
+// Boxes:            N rows × N cols,    index = br*N + bc.
+const H_COUNT = DOTS * N;
+const V_COUNT = N * DOTS;
+const BOXES = N * N;
+
+// The four edge references [set, index] that border box `b`.
+function boxSides(b) {
+  const br = Math.floor(b / N);
+  const bc = b % N;
+  return [
+    ['h', br * N + bc],         // top
+    ['h', (br + 1) * N + bc],   // bottom
+    ['v', br * DOTS + bc],      // left
+    ['v', br * DOTS + bc + 1],  // right
+  ];
+}
+
+// The boxes an edge borders: one along the rim of the grid, two inside it.
+function boxesOfEdge(type, index) {
+  const out = [];
+  if (type === 'h') {
+    const r = Math.floor(index / N);
+    const c = index % N;
+    if (r - 1 >= 0) out.push((r - 1) * N + c); // box above
+    if (r < N) out.push(r * N + c);            // box below
+  } else {
+    const r = Math.floor(index / DOTS);
+    const c = index % DOTS;
+    if (c - 1 >= 0) out.push(r * N + (c - 1)); // box to the left
+    if (c < N) out.push(r * N + c);            // box to the right
+  }
+  return out;
+}
+
+const isFilled = (model, type, index) => (type === 'h' ? model.h : model.v)[index];
+
+// How many of box `b`'s four sides are currently drawn.
+function sidesDrawn(model, b) {
+  let n = 0;
+  for (const [t, i] of boxSides(b)) if (isFilled(model, t, i)) n++;
+  return n;
+}
+
+/// A fresh game: every edge empty, no box owned, player 0 to move, scores 0–0.
+function newGame() {
+  return {
+    h: Array(H_COUNT).fill(false),
+    v: Array(V_COUNT).fill(false),
+    owner: Array(BOXES).fill(null),
+    turn: 0,
+    scores: [0, 0],
+  };
+}
+
+/// Every still-empty edge, as {type:'h'|'v', index} (horizontals first).
+function legalEdges(model) {
+  const out = [];
+  for (let i = 0; i < model.h.length; i++) if (!model.h[i]) out.push({ type: 'h', index: i });
+  for (let i = 0; i < model.v.length; i++) if (!model.v[i]) out.push({ type: 'v', index: i });
+  return out;
+}
+
+/// Returns a NEW model with `edge` drawn. Any box it completes is assigned to the
+/// current player and the SAME player moves again; if no box is completed the
+/// turn passes. The input model is never mutated.
+function claimEdge(model, type, index) {
+  const next = {
+    h: model.h.slice(),
+    v: model.v.slice(),
+    owner: model.owner.slice(),
+    turn: model.turn,
+    scores: model.scores.slice(),
+  };
+  if (type === 'h') next.h[index] = true;
+  else next.v[index] = true;
+
+  let claimed = 0;
+  for (const b of boxesOfEdge(type, index)) {
+    if (next.owner[b] === null && sidesDrawn(next, b) === 4) {
+      next.owner[b] = next.turn;
+      next.scores[next.turn]++;
+      claimed++;
+    }
+  }
+  // Completing one or two boxes earns another turn; otherwise play passes.
+  if (claimed === 0) next.turn = next.turn === 0 ? 1 : 0;
+  return next;
+}
+
+/// True once every box is owned (equivalently, every edge is drawn).
+function isOver(model) {
+  return model.owner.every((o) => o !== null);
+}
+
+/// 0 | 1 | 'draw' once the board is full, else null. Decided by box count.
+function winner(model) {
+  if (!isOver(model)) return null;
+  let a = 0;
+  let b = 0;
+  for (const o of model.owner) {
+    if (o === 0) a++;
+    else if (o === 1) b++;
+  }
+  if (a > b) return 0;
+  if (b > a) return 1;
+  return 'draw';
+}
+
+// Boxes this edge would complete (those sitting at 3 drawn sides already).
+function edgeCompletes(model, type, index) {
+  let n = 0;
+  for (const b of boxesOfEdge(type, index)) if (sidesDrawn(model, b) === 3) n++;
+  return n;
+}
+
+// Would drawing this edge hand a box its giveaway 3rd side?
+function edgeGivesThird(model, type, index) {
+  for (const b of boxesOfEdge(type, index)) if (sidesDrawn(model, b) === 2) return true;
+  return false;
+}
+
+/// Heuristic AI as {type, index} (or null if the board is full):
+/// 1) take any edge that completes a box; 2) else any edge that does not give an
+/// opponent a 3rd side; 3) else any remaining edge.
+function bestMove(model) {
+  const edges = legalEdges(model);
+  if (!edges.length) return null;
+  for (const e of edges) if (edgeCompletes(model, e.type, e.index) > 0) return e;
+  const safe = edges.filter((e) => !edgeGivesThird(model, e.type, e.index));
+  if (safe.length) return safe[0];
+  return edges[0];
+}
+
+return { DOTS, BOXES, newGame, legalEdges, claimEdge, isOver, winner, bestMove };
 })();
 const G2048 = (function(){
 // 2048 — pure logic. Grid is a flat 16-array (4x4), null for empty. Slides and
@@ -681,6 +995,66 @@ function dailyTarget(seed) {
 
 return { isValidHex, feedback, distance, dailyTarget };
 })();
+const MASTERMIND = (function(){
+// Mastermind — pure code-breaking logic (no DOM). The app hides a secret 4-peg
+// code drawn from 6 colours (repeats allowed); the player guesses and gets two
+// feedback numbers per guess. `score` uses the canonical Mastermind method:
+// first count exact (right-colour-right-place) pegs, then — over only the
+// leftover pegs — match colours by the minimum of the remaining counts, so no
+// peg is ever counted twice. All functions are pure (rng is injectable), so the
+// scoring and win check are fully deterministic and testable; the board is UI.
+
+/// The six peg colours (single-char keys); the UI maps these to swatch colours.
+const COLORS = ['r', 'o', 'y', 'g', 'b', 'p'];
+
+/// Pegs in a code / guess.
+const CODE_LEN = 4;
+
+/// How many guesses the player gets before the code is revealed.
+const MAX_GUESSES = 10;
+
+/// A secret code: CODE_LEN colours from COLORS, repeats allowed, chosen with an
+/// injectable rng (default Math.random) so a fixed rng yields a deterministic
+/// code.
+function secret(rng = Math.random) {
+  const code = [];
+  for (let i = 0; i < CODE_LEN; i++) {
+    code.push(COLORS[Math.floor(rng() * COLORS.length)]);
+  }
+  return code;
+}
+
+/// Standard Mastermind scoring of `guess` against `code` → {black, white}.
+/// black = pegs of the right colour in the right place. white = pegs of the
+/// right colour in the wrong place. Each peg is counted at most once: exact
+/// matches are removed first, then whites are the per-colour minimum of the
+/// counts that remain — so duplicates never double-count.
+function score(guess, code) {
+  let black = 0;
+  const codeLeft = {};
+  const guessLeft = {};
+  for (let i = 0; i < CODE_LEN; i++) {
+    if (guess[i] === code[i]) {
+      black++;
+    } else {
+      codeLeft[code[i]] = (codeLeft[code[i]] || 0) + 1;
+      guessLeft[guess[i]] = (guessLeft[guess[i]] || 0) + 1;
+    }
+  }
+  let white = 0;
+  for (const c in guessLeft) {
+    white += Math.min(guessLeft[c], codeLeft[c] || 0);
+  }
+  return { black, white };
+}
+
+/// A win is a perfect read: every peg right colour AND right place.
+function isWin(scoreResult) {
+  return scoreResult.black === CODE_LEN;
+}
+
+return { COLORS, CODE_LEN, MAX_GUESSES, secret, score, isWin };
+})();
 const MEMORY = (function(){
 // Memory (concentration) — pure deck logic. Two of every symbol, shuffled with
 // an injectable rng (so the shuffle is testable). Matching/turns live in the UI.
@@ -700,6 +1074,119 @@ function newDeck(symbols, rng = Math.random) {
 }
 
 return { newDeck };
+})();
+const MINESWEEPER = (function(){
+// Minesweeper — pure logic. The board is a ROWS*COLS flat grid; a "model" is an
+// immutable snapshot {mines, revealed, flagged, counts, dead}. Every operation
+// returns a NEW model (the shared `counts` array is never mutated). Mine
+// placement takes an injectable rng so games are reproducible and testable.
+
+// NOTE: each constant is its own `export` so the single-file build bundler
+// (build.mjs) — which captures one identifier per `export` — keeps all three.
+const ROWS = 9;
+const COLS = 9;
+const MINES = 10;
+
+/// Indices of the (up to 8) cells orthogonally/diagonally adjacent to `idx`.
+function neighbours(idx) {
+  const r = Math.floor(idx / COLS);
+  const c = idx % COLS;
+  const out = [];
+  for (let dr = -1; dr <= 1; dr++) {
+    for (let dc = -1; dc <= 1; dc++) {
+      if (dr === 0 && dc === 0) continue;
+      const nr = r + dr;
+      const nc = c + dc;
+      if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS) continue;
+      out.push(nr * COLS + nc);
+    }
+  }
+  return out;
+}
+
+/// counts[i] = number of mines adjacent to cell i (computed for every cell).
+function buildCounts(mines) {
+  const counts = new Array(ROWS * COLS).fill(0);
+  for (let i = 0; i < counts.length; i++) {
+    let n = 0;
+    for (const j of neighbours(i)) if (mines.has(j)) n++;
+    counts[i] = n;
+  }
+  return counts;
+}
+
+/// Start a fresh board with exactly MINES mines placed via `rng` (a () => [0,1)
+/// function). When `firstSafeIndex` is given that cell is excluded from the
+/// candidate pool, so the first reveal can never be a mine. A partial
+/// Fisher-Yates shuffle guarantees MINES *distinct* mines.
+function newGame(rng, firstSafeIndex = null) {
+  const total = ROWS * COLS;
+  const cells = [];
+  for (let i = 0; i < total; i++) if (i !== firstSafeIndex) cells.push(i);
+  for (let i = 0; i < MINES && i < cells.length; i++) {
+    const j = i + Math.floor(rng() * (cells.length - i));
+    const tmp = cells[i];
+    cells[i] = cells[j];
+    cells[j] = tmp;
+  }
+  const mines = new Set(cells.slice(0, MINES));
+  return {
+    mines,
+    revealed: new Set(),
+    flagged: new Set(),
+    counts: buildCounts(mines),
+    dead: false,
+  };
+}
+
+/// Reveal `idx`, returning a NEW model. Revealing a mine sets `dead`. Revealing
+/// a zero-count cell flood-fills its connected zero region plus the numbered
+/// border around it. Revealing an already-open, flagged, or dead-board cell is
+/// a no-op (returns an equivalent fresh model).
+function reveal(model, idx) {
+  if (model.dead || model.revealed.has(idx) || model.flagged.has(idx)) {
+    return model;
+  }
+  if (model.mines.has(idx)) {
+    const revealed = new Set(model.revealed);
+    revealed.add(idx);
+    return { ...model, revealed, dead: true };
+  }
+  const revealed = new Set(model.revealed);
+  const stack = [idx];
+  while (stack.length) {
+    const c = stack.pop();
+    if (revealed.has(c) || model.mines.has(c)) continue;
+    revealed.add(c);
+    if (model.counts[c] === 0) {
+      for (const n of neighbours(c)) if (!revealed.has(n)) stack.push(n);
+    }
+  }
+  // A revealed cell can't stay flagged.
+  const flagged = new Set([...model.flagged].filter((f) => !revealed.has(f)));
+  return { ...model, revealed, flagged };
+}
+
+/// Toggle a flag on `idx`, returning a NEW model. Flagging an already-revealed
+/// cell (or acting on a dead board) is a no-op.
+function toggleFlag(model, idx) {
+  if (model.dead || model.revealed.has(idx)) return model;
+  const flagged = new Set(model.flagged);
+  if (flagged.has(idx)) flagged.delete(idx);
+  else flagged.add(idx);
+  return { ...model, flagged };
+}
+
+/// Won when the board is alive and every non-mine cell has been revealed.
+function isWon(model) {
+  if (model.dead) return false;
+  for (let i = 0; i < ROWS * COLS; i++) {
+    if (!model.mines.has(i) && !model.revealed.has(i)) return false;
+  }
+  return true;
+}
+
+return { ROWS, COLS, MINES, neighbours, newGame, reveal, toggleFlag, isWon };
 })();
 const NIM = (function(){
 // Nim — pure game logic (no DOM). Normal play: the player who takes the LAST
@@ -934,6 +1421,104 @@ function bestMove(board, player) {
 
 return { LINES, emptyBoard, available, winner, bestMove };
 })();
+const WORDLE = (function(){
+// Wordle — the daily five-letter word hunt. Six tries; each guess is graded
+// per letter against standard Wordle rules (exact matches claimed first, then
+// 'present' only while unused answer letters of that kind remain, so duplicate
+// letters resolve correctly). Pure logic, offline word lists bundled below —
+// no server, no stored state: the puzzle is a deterministic function of the day.
+const WORD_LEN = 5;
+const MAX_GUESSES = 6;
+
+// ~150 common five-letter solutions. Lowercase, exactly five letters.
+const ANSWERS = [
+  'about', 'above', 'actor', 'acute', 'admit', 'adopt', 'adult', 'agent', 'agree', 'ahead',
+  'alarm', 'album', 'alert', 'alike', 'alive', 'allow', 'alone', 'along', 'alter', 'among',
+  'anger', 'angle', 'angry', 'apart', 'apple', 'apply', 'arena', 'argue', 'arise', 'aroma',
+  'array', 'aside', 'asset', 'audio', 'avoid', 'awake', 'award', 'aware', 'badge', 'baker',
+  'basic', 'basin', 'beach', 'beard', 'beast', 'begin', 'being', 'below', 'bench', 'berry',
+  'birth', 'black', 'blade', 'blame', 'blank', 'blast', 'blaze', 'bleak', 'blend', 'bless',
+  'blind', 'block', 'blood', 'bloom', 'board', 'boast', 'bonus', 'boost', 'booth', 'brain',
+  'brand', 'brave', 'bread', 'break', 'breed', 'brick', 'bride', 'brief', 'bring', 'broad',
+  'brown', 'brush', 'build', 'built', 'bunch', 'burst', 'cabin', 'cable', 'candy', 'cargo',
+  'carry', 'catch', 'cause', 'chain', 'chair', 'chalk', 'charm', 'chart', 'chase', 'cheap',
+  'check', 'cheer', 'chess', 'chest', 'chief', 'child', 'china', 'chunk', 'claim', 'class',
+  'clean', 'clear', 'clerk', 'click', 'cliff', 'climb', 'clock', 'close', 'cloth', 'cloud',
+  'coach', 'coast', 'color', 'couch', 'cough', 'could', 'count', 'court', 'cover', 'craft',
+  'crane', 'crash', 'crawl', 'cream', 'creek', 'crime', 'crisp', 'cross', 'crowd', 'crown',
+  'crumb', 'curve', 'cycle', 'daily', 'dairy', 'dance', 'dealt', 'death', 'debut', 'delay',
+];
+
+// ~150 further valid guess words. Combined with ANSWERS these form the set of
+// words a player is permitted to enter.
+const EXTRA = [
+  'dense', 'depth', 'dirty', 'dodge', 'doubt', 'dozen', 'draft', 'drain', 'drama', 'drawn',
+  'dream', 'dress', 'dried', 'drift', 'drill', 'drink', 'drive', 'drove', 'dwarf', 'eager',
+  'eagle', 'early', 'earth', 'eaten', 'ebony', 'elbow', 'elder', 'elect', 'elite', 'email',
+  'empty', 'enact', 'ended', 'enemy', 'enjoy', 'enter', 'entry', 'equal', 'equip', 'erase',
+  'error', 'essay', 'event', 'every', 'exact', 'exalt', 'excel', 'exist', 'extra', 'fable',
+  'faint', 'fairy', 'faith', 'false', 'fancy', 'fatal', 'fault', 'favor', 'feast', 'fence',
+  'ferry', 'fetch', 'fever', 'fiber', 'field', 'fiery', 'fifth', 'fifty', 'fight', 'filed',
+  'final', 'finch', 'finer', 'first', 'fixed', 'flair', 'flame', 'flash', 'flask', 'fleet',
+  'flesh', 'float', 'flock', 'flood', 'floor', 'flora', 'flour', 'flown', 'fluid', 'flush',
+  'focus', 'force', 'forge', 'forth', 'forty', 'forum', 'found', 'frame', 'frank', 'fraud',
+  'fresh', 'front', 'frost', 'frown', 'fruit', 'fully', 'funny', 'gauge', 'geese', 'ghost',
+  'giant', 'given', 'glass', 'gleam', 'glide', 'globe', 'gloom', 'glory', 'glove', 'grace',
+  'grade', 'grain', 'grand', 'grant', 'grape', 'graph', 'grasp', 'grass', 'grave', 'great',
+  'greed', 'green', 'greet', 'grief', 'grill', 'grind', 'groom', 'gross', 'group', 'grove',
+  'grown', 'guard', 'guess', 'guest', 'guide', 'guilt', 'habit', 'hairy', 'handy', 'happy',
+];
+const ALLOWED = new Set([...ANSWERS, ...EXTRA]);
+
+/// Deterministic puzzle for an integer seed (e.g. YYYYMMDD): the same seed
+/// always yields the same answer, with no server and no stored state. Mixes the
+/// seed's bits so consecutive days land on unrelated words.
+function dailyAnswer(seed) {
+  let a = (seed >>> 0) || 1;
+  a = Math.imul(a ^ (a >>> 16), 0x45d9f3b);
+  a = Math.imul(a ^ (a >>> 16), 0x45d9f3b);
+  a = (a ^ (a >>> 16)) >>> 0;
+  return ANSWERS[a % ANSWERS.length];
+}
+
+/// True when `word` is a permitted guess (case-insensitive).
+function isAllowed(word) {
+  return ALLOWED.has(String(word).toLowerCase());
+}
+
+/// Grade `guess` against `answer`, returning five verdicts of
+/// 'correct' | 'present' | 'absent' by standard Wordle rules: exact matches are
+/// claimed first, then each remaining guess letter is 'present' only while an
+/// unclaimed answer letter of that kind is still available (so a duplicate
+/// guessed letter goes 'absent' once the answer's copies are exhausted).
+function score(guess, answer) {
+  const g = String(guess).toLowerCase();
+  const a = String(answer).toLowerCase();
+  const out = new Array(WORD_LEN).fill('absent');
+  const remaining = {};
+  for (let i = 0; i < WORD_LEN; i++) {
+    remaining[a[i]] = (remaining[a[i]] || 0) + 1;
+  }
+  // First pass: exact, in-place matches consume an answer letter each.
+  for (let i = 0; i < WORD_LEN; i++) {
+    if (g[i] === a[i]) {
+      out[i] = 'correct';
+      remaining[g[i]]--;
+    }
+  }
+  // Second pass: 'present' only while unclaimed copies of that letter remain.
+  for (let i = 0; i < WORD_LEN; i++) {
+    if (out[i] === 'correct') continue;
+    if (remaining[g[i]] > 0) {
+      out[i] = 'present';
+      remaining[g[i]]--;
+    }
+  }
+  return out;
+}
+
+return { WORD_LEN, MAX_GUESSES, ANSWERS, ALLOWED, dailyAnswer, isAllowed, score };
+})();
 
 
 // ---- Game registry. Each entry: {id, name, glyph, blurb, badges, mount} ----
@@ -983,6 +1568,9 @@ const GAMES = [
   },
   { id:'hangman', name:'Hangman', glyph:'🔤', blurb:'Guess the hidden word letter by letter before the figure is drawn.', badges:['1 player'], tier:0, mount: mountHangman },
   { id:'hex', name:'Hex', glyph:'⬡', blurb:'Link your two edges across the board before your rival bridges theirs.', badges:['1 player','2 players'], tier:4, mount: mountHex },
+  { id:'minesweeper', name:'Minesweeper', glyph:'💣', blurb:'Clear every safe square on the 9x9 grid without tripping a hidden mine.', badges:['solo'], tier:0, mount: mountMinesweeper },
+  { id:'mastermind', name:'Mastermind', glyph:'🔴', blurb:'Crack the hidden four-peg colour code in ten guesses — black pegs for right colour and place, white for right colour only.', badges:['solo'], tier:0, mount: mountMastermind },
+  { id:'wordle', name:'Wordle', glyph:'🟩', blurb:'Six tries to crack today’s five-letter word.', badges:['daily-le'], tier:0, mount: mountWordle },
   /*__MORE_GAMES__*/
 ];
 
@@ -1609,6 +2197,281 @@ function mountHex(host, h){
   function ctrl(label,fn,p){ const b=document.createElement('button'); b.className='btn'; b.type='button';
     b.textContent=label; if(p)b.setAttribute('aria-pressed','true'); b.addEventListener('click',fn); controls.appendChild(b); return b; }
   setModes(); newGame();
+}
+
+function mountMinesweeper(host, h){
+  const R=MINESWEEPER.ROWS, C=MINESWEEPER.COLS, M=MINESWEEPER.MINES;
+  let model=null, over=false, won=false, flagMode=false;
+  const controls=h.controls; controls.innerHTML='';
+  const flagBtn=document.createElement('button');
+  flagBtn.className='btn'; flagBtn.type='button'; flagBtn.textContent='🚩 Flag mode';
+  flagBtn.setAttribute('aria-pressed','false');
+  flagBtn.addEventListener('click',()=>{
+    flagMode=!flagMode;
+    flagBtn.setAttribute('aria-pressed', flagMode?'true':'false');
+  });
+  const again=document.createElement('button');
+  again.className='btn ghost'; again.type='button'; again.textContent='New game';
+  again.addEventListener('click',start);
+  controls.appendChild(flagBtn); controls.appendChild(again);
+
+  function start(){
+    model=null; over=false; won=false;
+    flagMode=false; flagBtn.setAttribute('aria-pressed','false');
+    draw();
+  }
+  function tap(i){
+    if(over) return;
+    if(model===null) model=MINESWEEPER.newGame(Math.random, i); // first tap is always safe
+    if(flagMode){
+      model=MINESWEEPER.toggleFlag(model, i);
+    } else {
+      if(model.flagged.has(i)) return;
+      model=MINESWEEPER.reveal(model, i);
+      if(model.dead) over=true;
+      else if(MINESWEEPER.isWon(model)){ over=true; won=true; }
+    }
+    draw();
+  }
+  function draw(){
+    const flags = model ? model.flagged.size : 0;
+    if(over && won) h.status('Swept the board — every mine avoided! 🎉');
+    else if(over) h.status('Boom — you hit a mine. 💥 New game?');
+    else if(model===null) h.status('Tap any square to begin — your first tap is always safe.');
+    else h.status('Mines: '+M+' · 🚩 '+flags+' flagged · '+(M-flags)+' to find');
+    host.className='mines'; host.innerHTML='';
+    const board=document.createElement('div'); board.className='board';
+    for(let i=0;i<R*C;i++){
+      const cell=document.createElement('button'); cell.type='button'; cell.className='cell';
+      let label='hidden square '+(i+1);
+      if(model){
+        const rev=model.revealed.has(i), fl=model.flagged.has(i), mine=model.mines.has(i);
+        if(rev){
+          cell.classList.add('open');
+          if(mine){ cell.classList.add('mine'); cell.textContent='💣'; label='mine'; }
+          else { const n=model.counts[i]; if(n>0){ cell.textContent=n; cell.classList.add('n'+n); label=n+' adjacent'; } else { label='empty'; } }
+        } else if(over && mine){
+          cell.classList.add('open','mine'); cell.textContent='💣'; label='mine';
+        } else if(fl){
+          cell.classList.add('flag'); cell.textContent='🚩'; label='flag';
+        }
+      }
+      cell.setAttribute('aria-label', label);
+      cell.disabled = over;
+      cell.addEventListener('click',()=>tap(i));
+      board.appendChild(cell);
+    }
+    host.appendChild(board);
+  }
+  start();
+}
+
+function mountMastermind(host, h){
+  const COLORS=MASTERMIND.COLORS, LEN=MASTERMIND.CODE_LEN, MAX=MASTERMIND.MAX_GUESSES;
+  const NAMES={r:'red',o:'orange',y:'yellow',g:'green',b:'blue',p:'purple'};
+  let code, rows, current, over, won;
+
+  function start(){ code=MASTERMIND.secret(); rows=[]; current=[]; over=false; won=false; draw(); }
+  function place(c){ if(over||current.length>=LEN) return; current.push(c); draw(); }
+  function removeAt(i){ if(over||i>=current.length) return; current.splice(i,1); draw(); }
+  function clearLast(){ if(over||!current.length) return; current.pop(); draw(); }
+  function submit(){
+    if(over||current.length!==LEN) return;
+    const res=MASTERMIND.score(current, code);
+    rows.push({guess:current.slice(), black:res.black, white:res.white});
+    current=[];
+    if(MASTERMIND.isWin(res)){ won=true; over=true; }
+    else if(rows.length>=MAX){ over=true; }
+    draw();
+  }
+
+  function peg(c, onClick){
+    const el=document.createElement(onClick?'button':'div');
+    el.className='mm-peg'+(c?' c-'+c:' slot');
+    if(onClick){ el.type='button'; el.addEventListener('click', onClick); }
+    el.setAttribute('aria-label', c?NAMES[c]:'empty slot');
+    return el;
+  }
+  function feedback(black, white){
+    const fb=document.createElement('div'); fb.className='mm-feedback';
+    fb.setAttribute('aria-label', black+' black, '+white+' white');
+    for(let i=0;i<LEN;i++){
+      const d=document.createElement('div');
+      d.className='mm-fb '+(i<black?'black':(i<black+white?'white':'none'));
+      fb.appendChild(d);
+    }
+    return fb;
+  }
+  function pegRow(){ const p=document.createElement('div'); p.className='mm-pegs'; return p; }
+  function row(n, pegs, fb){
+    const r=document.createElement('div'); r.className='mm-row'+(fb?'':' active');
+    const num=document.createElement('div'); num.className='mm-num'; num.textContent=n; r.appendChild(num);
+    r.appendChild(pegs);
+    r.appendChild(fb||feedback(0,0));
+    return r;
+  }
+
+  function draw(){
+    host.className='mm'; host.innerHTML='';
+    const board=document.createElement('div'); board.className='mm-board';
+
+    rows.forEach((rw,i)=>{
+      const pegs=pegRow(); rw.guess.forEach(c=>pegs.appendChild(peg(c)));
+      board.appendChild(row(i+1, pegs, feedback(rw.black, rw.white)));
+    });
+
+    if(!over){
+      const pegs=pegRow();
+      for(let i=0;i<LEN;i++){
+        const c=current[i];
+        pegs.appendChild(c ? peg(c, ()=>removeAt(i)) : peg(null));
+      }
+      board.appendChild(row(rows.length+1, pegs, null));
+    }
+    host.appendChild(board);
+
+    if(over && !won){
+      const rev=document.createElement('div'); rev.className='mm-reveal';
+      const label=document.createElement('span'); label.className='mm-revlabel'; label.textContent='The code was'; rev.appendChild(label);
+      const pegs=pegRow(); code.forEach(c=>pegs.appendChild(peg(c))); rev.appendChild(pegs);
+      host.appendChild(rev);
+    }
+
+    if(!over){
+      const pal=document.createElement('div'); pal.className='mm-palette';
+      COLORS.forEach(c=>{
+        const sw=document.createElement('button'); sw.type='button'; sw.className='mm-swatch c-'+c;
+        sw.setAttribute('aria-label','add '+NAMES[c]);
+        sw.addEventListener('click',()=>place(c));
+        pal.appendChild(sw);
+      });
+      host.appendChild(pal);
+
+      const acts=document.createElement('div'); acts.className='mm-actions';
+      const undo=document.createElement('button'); undo.type='button'; undo.className='mm-act';
+      undo.textContent='⌫ Undo'; undo.disabled=!current.length; undo.addEventListener('click', clearLast);
+      const go=document.createElement('button'); go.type='button'; go.className='mm-act primary';
+      go.textContent='Guess'; go.disabled=current.length!==LEN; go.addEventListener('click', submit);
+      acts.appendChild(undo); acts.appendChild(go);
+      host.appendChild(acts);
+    }
+
+    const remaining=MAX-rows.length;
+    h.status(
+      won  ? 'Cracked it in '+rows.length+' '+(rows.length===1?'guess':'guesses')+'!' :
+      over ? 'Out of guesses — the code was '+code.map(c=>NAMES[c]).join(', ')+'.' :
+             remaining+' guess'+(remaining===1?'':'es')+' left · tap colours, then Guess.'
+    );
+  }
+
+  const controls=h.controls; controls.innerHTML='';
+  const again=document.createElement('button'); again.className='btn'; again.type='button';
+  again.textContent='New game'; again.addEventListener('click', start); controls.appendChild(again);
+
+  start();
+}
+
+function mountWordle(host, h){
+  host.className='wordle'; host.innerHTML='';
+  const now=new Date();
+  const seed=now.getFullYear()*10000+(now.getMonth()+1)*100+now.getDate();
+  const answer=WORDLE.dailyAnswer(seed);
+  const LEN=WORDLE.WORD_LEN, MAX=WORDLE.MAX_GUESSES;
+  let rows=[], cur='', done=false, win=false;
+
+  const gridEl=document.createElement('div'); gridEl.className='wgrid';
+  const kbEl=document.createElement('div'); kbEl.className='wkeys';
+  host.appendChild(gridEl); host.appendChild(kbEl);
+
+  const rank={correct:3, present:2, absent:1};
+  function keyState(){
+    const m={};
+    for(const r of rows){
+      for(let i=0;i<LEN;i++){
+        const ch=r.word[i], st=r.marks[i];
+        if(!m[ch] || rank[st]>rank[m[ch]]) m[ch]=st;
+      }
+    }
+    return m;
+  }
+
+  function drawGrid(){
+    gridEl.innerHTML='';
+    for(let r=0;r<MAX;r++){
+      const filled=rows[r];
+      const typing=!done && r===rows.length;
+      const row=document.createElement('div'); row.className='wrow';
+      for(let c=0;c<LEN;c++){
+        const cell=document.createElement('div'); cell.className='wcell';
+        if(filled){ cell.textContent=filled.word[c]; cell.classList.add(filled.marks[c]); }
+        else if(typing && c<cur.length){ cell.textContent=cur[c]; cell.classList.add('typed'); }
+        row.appendChild(cell);
+      }
+      gridEl.appendChild(row);
+    }
+  }
+
+  const KB=[ 'qwertyuiop'.split(''), 'asdfghjkl'.split(''), ['enter',...'zxcvbnm'.split(''),'back'] ];
+  function drawKeys(){
+    kbEl.innerHTML='';
+    const ks=keyState();
+    for(const line of KB){
+      const rowEl=document.createElement('div'); rowEl.className='wkrow';
+      for(const k of line){
+        const b=document.createElement('button'); b.type='button'; b.className='wkey';
+        if(k==='enter'){ b.classList.add('wide'); b.textContent='Enter'; }
+        else if(k==='back'){ b.classList.add('wide'); b.textContent='⌫'; b.setAttribute('aria-label','Backspace'); }
+        else { b.textContent=k; if(ks[k]) b.classList.add(ks[k]); }
+        b.addEventListener('click',()=>press(k));
+        rowEl.appendChild(b);
+      }
+      kbEl.appendChild(rowEl);
+    }
+  }
+
+  function setStatus(){
+    if(done) h.status(win
+      ? `Solved in ${rows.length}/${MAX}! Today’s word was ${answer.toUpperCase()}.`
+      : `Out of guesses — today’s word was ${answer.toUpperCase()}.`);
+    else h.status(`Guess today’s word · row ${rows.length+1} of ${MAX}.`);
+  }
+
+  let flash=0;
+  function note(msg){
+    h.status(msg);
+    const id=++flash;
+    setTimeout(()=>{ if(id===flash && !done) setStatus(); }, 1500);
+  }
+
+  function press(k){
+    if(done) return;
+    if(k==='back'){ if(cur.length){ cur=cur.slice(0,-1); drawGrid(); } return; }
+    if(k==='enter'){ submit(); return; }
+    if(/^[a-z]$/.test(k) && cur.length<LEN){ cur+=k; drawGrid(); }
+  }
+
+  function submit(){
+    if(cur.length<LEN){ note('Not enough letters.'); return; }
+    if(!WORDLE.isAllowed(cur)){ note(`“${cur.toUpperCase()}” isn’t in the word list.`); return; }
+    const marks=WORDLE.score(cur, answer);
+    rows.push({word:cur, marks});
+    const solved=marks.every(m=>m==='correct');
+    cur='';
+    if(solved){ done=true; win=true; }
+    else if(rows.length>=MAX){ done=true; win=false; }
+    drawGrid(); drawKeys(); setStatus();
+  }
+
+  function onKey(e){
+    if(!host.isConnected){ window.removeEventListener('keydown', onKey); return; }
+    if(e.metaKey||e.ctrlKey||e.altKey) return;
+    if(e.key==='Enter'){ e.preventDefault(); press('enter'); }
+    else if(e.key==='Backspace'){ e.preventDefault(); press('back'); }
+    else if(/^[a-zA-Z]$/.test(e.key)) press(e.key.toLowerCase());
+  }
+  window.addEventListener('keydown', onKey);
+
+  drawGrid(); drawKeys(); setStatus();
 }
 
 /*__MORE_MOUNTS__*/
