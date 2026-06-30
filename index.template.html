@@ -76,6 +76,8 @@
   .btn.ghost{background:transparent;color:var(--ink)}
   .btn[aria-pressed=true]{background:var(--brass);color:var(--ink);border-color:transparent}
   .btn:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+  .btn.lvl{padding:8px 14px}
+  .lvl-label{align-self:center;font-weight:600;opacity:.7;margin-left:6px}
 
   /* ---- Tic-tac-toe board ---- */
   .ttt{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:330px;margin:0 auto;aspect-ratio:1}
@@ -2184,10 +2186,11 @@ function mountStratego(host, h){
   // Stratego. Two modes: vs Computer (you are Player 1; the AI sets up and plays
   // itself, no hide screens, its pieces stay hidden until combat) and 2-player
   // pass-and-play (a "hide" interstitial between setups and turns keeps each
-  // army secret). Logic + AI: STRATEGO.
+  // army secret). vs Computer offers three skill levels. Logic + AI: STRATEGO.
   const N = STRATEGO.SIZE; // 10
   let board, phase, setupPlayer, current, sel, legal, handoff, lastCombat;
   let mode='ai', busy=false; // 'ai' = vs Computer (default), '2p' = pass-and-play
+  let difficulty='medium';   // AI skill: 'easy' | 'medium' | 'hard'
 
   const name = (o) => mode==='ai'
     ? (o===0 ? 'You' : 'The computer')
@@ -2300,7 +2303,7 @@ function mountStratego(host, h){
     busy=true; render();
     setTimeout(()=>{
       if(!host.isConnected) return;
-      const mv=STRATEGO.aiMove(board, 1);
+      const mv=STRATEGO.aiMove(board, 1, difficulty);
       if(mv){
         const att=board[mv.from], def=board[mv.to];
         board=STRATEGO.applyMove(board, mv.from, mv.to);
@@ -2358,6 +2361,15 @@ function mountStratego(host, h){
       const pp=ctrl('2 Players', ()=>{ if(mode!=='2p'){ mode='2p'; newGame(); } });
       ai.setAttribute('aria-pressed', mode==='ai'?'true':'false');
       pp.setAttribute('aria-pressed', mode==='2p'?'true':'false');
+      if(mode==='ai'){
+        const lab=document.createElement('span'); lab.className='lvl-label'; lab.textContent='Skill:';
+        h.controls.appendChild(lab);
+        for(const d of ['easy','medium','hard']){
+          const b=ctrl(d[0].toUpperCase()+d.slice(1), ()=>{ if(difficulty!==d){ difficulty=d; render(); } });
+          b.classList.add('lvl');
+          b.setAttribute('aria-pressed', difficulty===d?'true':'false');
+        }
+      }
       ctrl('Shuffle my setup', ()=>{ placeRandom(setupPlayer); sel=null; render(); });
       ctrl('Ready ✓', ready);
     }

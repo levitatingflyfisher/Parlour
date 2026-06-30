@@ -330,3 +330,42 @@ test('a long vs-AI game runs without crashing or deadlocking', () => {
   }
   assert.ok(winner(b) !== null || moves >= 1500 || true, 'completed without throwing');
 });
+
+// --- aiMove difficulty levels ---
+test('easy difficulty returns a legal move', () => {
+  const b = emptyBoard(); b[at(3, 5)] = piece(1, 6);
+  const mv = aiMove(b, 1, 'easy');
+  assert.ok(mv && legalMoves(b, mv.from).includes(mv.to));
+});
+
+test('easy still grabs a reachable flag', () => {
+  const b = emptyBoard(); b[at(3, 5)] = piece(1, 2); b[at(4, 5)] = piece(0, 'F', true);
+  assert.deepEqual(aiMove(b, 1, 'easy'), { from: at(3, 5), to: at(4, 5) });
+});
+
+test('easy never makes a known-suicidal attack when a safe move exists', () => {
+  const b = emptyBoard(); b[at(3, 5)] = piece(1, 3); b[at(4, 5)] = piece(0, 10, true);
+  assert.notDeepEqual(aiMove(b, 1, 'easy'), { from: at(3, 5), to: at(4, 5) });
+});
+
+test('easy varies its move (not a fixed script)', () => {
+  const b = emptyBoard(); b[at(3, 5)] = piece(1, 6); // 4 safe empty moves
+  const seen = new Set();
+  for (let i = 0; i < 50; i++) { const m = aiMove(b, 1, 'easy'); seen.add(m.from + '-' + m.to); }
+  assert.ok(seen.size >= 2, 'easy should not always return the same move');
+});
+
+test('hard returns a legal move and takes a winning capture', () => {
+  const b = emptyBoard(); b[at(3, 5)] = piece(1, 8); b[at(4, 5)] = piece(0, 5, true);
+  assert.deepEqual(aiMove(b, 1, 'hard'), { from: at(3, 5), to: at(4, 5) });
+});
+
+test('hard refuses a bad trade (General for a Scout) that medium would take', () => {
+  const b = emptyBoard();
+  b[at(3, 5)] = piece(1, 9);       // our General
+  b[at(4, 5)] = piece(0, 2, true); // revealed enemy Scout (capturable, below)
+  b[at(4, 6)] = piece(0, 10, true);// revealed enemy Marshal guarding it
+  const bad = { from: at(3, 5), to: at(4, 5) };
+  assert.deepEqual(aiMove(b, 1, 'medium'), bad, 'medium grabs the scout');
+  assert.notDeepEqual(aiMove(b, 1, 'hard'), bad, 'hard foresees the Marshal recapture');
+});

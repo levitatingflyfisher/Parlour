@@ -235,25 +235,104 @@ function scoreMove(board, piece, from, to, owner) {
   return s;
 }
 
-/// A heuristic move for the computer side. It uses only what it can legitimately
-/// know — its own pieces and any *revealed* enemy — never the hidden enemy
-/// ranks. It seizes a winning capture or the flag, refuses suicidal attacks,
-/// probes the unknown with mid-rank pieces, and otherwise advances while staying
-/// clear of revealed predators. Returns { from, to } or null if it cannot move.
-export function aiMove(board, owner) {
-  let best = null;
-  let bestScore = -Infinity;
+// Every legal { from, to } for a side, flattened for ranking.
+function allAiMoves(board, owner) {
+  const out = [];
   for (let i = 0; i < board.length; i++) {
     const p = board[i];
     if (!p || p.owner !== owner) continue;
+    for (const to of legalMoves(board, i)) out.push({ from: i, to });
+  }
+  return out;
+}
+
+const pickOne = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+// The most valuable `owner` piece a *revealed* enemy could capture next turn.
+// Hidden enemy ranks are never consulted — the AI plays fair, reasoning only
+// about what it could legitimately see. Drives the hard tier's 1-ply foresight.
+function opponentThreat(board, owner) {
+  const enemy = owner === 0 ? 1 : 0;
+  let worst = 0;
+  for (let i = 0; i < board.length; i++) {
+    const e = board[i];
+    if (!e || e.owner !== enemy || !e.revealed || typeof e.rank !== 'number') continue;
     for (const to of legalMoves(board, i)) {
-      // A tiny deterministic spread varies equal-scoring choices by position so
-      // play isn't a rigid script, without breaking test determinism.
-      const score = scoreMove(board, p, i, to, owner) + ((i * 31 + to) % 7) * 0.01;
-      if (score > bestScore) {
-        bestScore = score;
-        best = { from: i, to };
+      const t = board[to];
+      if (t && t.owner === owner && resolveCombat(e.rank, t.rank) === 'attacker') {
+        worst = Math.max(worst, rankValue(t.rank));
       }
+    }
+  }
+  return worst;
+}
+
+// Net-material evaluation: value won minus the value a revealed enemy wins back
+// in one reply. Unlike the medium heuristic this sees recaptures, so it declines
+// trades that come out behind (e.g. a General grabbing a guarded Scout).
+function hardScore(board, from, to, owner) {
+  const mover = board[from];
+  const target = board[to];
+  let gain;
+  if (target) {
+    if (target.revealed) {
+      if (target.rank === FLAG) return 100000;
+      const v = resolveCombat(mover.rank, target.rank);
+      gain = v === 'attacker' ? rankValue(target.rank)
+        : v === 'defender' ? -rankValue(mover.rank)
+        : rankValue(target.rank) - rankValue(mover.rank);
+    } else {
+      const r = typeof mover.rank === 'number' ? mover.rank : 0;
+      gain = (r >= 6 && r <= 9) ? 1.5 : (r === MARSHAL || r === SPY) ? -2 : 0.5;
+    }
+  } else {
+    const adv = owner === 1
+      ? Math.floor(to / SIZE) - Math.floor(from / SIZE)
+      : Math.floor(from / SIZE) - Math.floor(to / SIZE);
+    gain = adv * 0.5;
+  }
+  return gain - opponentThreat(applyMove(board, from, to), owner);
+}
+
+/// A heuristic move for the computer side at one of three skill levels. It uses
+/// only what it can legitimately know — its own pieces and any *revealed* enemy —
+/// never the hidden enemy ranks. Returns { from, to } or null if it cannot move.
+/// - easy:   grabs a guaranteed win, otherwise a random non-suicidal move.
+/// - medium: seizes winning captures, probes with mid-rank pieces, advances while
+///           dodging revealed predators (the original heuristic).
+/// - hard:   medium's instincts plus net-material 1-ply foresight — it won't make
+///           a capture that a revealed enemy immediately punishes.
+export function aiMove(board, owner, difficulty = 'medium') {
+  const moves = allAiMoves(board, owner);
+  if (!moves.length) return null;
+
+  if (difficulty === 'easy') {
+    const winsNow = (m) => {
+      const t = board[m.to];
+      return t && t.revealed
+        && (t.rank === FLAG || resolveCombat(board[m.from].rank, t.rank) === 'attacker');
+    };
+    const wins = moves.filter(winsNow);
+    if (wins.length) return pickOne(wins);
+    const safe = moves.filter((m) => {
+      const t = board[m.to];
+      return !(t && t.revealed && resolveCombat(board[m.from].rank, t.rank) === 'defender');
+    });
+    return pickOne(safe.length ? safe : moves);
+  }
+
+  let best = null;
+  let bestScore = -Infinity;
+  for (const m of moves) {
+    // A tiny deterministic spread varies equal-scoring choices by position so
+    // play isn't a rigid script, without breaking test determinism.
+    const score = (difficulty === 'hard'
+      ? hardScore(board, m.from, m.to, owner)
+      : scoreMove(board, board[m.from], m.from, m.to, owner))
+      + ((m.from * 31 + m.to) % 7) * 0.01;
+    if (score > bestScore) {
+      bestScore = score;
+      best = m;
     }
   }
   return best;
