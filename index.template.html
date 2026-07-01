@@ -693,7 +693,7 @@ function openGame(g){
   const helpers = {
     board: document.getElementById('board'),
     controls: document.getElementById('controls'),
-    status: (t)=>{ document.getElementById('status').textContent = t; },
+    status: (t)=>{ const el=document.getElementById('status'); if(el) el.textContent = t; },
   };
   g.mount(helpers.board, helpers);
   location.hash = g.id;
@@ -2189,7 +2189,7 @@ function mountStratego(host, h){
   // army secret). vs Computer offers three skill levels. Logic + AI: STRATEGO.
   const N = STRATEGO.SIZE; // 10
   let board, phase, setupPlayer, current, sel, legal, handoff, lastCombat;
-  let mode='ai', busy=false; // 'ai' = vs Computer (default), '2p' = pass-and-play
+  let mode='ai', busy=false, gen=0; // 'ai' = vs Computer (default), '2p' = pass-and-play
   let difficulty='medium';   // AI skill: 'easy' | 'medium' | 'hard'
 
   const name = (o) => mode==='ai'
@@ -2210,6 +2210,7 @@ function mountStratego(host, h){
   }
 
   function newGame(){
+    gen++; // invalidate any queued AI move from the previous game
     board=STRATEGO.emptyBoard();
     placeRandom(0);
     setupPlayer=0; current=0; sel=null; legal=[]; handoff=null; lastCombat=''; busy=false;
@@ -2301,8 +2302,9 @@ function mountStratego(host, h){
   // The computer's turn (vs-Computer mode): think briefly, then play its move.
   function aiTurn(){
     busy=true; render();
+    const myGen=gen;
     setTimeout(()=>{
-      if(!host.isConnected) return;
+      if(myGen!==gen || !host.isConnected) return; // stale: game restarted or closed
       const mv=STRATEGO.aiMove(board, 1, difficulty);
       if(mv){
         const att=board[mv.from], def=board[mv.to];
