@@ -1,0 +1,12 @@
+A cupboard of calm family games that respect you.
+
+Offline, no accounts, no ads, no engagement traps — and every game is a tiny, unit-tested module you could read end to end if you wanted to.
+
+• Pass-and-play and versus-the-computer
+• Games that end when you stop, not when a timer says so
+• No leaderboards, no streaks, no notifications begging you back
+
+Nothing here is trying to keep you on your phone.
+
+Free and open source, MIT licensed.
+Source: https://github.com/levitatingflyfisher/Parlour
