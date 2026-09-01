@@ -25,7 +25,7 @@ flowchart TD
     end
 
     G -->|"import"| T
-    T -->|"npm test"| GREEN["276 tests green"]
+    T -->|"npm test"| GREEN["all tests green"]
 
     G -->|"namespaced IIFE at /*__GAMES__*/"| BUILD["build.mjs"]
     TPL --> BUILD
@@ -38,7 +38,7 @@ flowchart TD
         STAGE -->|"calls"| NS["bundled logic<br/>e.g. CHESS.legalMoves(...)"]
     end
 
-    HTML -.->|"no fetch / no analytics / no storage"| WORLD["the network<br/>(never contacted after load)"]
+    HTML -.->|"no fetch / no analytics / no saved games"| WORLD["the network<br/>(never contacted after load)"]
 
     classDef ghost stroke-dasharray:5 5;
     class WORLD ghost;

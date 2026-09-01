@@ -50,7 +50,8 @@ fills up one tile at a time:
 ## Privacy
 
 Everything stays on your device. Parlour makes no network calls after the page
-loads and stores nothing — not even scores. See [PRIVACY.md](PRIVACY.md) and the
+loads and saves no games, no scores and nothing about you; the one thing it
+remembers is whether you picked Light or Dark. See [PRIVACY.md](PRIVACY.md) and the
 checkable [privacy model](docs/privacy-model.md).
 
 ## See the docs

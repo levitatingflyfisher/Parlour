@@ -35,7 +35,7 @@ tests does not ship.
 
 - **One source, two consumers.** The exact same `games/<id>.mjs` is `import`-able
   by `node:test` *and* inlined as a browser namespace — no duplicated logic, no
-  transpiler, no bundler dependency. 276 tests cover the rules and the AIs.
+  transpiler, no bundler dependency. A test file per game covers the rules and the AIs.
 - **Auditable by construction.** Because logic can't touch the DOM or the network,
   a reviewer knows a game module can't hide a tracker or a dark pattern — there's
   nowhere to put one.

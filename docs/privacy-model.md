@@ -1,7 +1,8 @@
 # Privacy model
 
 Parlour's privacy story is short because Parlour does very little: **after the page
-loads, nothing leaves your device, and nothing about you is stored.** This page
+loads, nothing leaves your device, and nothing about you is stored.** The one thing
+written to the browser is your theme choice. This page
 says exactly what that means and — the important part — how you can check it
 yourself rather than trust us.
 
@@ -20,14 +21,21 @@ offline cache warm. There are:
 
 ## What is stored
 
-**Nothing.** Today Parlour writes no `localStorage`, no `sessionStorage`, and no
-IndexedDB. Game state lives in memory for the current session and is gone when you
-refresh or close the tab. There is no profile, no history, no saved game.
+**One key: your theme choice.** If you pick Light or Dark, Parlour writes
+`localStorage['parlour.theme']` = `light` or `dark`. Picking Auto (follow the
+device, the default) removes the key, so a player who never touches the switch
+has nothing stored at all. Every access is wrapped so a browser that blocks
+storage still works; the choice then lasts for that visit only.
 
-> Note: `PRIVACY.md` says "any scores or preferences are stored in your browser on
-> this device." That describes an option we've left open, not a current feature —
-> at present *nothing* is stored. If persistence is ever added it will be opt-in,
-> on-device only, and erasable (see [ADR-0005](adr/0005-no-accounts-no-persistence-no-telemetry.md)).
+Nothing else. No `sessionStorage`, no IndexedDB, no cookies. Game state lives in
+memory and is gone when you leave the game, refresh or close the tab. There is no
+profile, no history, no saved game ([ADR-0005](adr/0005-no-accounts-no-persistence-no-telemetry.md)).
+
+The service worker's offline cache (`sw.js`) holds a copy of the app's own files
+(the page, manifest and icon), nothing about the player.
+
+`test/theme.test.mjs` pins this: the page uses one storage accessor, every
+storage call names `THEME_KEY`, and `PRIVACY.md` names the key.
 
 ## Threat model (what this does and doesn't protect)
 
@@ -57,11 +65,12 @@ grep -rniE "fetch\(|XMLHttpRequest|sendBeacon" index.template.html games/
 grep -rniE "analytics|gtag|googletagmanager|http://|https://" index.template.html games/ \
   | grep -viE "levitatingflyfisher|w3.org|schema"
 
-# No storage:
-grep -rniE "localStorage|sessionStorage|indexedDB" index.template.html games/
+# Storage: only the theme helpers in <head> (themeStore/readThemePref/writeThemePref):
+grep -rniE "localStorage|sessionStorage|indexedDB|document.cookie|setItem|getItem" index.template.html games/
 ```
 
-Each of these should come back empty (aside from same-origin/OpenHearth links).
+The first two should come back empty (aside from same-origin/OpenHearth links);
+the third should show only the theme helpers.
 The only file that performs any `fetch` is the service worker `sw.js`, and only for
 the first-party app-shell assets it caches for offline use — read it; it's ~30
 lines.

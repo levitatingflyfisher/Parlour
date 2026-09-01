@@ -51,6 +51,7 @@ narrated tutorial would live in `docs/tutorials/`.
 - **[Vision](../VISION.md)** — the one idea, the commitments, the honest scorecard.
 - **[Architecture overview](architecture/OVERVIEW.md)** — the spine + a diagram.
 - **[Architecture Decision Records](adr/)** — why each load-bearing choice was made.
+- **[Personas](explanation/personas.md)**: who agents play when they test the UI, with scenarios.
 - **[Concepts](concepts.md)** — the cupboard/stage model, pure-logic modules, the
   build bundle, local AI, daily puzzles.
 - **[Privacy model](privacy-model.md)** — what leaves the device (nothing) and how

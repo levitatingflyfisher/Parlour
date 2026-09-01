@@ -61,7 +61,18 @@ the tools the shell passes in:
 
 - `h.board` — the element to render into (same as `host`),
 - `h.controls` — an element for buttons (mode toggle, new game),
-- `h.status(text)` — set the status line.
+- `h.status(text)` — set the status line; `h.status(text, {kind:'error'})` for a
+  refused move or input, which adds the urgency colour, an alert icon and your
+  words (an error is never colour alone).
+
+If the game has a vs Computer / 2 Players pair, each pill returns early when its
+mode is already live (`if(mode==='ai')return;`), so a stray re-tap never throws
+the game away; `test/mode-guard.test.mjs` checks every pill.
+
+Style the game with the `:root` colour tokens (`--ink`/`--muted` on the panel,
+`--on-felt` on felt, `--card-ink`/`--board` for physical cards and boards) and
+never re-declare them on the game's root class, or the game stays light in dark
+mode; `test/contrast.test.mjs` checks text at 4.5:1 in both themes.
 
 ```js
 function mountMygame(host, h) {
@@ -108,9 +119,13 @@ of the modules and the template.
 
 ## Checklist
 
+Read-do, in order. Last checked against the code: 2026-09-27.
+
 - [ ] `games/mygame.mjs` — pure logic, no DOM, named exports
 - [ ] `test/mygame.test.mjs` — rules + AI covered, `npm test` green
 - [ ] `mountMygame` in `index.template.html`
 - [ ] `GAMES` registry entry (`id, name, glyph, blurb, badges, tier, mount`)
 - [ ] `npm run build`, then play it
+- [ ] every doc that states the number of games is updated (`test/counts.test.mjs`
+      fails until it is); don't write test counts into docs, they drift
 - [ ] one atomic commit (source + rebuilt `index.html`), no AI-attribution lines

@@ -23,12 +23,10 @@ puzzle a day derived from the date.
 | Quoridor | `quoridor` | 1p / 2p | Heuristic pawn race + fence placement (shortest-path aware). |
 | Hex | `hex` | 1p / 2p | Connection play on an 11×11 rhombus. |
 | Chess | `chess` | 1p / 2p | **Alpha-beta** search with a material/position evaluation; full legal moves incl. castling, en passant, promotion. |
-| Stratego | `stratego` | 2p + vs-computer | Heuristic with limited lookahead at **Easy / Medium / Hard** skill levels. |
+| Stratego | `stratego` | 1p / 2p | Heuristic with limited lookahead at **Easy / Medium / Hard** skill levels. |
 
-> Note: Stratego's tile badge currently reads only `2 players`, but the game also
-> ships a vs-computer mode with three difficulty levels (see `aiMove` in
-> `games/stratego.mjs`). Stratego is also the **only** game that currently exposes a
-> difficulty picker.
+> Stratego is the **only** vs-computer game that exposes a difficulty picker
+> (see `aiMove` in `games/stratego.mjs`).
 
 ## Solo puzzles
 
@@ -66,4 +64,5 @@ Every registry entry is `{ id, name, glyph, blurb, badges, tier, mount }`:
   [limitations](../limitations.md).
 - **`mount`** — the UI function that renders and drives the game.
 
-Counts as of this writing: **23 games**, **276 tests** (`npm test`).
+**23 games.** `test/counts.test.mjs` fails if this number, or any other stated
+game count in the docs, drifts from the registry.

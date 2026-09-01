@@ -23,7 +23,7 @@ A single-file PWA: a **cupboard of 23 pass-and-play + vs-computer family games**
 Each game's rules are a pure-logic ES module under `games/` (no DOM, no network),
 unit-tested with `node:test` in `test/`, and bundled into `index.html` by
 `build.mjs`. The UI shell and per-game mount functions live in
-`index.template.html`. ~276 tests, zero runtime dependencies.
+`index.template.html`. A test file per game, zero runtime dependencies.
 
 ## Non-negotiables (breaking one is a regression, not a feature)
 
@@ -32,6 +32,14 @@ unit-tested with `node:test` in `test/`, and bundled into `index.html` by
   add any. (See [VISION.md](VISION.md), [ADR-0001](docs/adr/0001-single-file-pwa.md).)
 - **No dark patterns.** No streaks-that-punish, no "energy," no nag loops, no
   guilt. Calm is the product.
+- **Store nothing but the theme.** The page writes one key, `parlour.theme`,
+  and only when the player picks Light or Dark; games are never saved
+  ([ADR-0005](docs/adr/0005-no-accounts-no-persistence-no-telemetry.md)).
+  `test/theme.test.mjs` fails on any other storage use.
+- **Colours are role tokens, checked.** Use the `:root` tokens named for their
+  ground (`--ink` on the panel, `--on-felt` on felt, `--card-ink` on physical
+  cards) and never re-declare them in a game's root; `test/contrast.test.mjs`
+  holds every text pair to 4.5:1 in light and dark.
 - **Game logic stays pure.** `games/*.mjs` must not touch the DOM, `window`,
   `fetch`, timers, or `localStorage`. DOM/UI belongs in `index.template.html`
   mount functions. This boundary is what keeps games testable *and* auditable.

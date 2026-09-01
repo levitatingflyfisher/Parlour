@@ -12,7 +12,7 @@ mainstream games app is engineered to keep you: ads between rounds, streaks that
 punish a missed day, "energy" timers, an account before you can play, telemetry
 on every tap. Parlour is the opposite by construction. Open it once and it works
 forever, offline, on a device the family already owns. No account, no ads, no
-tracking, nothing stored, nothing sold. Just the games — pass the phone around
+tracking, no saved games, nothing sold. Just the games — pass the phone around
 the table, or play the computer.
 
 The second half of the idea is *how* that promise stays honest: **each game is a
@@ -81,7 +81,7 @@ the tests win; if the tests and reality disagree, reality wins. Verify a claim
 before you rely on it. As of v0.1:
 
 **Real, tested, load-bearing:**
-- **23 games**, each a pure-logic module under `games/`, covered by **276 tests**
+- **23 games**, each a pure-logic module under `games/` with its own tests
   in `test/` (`node --test`, zero dependencies). This is the whole thesis — small
   auditable modules — and it holds.
 - The **single-file PWA**: `build.mjs` bundles the modules into `index.html`; the
@@ -92,17 +92,20 @@ before you rely on it. As of v0.1:
 - **Daily "-le" puzzles** (Wordle, Hexcodle, Globle) derived deterministically
   from a `YYYYMMDD` seed — the same puzzle for everyone, every day, with no server
   and no stored state.
-- **Zero egress, zero storage** — no `fetch`, no analytics, no `localStorage`.
-  You can grep the source and confirm it (see [privacy model](docs/privacy-model.md)).
+- **Zero egress, one stored setting** — no `fetch`, no analytics; the only thing
+  written to the browser is the Light/Dark choice (`parlour.theme`), and a test
+  fails if anything else appears (see [privacy model](docs/privacy-model.md)).
+- **Light, dark or follow the device**, one tap away on every screen, default
+  follow the device.
 
 **Aspirational — documented, not shipped:**
 - **The APK build is out-of-band.** There is no Android/shell source in this repo;
   the APK is a thin WebView wrapper produced separately and attached as a release.
   This repo builds the PWA; it does not build the APK.
-- **Persistence.** Nothing is saved today — not scores, not streaks, not a
-  half-finished game. PRIVACY.md's "any scores or preferences are stored in your
-  browser" describes an *option that is open*, not a feature that exists. A
-  refresh loses the current game. See [limitations](docs/limitations.md).
+- **Persistence of play.** No game is saved: not scores, not streaks, not a
+  half-finished game. A refresh loses the current game (ADR-0005, kept on
+  purpose). The theme choice is the one setting remembered. See
+  [limitations](docs/limitations.md).
 - **Tier grouping.** Each registry entry carries a `tier` (a rough
   simplest→hardest ladder), but the cupboard renders one flat, ordered grid —
   tiers are latent authoring metadata, not a UI filter yet.

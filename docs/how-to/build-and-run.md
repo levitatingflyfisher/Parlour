@@ -20,7 +20,7 @@ npm test        # runs `node --test` over test/*.mjs
 ```
 
 This exercises every game's pure-logic module (rules and AI). It should report all
-tests passing (276 at the time of writing) and finish in a few seconds. Run it
+tests passing and finish in a few seconds. Run it
 before and after any change to game logic.
 
 ## Build the page

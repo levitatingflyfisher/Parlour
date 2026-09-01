@@ -85,18 +85,18 @@ to — which is the local-first thesis in miniature.
 
 A white paper that only lists strengths is marketing. The line, drawn straight:
 
-**Built and load-bearing.** The 23 games and their 276 tests; the single-file
+**Built and load-bearing.** The 23 games and their tests; the single-file
 offline PWA; on-device AI (minimax / alpha-beta / heuristics) and pass-and-play;
-deterministic daily puzzles; genuinely zero egress and zero storage. These are
+deterministic daily puzzles; genuinely zero egress, and no storage beyond the
+one Light/Dark choice. These are
 real and checkable today.
 
 **Aspirational or absent.**
 - **The Android APK is built out-of-band** — there's no shell source in the
   repository; the PWA is the source of truth and the APK is a thin WebView wrapper
   attached to a release.
-- **Nothing persists.** No saved games, no resume, no scores or streaks — a refresh
-  loses the current game. `PRIVACY.md` mentions storing scores "in your browser,"
-  but today nothing is stored; that's an option left open, not a feature.
+- **No game persists.** No saved games, no resume, no scores or streaks; a refresh
+  loses the current game. Only the theme choice is remembered.
 - **The `tier` ladder isn't surfaced** as age/difficulty drawers, and only Stratego
   exposes a difficulty picker.
 

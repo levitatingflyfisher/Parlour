@@ -6,8 +6,8 @@ just not built yet.
 
 ## By design (trade-offs we'd make again)
 
-- **No saved games, scores, or streaks.** Nothing is persisted — a refresh or a
-  closed tab loses the current game. This is the direct cost of storing nothing
+- **No saved games, scores, or streaks.** No play is persisted: a refresh or a
+  closed tab loses the current game. This is the direct cost of storing no play
   ([ADR-0005](adr/0005-no-accounts-no-persistence-no-telemetry.md)); it's why the
   privacy story is airtight, and it's also the most-noticed missing feature.
 - **No online multiplayer.** Two humans play by passing one device
@@ -26,9 +26,6 @@ just not built yet.
 - **Tiers aren't surfaced.** Every game carries a `tier` (a simplest→hardest
   ladder) in the registry, but `renderCupboard` ignores it — the cupboard is one
   flat, ordered grid. There's no age/difficulty filter or grouping yet.
-- **`PRIVACY.md` over-promises storage.** It mentions "scores or preferences …
-  stored in your browser"; today nothing is stored at all. The doc describes an
-  option, not a shipped feature.
 - **Difficulty selection is mostly absent.** See above — most games have one AI
   strength.
 - **No in-app help / rules.** Each game's tile blurb is the only explanation;

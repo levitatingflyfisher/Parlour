@@ -1,6 +1,6 @@
 # ADR-0005 — No accounts, no persistence, no telemetry (calm by architecture)
 
-**Status:** Accepted
+**Status:** Accepted (amended 2026-09-27: one theme key)
 
 ## Context
 
@@ -32,9 +32,16 @@ Enforce the promise by building nothing that could break it:
 - **No saved games or history** (the honest cost). A refresh or a closed tab loses
   the current game; there are no streaks, high scores, or resume. This is a
   deliberate trade recorded in [limitations.md](../limitations.md).
-- **`PRIVACY.md` slightly over-promises.** It says "any scores or preferences are
-  stored in your browser on this device"; today *nothing* is stored, so that line
-  describes an option left open, not a current feature. If persistence is ever
-  added it MUST be **opt-in, on-device only, erasable, and never guilt-inducing** —
-  a streak must never become a dark pattern. See the near-term
-  [horizon](../../VISION.md#horizons-problems-not-a-feature-list).
+- If persistence of play is ever added it MUST be **opt-in, on-device only,
+  erasable, and never guilt-inducing**; a streak must never become a dark pattern.
+  See the near-term [horizon](../../VISION.md#horizons-problems-not-a-feature-list).
+
+## Amendment (2026-09-27): the theme choice is stored
+
+The fleet ruling on theme (light, dark or follow the device, one tap away,
+default follow the device) needs the choice to survive a reload, or the switch
+would have to be made again on every visit. So Parlour stores exactly one key,
+`localStorage['parlour.theme']`, and only when the player picks Light or Dark;
+picking Auto deletes it. It is a display preference, not play: games are still
+never saved, and leaving a game still loses it. `PRIVACY.md` says this in plain
+words, and `test/theme.test.mjs` fails if any other storage use appears.
