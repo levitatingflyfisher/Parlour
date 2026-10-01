@@ -18,7 +18,7 @@ To publish an update you build the page and serve the static files:
 
 ```sh
 npm test          # green
-npm run build     # regenerate index.html from source
+npm run build     # regenerate index.html and restamp the sw.js cache name
 # then publish the repo's static files to the static host
 ```
 

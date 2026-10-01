@@ -67,7 +67,13 @@ the tools the shell passes in:
 
 If the game has a vs Computer / 2 Players pair, each pill returns early when its
 mode is already live (`if(mode==='ai')return;`), so a stray re-tap never throws
-the game away; `test/mode-guard.test.mjs` checks every pill.
+the game away; `test/mode-guard.test.mjs` checks every pill. Switching modes
+keeps the board: the pill calls a `handOver()` that bumps the game's `gen`
+guard (dropping a computer move still on its timer) and lets the computer take
+its side if it is now to move, without flipping the turn. Once a game is over,
+`handOver()` does nothing: the result keeps the mode it was played in, and the
+new mode starts with New game;
+`test/mode-switch.test.mjs` holds each game to that.
 
 Style the game with the `:root` colour tokens (`--ink`/`--muted` on the panel,
 `--on-felt` on felt, `--card-ink`/`--board` for physical cards and boards) and

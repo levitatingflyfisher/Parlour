@@ -5,6 +5,7 @@
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { createHash } from 'node:crypto';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const gamesDir = join(root, 'games');
@@ -28,7 +29,19 @@ if (!tpl.includes('/*__GAMES__*/')) {
   throw new Error('index.template.html is missing the /*__GAMES__*/ marker');
 }
 writeFileSync(join(root, 'index.html'), tpl.replace('/*__GAMES__*/', () => bundle));
+// Stamp the service worker's cache name with a hash of the files it caches, so
+// installed PWAs pick up every new build and drop the old cache
+// (test/sw-cache.test.mjs fails if a shipped file changes without a rebuild).
+const swPath = join(root, 'sw.js');
+const sw = readFileSync(swPath, 'utf8');
+const assets = JSON.parse(sw.match(/const ASSETS = (\[[^\]]*\]);/)[1].replace(/'/g, '"'))
+  .filter((a) => a !== './');
+const hash = createHash('sha256');
+for (const a of assets) hash.update(readFileSync(join(root, a)));
+const cache = `parlour-${hash.digest('hex').slice(0, 10)}`;
+writeFileSync(swPath, sw.replace(/const CACHE = '[^']+';/, `const CACHE = '${cache}';`));
+
 console.log(
   `Built index.html · ${files.length} game module(s): ` +
-  files.map((f) => f.replace(/\.mjs$/, '')).join(', '),
+  files.map((f) => f.replace(/\.mjs$/, '')).join(', ') + ` · sw cache ${cache}`,
 );

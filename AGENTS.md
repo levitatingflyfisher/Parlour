@@ -49,6 +49,11 @@ unit-tested with `node:test` in `test/`, and bundled into `index.html` by
   `index.template.html`, then `npm run build`, then commit the regenerated
   `index.html` alongside your source change. Editing `index.html` directly will be
   silently overwritten on the next build.
+- **Bump the service-worker cache when shipped files change.** Installed PWAs
+  only pick up a new build promptly when `sw.js` changes. `npm run build` does
+  the bump: it stamps `CACHE` in `sw.js` with a hash of the files the worker
+  caches. Commit the restamped `sw.js` with `index.html`, and never hand-edit the
+  name. `test/sw-cache.test.mjs` fails if a shipped file changed without a rebuild.
 - **Atomic commits, one concern each.** Commit messages state the *why*. **No
   AI-assistant attribution trailers** on commits — deliberate project policy.
 - **Never commit** local working artifacts — `docs/superpowers/` (plans/specs) and

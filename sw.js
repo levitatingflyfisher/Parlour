@@ -1,7 +1,7 @@
 // Offline app-shell cache. Parlour is a single self-contained page, so after
 // the first visit every game plays fully offline. Stale-while-revalidate:
 // serve the cached shell instantly, refresh it in the background.
-const CACHE = 'parlour-v1';
+const CACHE = 'parlour-110dcf1930';
 const ASSETS = ['./', 'index.html', 'manifest.webmanifest', 'icon.svg'];
 
 self.addEventListener('install', (e) => {

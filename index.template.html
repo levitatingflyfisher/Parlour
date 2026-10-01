@@ -849,16 +849,20 @@ window.addEventListener('hashchange',()=>{
 
 // ---- Tic-Tac-Toe UI (logic from the TICTACTOE bundle) ----
 function mountTicTacToe(host, h){
-  let board, mode='ai', turn='X', over=false;
+  let board, mode='ai', turn='X', over=false, gen=0;
   const controls=h.controls;
 
-  function newGame(){ board=TICTACTOE.emptyBoard(); turn='X'; over=false; draw(); }
+  function newGame(){ gen++; board=TICTACTOE.emptyBoard(); turn='X'; over=false; draw(); }
+  // A mode switch keeps the board: the side to move passes to the computer (it
+  // plays ◯) or back to a human, and a computer move still on its timer is dropped. A finished game keeps
+  // its result as played; the new mode starts with New game.
+  function handOver(){ if(over) return; gen++; draw(); think(); }
 
   function think(){
     if(over) return;
     if(mode==='ai' && turn==='O'){
-      const i=TICTACTOE.bestMove(board,'O');
-      setTimeout(()=>{ if(over) return; board[i]='O'; turn='X'; resolve(); }, 260);
+      const i=TICTACTOE.bestMove(board,'O'), myGen=gen;
+      setTimeout(()=>{ if(over||myGen!==gen) return; board[i]='O'; turn='X'; resolve(); }, 260);
     }
   }
   function resolve(){ draw(); maybeEnd(); }
@@ -904,8 +908,8 @@ function mountTicTacToe(host, h){
   }
 
   controls.innerHTML='';
-  const vsAi=ctrl('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();newGame();},true);
-  const vs2=ctrl('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();newGame();});
+  const vsAi=ctrl('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();handOver();},true);
+  const vs2=ctrl('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();handOver();});
   const again=ctrl('New game',()=>newGame());
   again.classList.add('ghost');
   function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
@@ -920,9 +924,9 @@ function mountTicTacToe(host, h){
 // ---- Connect Four UI (logic from the CONNECT4 bundle) ----
 function mountConnect4(host, h){
   const R=CONNECT4.ROWS, C=CONNECT4.COLS;
-  let board, mode='ai', turn='R', over=false, busy=false;
+  let board, mode='ai', turn='R', over=false, busy=false, gen=0;
 
-  function newGame(){ board=CONNECT4.emptyBoard(); turn='R'; over=false; busy=false; draw(); }
+  function newGame(){ gen++; board=CONNECT4.emptyBoard(); turn='R'; over=false; busy=false; draw(); }
   function play(col){
     if(over||busy) return;
     if(mode==='ai'&&turn==='Y') return;
@@ -933,12 +937,19 @@ function mountConnect4(host, h){
   function advance(){
     if(CONNECT4.winner(board)){ over=true; draw(); return; }
     turn = turn==='R'?'Y':'R'; draw();
-    if(mode==='ai'&&turn==='Y'){
-      busy=true;
-      setTimeout(()=>{ if(over) return; const c=CONNECT4.bestMove(board,'Y');
-        board=CONNECT4.drop(board,c,'Y').board; busy=false; advance(); }, 300);
-    }
+    aiTurn();
   }
+  function aiTurn(){
+    if(over||mode!=='ai'||turn!=='Y') return;
+    busy=true; draw();
+    const myGen=gen;
+    setTimeout(()=>{ if(over||myGen!==gen) return; const c=CONNECT4.bestMove(board,'Y');
+      board=CONNECT4.drop(board,c,'Y').board; busy=false; advance(); }, 300);
+  }
+  // A mode switch keeps the board: the side to move passes to the computer (it
+  // plays yellow) or back to a human, and a computer move still on its timer is dropped. A finished game keeps
+  // its result as played; the new mode starts with New game.
+  function handOver(){ if(over) return; gen++; busy=false; draw(); aiTurn(); }
   function winCells(bd){
     const DIRS=[[0,1],[1,0],[1,1],[1,-1]];
     for(let r=0;r<R;r++) for(let c=0;c<C;c++){ const p=bd[r*C+c]; if(!p) continue;
@@ -969,8 +980,8 @@ function mountConnect4(host, h){
     }
   }
   const controls=h.controls; controls.innerHTML='';
-  const vsAi=ctrl('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();newGame();},true);
-  const vs2=ctrl('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();newGame();});
+  const vsAi=ctrl('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();handOver();},true);
+  const vs2=ctrl('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();handOver();});
   const again=ctrl('New game',()=>newGame()); again.classList.add('ghost');
   function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
   function ctrl(label,fn,p){ const b=document.createElement('button'); b.className='btn'; b.type='button';
@@ -1119,9 +1130,9 @@ function mountHexcodle(host, h){
 }
 
 function mountReversi(host, h){
-  let board, mode='ai', turn='B', over=false, busy=false, note='';
+  let board, mode='ai', turn='B', over=false, busy=false, note='', gen=0;
 
-  function newGame(){ board=REVERSI.emptyBoard(); turn='B'; over=false; busy=false; note=''; resolve(); }
+  function newGame(){ gen++; board=REVERSI.emptyBoard(); turn='B'; over=false; busy=false; note=''; resolve(); }
 
   // Whose turn it is is `turn`. After any board change we resolve passes (a side
   // with no move passes; winner()!==null only when neither side can move, so at
@@ -1138,7 +1149,9 @@ function mountReversi(host, h){
     if(over) return;
     if(mode==='ai' && turn==='W'){
       busy=true;
+      const myGen=gen;
       setTimeout(()=>{
+        if(myGen!==gen) return;
         if(!host.isConnected || over){ busy=false; return; }
         const m=REVERSI.bestMove(board,'W');
         if(m>=0) board=REVERSI.applyMove(board, m, 'W');
@@ -1146,6 +1159,11 @@ function mountReversi(host, h){
       }, 280);
     }
   }
+
+  // A mode switch keeps the board: the side to move passes to the computer (it
+  // plays white) or back to a human, and a computer move still on its timer is dropped. A finished game keeps
+  // its result as played; the new mode starts with New game.
+  function handOver(){ if(over) return; gen++; busy=false; resolve(); }
 
   function play(i){
     if(over||busy) return;
@@ -1191,8 +1209,8 @@ function mountReversi(host, h){
   }
 
   const controls=h.controls; controls.innerHTML='';
-  const vsAi=ctrl('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();newGame();},true);
-  const vs2=ctrl('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();newGame();});
+  const vsAi=ctrl('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();handOver();},true);
+  const vs2=ctrl('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();handOver();});
   const again=ctrl('New game',()=>newGame()); again.classList.add('ghost');
   function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
   function ctrl(label,fn,p){ const b=document.createElement('button'); b.className='btn'; b.type='button';
@@ -1221,17 +1239,23 @@ function mountNim(host, h){
   function advance(){
     if(NIM.isOver(heaps)){ over=true; draw(); return; }
     turn = turn===0 ? 1 : 0; draw();
-    if(mode==='ai' && turn===1){
-      busy=true;
-      const myGen=gen;
-      setTimeout(()=>{
-        if(over || myGen!==gen || !host.isConnected) return; // stale: game ended, restarted, or closed
-        const m=NIM.bestMove(heaps);
-        heaps=NIM.take(heaps, m.heap, m.count);
-        busy=false; advance();
-      }, 300);
-    }
+    aiTurn();
   }
+  function aiTurn(){
+    if(over || mode!=='ai' || turn!==1) return;
+    busy=true; draw();
+    const myGen=gen;
+    setTimeout(()=>{
+      if(over || myGen!==gen || !host.isConnected) return; // stale: game ended, restarted, switched, or closed
+      const m=NIM.bestMove(heaps);
+      heaps=NIM.take(heaps, m.heap, m.count);
+      busy=false; advance();
+    }, 300);
+  }
+  // A mode switch keeps the heaps: the side to move passes to the computer (it is
+  // player 2) or back to a human, and a computer move still on its timer is dropped. A finished game keeps
+  // its result as played; the new mode starts with New game.
+  function handOver(){ if(over) return; gen++; busy=false; draw(); aiTurn(); }
 
   function draw(){
     if(over){
@@ -1272,8 +1296,8 @@ function mountNim(host, h){
   }
 
   const controls=h.controls; controls.innerHTML='';
-  const vsAi=ctrl('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();newGame();},true);
-  const vs2=ctrl('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();newGame();});
+  const vsAi=ctrl('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();handOver();},true);
+  const vs2=ctrl('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();handOver();});
   const again=ctrl('New game',()=>newGame()); again.classList.add('ghost');
   function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
   function ctrl(label,fn,pressed){ const b=document.createElement('button'); b.className='btn'; b.type='button';
@@ -1366,9 +1390,9 @@ function mountHangman(host, h){
 
 function mountHex(host, h){
   const N=HEX.SIZE;
-  let board, mode='ai', turn='R', over=false, busy=false;
+  let board, mode='ai', turn='R', over=false, busy=false, gen=0;
 
-  function newGame(){ board=HEX.emptyBoard(); turn='R'; over=false; busy=false; draw(); }
+  function newGame(){ gen++; board=HEX.emptyBoard(); turn='R'; over=false; busy=false; draw(); }
   function play(i){
     if(over||busy) return;
     if(mode==='ai'&&turn==='B') return;
@@ -1379,15 +1403,22 @@ function mountHex(host, h){
   function advance(){
     if(HEX.winner(board)){ over=true; draw(); return; }
     turn = turn==='R'?'B':'R'; draw();
-    if(mode==='ai'&&turn==='B'&&!over){
-      busy=true;
-      setTimeout(()=>{
-        if(over||!host.isConnected) return;
-        const m=HEX.bestMove(board,'B');
-        board=HEX.place(board,m,'B'); busy=false; advance();
-      }, 300);
-    }
+    aiTurn();
   }
+  function aiTurn(){
+    if(over||mode!=='ai'||turn!=='B') return;
+    busy=true; draw();
+    const myGen=gen;
+    setTimeout(()=>{
+      if(over||myGen!==gen||!host.isConnected) return;
+      const m=HEX.bestMove(board,'B');
+      board=HEX.place(board,m,'B'); busy=false; advance();
+    }, 300);
+  }
+  // A mode switch keeps the board: the side to move passes to the computer (it
+  // plays blue) or back to a human, and a computer move still on its timer is dropped. A finished game keeps
+  // its result as played; the new mode starts with New game.
+  function handOver(){ if(over) return; gen++; busy=false; draw(); aiTurn(); }
   function draw(){
     const w=HEX.winner(board);
     h.status(
@@ -1418,8 +1449,8 @@ function mountHex(host, h){
     host.appendChild(legend);
   }
   const controls=h.controls; controls.innerHTML='';
-  const vsAi=ctrl('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();newGame();},true);
-  const vs2=ctrl('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();newGame();});
+  const vsAi=ctrl('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();handOver();},true);
+  const vs2=ctrl('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();handOver();});
   const again=ctrl('New game',()=>newGame()); again.classList.add('ghost');
   function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
   function ctrl(label,fn,p){ const b=document.createElement('button'); b.className='btn'; b.type='button';
@@ -1914,6 +1945,10 @@ function mountDotsboxes(host, h){
   }
 
   function newGame(){ gen++; model=DOTSBOXES.newGame(); over=false; busy=false; draw(); }
+  // A mode switch keeps the board: the side to move passes to the computer (it is
+  // player 2) or back to a human, and a computer move still on its timer is dropped. A finished game keeps
+  // its result as played; the new mode starts with New game.
+  function handOver(){ if(over) return; gen++; busy=false; afterMove(); }
 
   function makeEdge(type, index, live){
     const on=(type==='h'?model.h:model.v)[index];
@@ -1972,8 +2007,8 @@ function mountDotsboxes(host, h){
   const controls=h.controls; controls.innerHTML='';
   function ctrl(label,fn,p){ const b=document.createElement('button'); b.className='btn'; b.type='button';
     b.textContent=label; if(p)b.setAttribute('aria-pressed','true'); b.addEventListener('click',fn); controls.appendChild(b); return b; }
-  const vsAi=ctrl('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();newGame();},true);
-  const vs2=ctrl('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();newGame();});
+  const vsAi=ctrl('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();handOver();},true);
+  const vs2=ctrl('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();handOver();});
   const again=ctrl('New game',()=>newGame()); again.classList.add('ghost');
   function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
   setModes(); newGame();
@@ -1999,6 +2034,11 @@ function mountBlokus(host, h){
 
   // After any change: end when neither side can move; auto-pass (permanently) a
   // side with no legal move; in vs-Computer, let the AI answer after a beat.
+  // A mode switch keeps the board: the side to move passes to the computer (it is
+  // player 2) or back to a human, and a computer move still on its timer is dropped. A finished game keeps
+  // its result as played; the new mode starts with New game.
+  function handOver(){ if(over) return; gen++; busy=false; resolve(); }
+
   function resolve(){
     const can=[B.hasAnyMove(board,0,remaining[0]), B.hasAnyMove(board,1,remaining[1])];
     if(!can[0] && !can[1]){ over=true; busy=false; draw(); return; }
@@ -2112,8 +2152,8 @@ function mountBlokus(host, h){
   const controls=h.controls; controls.innerHTML='';
   function ctrl(label,fn,p){ const b=document.createElement('button'); b.className='btn'; b.type='button';
     b.textContent=label; if(p)b.setAttribute('aria-pressed','true'); b.addEventListener('click',fn); controls.appendChild(b); return b; }
-  const vsAi=ctrl('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();newGame();},true);
-  const vs2=ctrl('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();newGame();});
+  const vsAi=ctrl('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();handOver();},true);
+  const vs2=ctrl('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();handOver();});
   const again=ctrl('New game',()=>newGame()); again.classList.add('ghost');
   function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
   setModes(); newGame();
@@ -2129,6 +2169,11 @@ function mountCheckers(host, h){
   // After any board change, the side to move is `turn`. If it has no legal move
   // it has lost (this also covers having no pieces). Vs the computer, schedule
   // Black's reply on a short delay.
+  // A mode switch keeps the board: the side to move passes to the computer (it
+  // plays black) or back to a human, and a computer move still on its timer is dropped. A finished game keeps
+  // its result as played; the new mode starts with New game.
+  function handOver(){ if(over) return; gen++; busy=false; resolve(); }
+
   function resolve(){
     sel=null;
     over = CHECKERS.legalMoves(board, turn).length===0;
@@ -2207,8 +2252,8 @@ function mountCheckers(host, h){
   }
 
   const controls=h.controls; controls.innerHTML='';
-  const vsAi=mkBtn('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();newGame();},true);
-  const vs2=mkBtn('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();newGame();});
+  const vsAi=mkBtn('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();handOver();},true);
+  const vs2=mkBtn('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();handOver();});
   const again=mkBtn('New game',()=>newGame()); again.classList.add('ghost');
   function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
   function mkBtn(text,fn,pressed){ const b=document.createElement('button'); b.className='btn'; b.type='button';
@@ -2217,17 +2262,19 @@ function mountCheckers(host, h){
 }
 
 function mountQuoridor(host, h){
-  let state, mode='ai', place='move', over=false, busy=false;
+  let state, mode='ai', place='move', over=false, busy=false, gen=0;
   const HUMAN=0; // in vs-Computer you are pawn 0 (bottom, racing up)
 
-  function fresh(){ state=QUORIDOR.newGame(); over=false; busy=false; place='move'; setPlace(); draw(); maybeAi(); }
+  function fresh(){ gen++; state=QUORIDOR.newGame(); over=false; busy=false; place='move'; setPlace(); draw(); maybeAi(); }
 
   function myTurn(){ return mode==='2p' || state.turn===HUMAN; }
 
   function maybeAi(){
     if(over || mode!=='ai' || state.turn===HUMAN) return;
     busy=true; draw();
+    const myGen=gen;
     setTimeout(()=>{
+      if(myGen!==gen) return;
       if(!host.isConnected || over){ busy=false; return; }
       const act=QUORIDOR.aiMove(state);
       if(act){
@@ -2238,6 +2285,11 @@ function mountQuoridor(host, h){
       busy=false; over=QUORIDOR.winner(state)!==null; draw();
     }, 320);
   }
+
+  // A mode switch keeps the board: the side to move passes to the computer (it is
+  // pawn 2) or back to a human, and a computer move still on its timer is dropped. A finished game keeps
+  // its result as played; the new mode starts with New game.
+  function handOver(){ if(over) return; gen++; busy=false; draw(); maybeAi(); }
 
   function doMove(r,c){
     if(over||busy||!myTurn()) return;
@@ -2323,11 +2375,11 @@ function mountQuoridor(host, h){
   const controls=h.controls; controls.innerHTML='';
   function ctrl(label,fn,pressed){ const b=document.createElement('button'); b.className='btn'; b.type='button';
     b.textContent=label; if(pressed)b.setAttribute('aria-pressed','true'); b.addEventListener('click',fn); controls.appendChild(b); return b; }
-  const vsAi=ctrl('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();fresh();},true);
-  const vs2=ctrl('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();fresh();});
+  const vsAi=ctrl('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();handOver();},true);
+  const vs2=ctrl('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();handOver();});
   const again=ctrl('New game',()=>fresh()); again.classList.add('ghost');
-  const moveBtn=ctrl('Move',()=>{place='move';setPlace();draw();},true);
-  const wallBtn=ctrl('Wall',()=>{place='wall';setPlace();draw();});
+  const moveBtn=ctrl('Move',()=>{place='move';setPlace();if(!over)draw();},true);
+  const wallBtn=ctrl('Wall',()=>{place='wall';setPlace();if(!over)draw();});
   moveBtn.classList.add('ghost'); wallBtn.classList.add('ghost');
   function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
   function setPlace(){ moveBtn.setAttribute('aria-pressed',place==='move'); wallBtn.setAttribute('aria-pressed',place==='wall'); }
@@ -2582,8 +2634,8 @@ function mountStratego(host, h){
 
 function mountGomoku(host, h){
   const S=GOMOKU.SIZE;
-  let board, mode='ai', turn='B', over=false, busy=false, last=-1;
-  function newGame(){ board=GOMOKU.emptyBoard(); turn='B'; over=false; busy=false; last=-1; draw(); }
+  let board, mode='ai', turn='B', over=false, busy=false, last=-1, gen=0;
+  function newGame(){ gen++; board=GOMOKU.emptyBoard(); turn='B'; over=false; busy=false; last=-1; draw(); }
   function play(idx){
     if(over||busy) return;
     if(mode==='ai'&&turn==='W') return;
@@ -2594,12 +2646,19 @@ function mountGomoku(host, h){
   function advance(){
     if(GOMOKU.winner(board)){ over=true; draw(); return; }
     turn = turn==='B'?'W':'B'; draw();
-    if(mode==='ai'&&turn==='W'){
-      busy=true;
-      setTimeout(()=>{ if(over) return; const m=GOMOKU.bestMove(board,'W');
-        board=GOMOKU.place(board,m,'W'); last=m; busy=false; advance(); }, 300);
-    }
+    aiTurn();
   }
+  function aiTurn(){
+    if(over||mode!=='ai'||turn!=='W') return;
+    busy=true; draw();
+    const myGen=gen;
+    setTimeout(()=>{ if(over||myGen!==gen) return; const m=GOMOKU.bestMove(board,'W');
+      board=GOMOKU.place(board,m,'W'); last=m; busy=false; advance(); }, 300);
+  }
+  // A mode switch keeps the board: the side to move passes to the computer (it
+  // plays white) or back to a human, and a computer move still on its timer is dropped. A finished game keeps
+  // its result as played; the new mode starts with New game.
+  function handOver(){ if(over) return; gen++; busy=false; draw(); aiTurn(); }
   function draw(){
     const w=GOMOKU.winner(board);
     h.status(
@@ -2623,8 +2682,8 @@ function mountGomoku(host, h){
     host.appendChild(grid);
   }
   const controls=h.controls; controls.innerHTML='';
-  const vsAi=ctrl('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();newGame();},true);
-  const vs2=ctrl('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();newGame();});
+  const vsAi=ctrl('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();handOver();},true);
+  const vs2=ctrl('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();handOver();});
   const again=ctrl('New game',()=>newGame()); again.classList.add('ghost');
   function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
   function ctrl(label,fn,p){ const b=document.createElement('button'); b.className='btn'; b.type='button';
@@ -2977,6 +3036,10 @@ function mountChess(host, h){
   const cOf=(p)=>p?(p<'a'?'w':'b'):null;
 
   function newGame(){ gen++; state=CHESS.newGame(); sel=null; over=false; busy=false; last=null; note=''; resolve(); }
+  // A mode switch keeps the position: the side to move passes to the computer (it
+  // plays black) or back to a human, and a computer move still on its timer is dropped. A finished game keeps
+  // its result as played; the new mode starts with New game.
+  function handOver(){ if(over) return; gen++; busy=false; resolve(); }
   function myTurn(){ return mode==='2p' || state.turn===HUMAN; }
 
   // After every board change: if the side to move has no move it is mate/stalemate;
@@ -3068,8 +3131,8 @@ function mountChess(host, h){
 
   const controls=h.controls; controls.innerHTML='';
   function mkBtn(text,fn,pressed){ const b=document.createElement('button'); b.className='btn'; b.type='button'; b.textContent=text; if(pressed) b.setAttribute('aria-pressed','true'); b.addEventListener('click',fn); controls.appendChild(b); return b; }
-  const vsAi=mkBtn('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();newGame();},true);
-  const vs2=mkBtn('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();newGame();});
+  const vsAi=mkBtn('vs Computer',()=>{if(mode==='ai')return;mode='ai';setModes();handOver();},true);
+  const vs2=mkBtn('2 Players',()=>{if(mode==='2p')return;mode='2p';setModes();handOver();});
   const again=mkBtn('New game',()=>newGame()); again.classList.add('ghost');
   function setModes(){ vsAi.setAttribute('aria-pressed',mode==='ai'); vs2.setAttribute('aria-pressed',mode==='2p'); }
   setModes(); newGame();
