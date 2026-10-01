@@ -347,6 +347,8 @@ if(darkQuery && darkQuery.addEventListener){
   .wordle{max-width:360px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:18px}
   .wordle .wgrid{display:flex;flex-direction:column;gap:6px}
   .wordle .wrow{display:flex;gap:6px;justify-content:center}
+  /* A refused row: the error colour on its outline, where the eyes are. */
+  .wordle .wrow.refused .wcell{outline:2px solid var(--urgency);outline-offset:-2px}
   .wordle .wcell{width:52px;height:52px;display:grid;place-items:center;background:var(--paper);
     border:2px solid var(--paper-edge);border-radius:7px;color:var(--ink);text-transform:uppercase;
     font-family:var(--serif);font-weight:700;font-size:1.7rem;line-height:1;transition:transform .08s ease}
@@ -566,6 +568,7 @@ div.qd .cell{cursor:default}
   border:2px solid var(--brass);border-radius:50%;z-index:2;pointer-events:none}
   /* Globle — daily geography proximity hunt */
   .globe{max-width:420px;margin:0 auto}
+  .globe .glabel{display:block;font-weight:600;margin:6px 0 0}
   .globe .grow{display:flex;gap:8px;align-items:center;margin:6px 0 2px}
   .globe input{flex:1;min-width:0;font:inherit;font-size:1.05rem;padding:10px 12px;border-radius:10px;
     border:2px solid #cdbfa3;background:var(--paper);color:var(--ink)}
@@ -682,7 +685,7 @@ div.qd .cell{cursor:default}
 
   <main>
     <div class="cupboard" id="cupboard" aria-label="Games cupboard"></div>
-    <section class="stage" id="stage" aria-live="polite"></section>
+    <section class="stage" id="stage"></section>
   </main>
 
   <p class="shelf-foot">
@@ -4139,7 +4142,7 @@ function openGame(g){
   stageEl.innerHTML =
     `<div class="gbar"><button class="back" type="button" id="back">← Cupboard</button>`+
     `<h2 class="gtitle">${g.name}</h2></div>`+
-    `<div class="panel"><p class="status" id="status"></p><div id="board"></div>`+
+    `<div class="panel"><p class="status" id="status" aria-live="polite"></p><div id="board"></div>`+
     `<div class="controls" id="controls"></div></div>`;
   document.getElementById('back').addEventListener('click',closeGame);
   const helpers = {
@@ -4974,6 +4977,7 @@ function mountWordle(host, h){
       const filled=rows[r];
       const typing=!done && r===rows.length;
       const row=document.createElement('div'); row.className='wrow';
+      if(typing && refused){ row.classList.add('refused'); row.setAttribute('aria-invalid','true'); }
       for(let c=0;c<LEN;c++){
         const cell=document.createElement('div'); cell.className='wcell';
         if(filled){
@@ -5015,15 +5019,19 @@ function mountWordle(host, h){
     else h.status(`Guess today’s word · row ${rows.length+1} of ${MAX}.`);
   }
 
-  let flash=0;
+  // A refusal stays until the player's next key (no timer: any fixed delay
+  // is too short for one reader and too long for another), then the row
+  // count comes back. The refused row is marked where the eyes are.
+  let refused=false;
   function note(msg){
+    refused=true;
     h.status(msg, {kind:'error'});
-    const id=++flash;
-    setTimeout(()=>{ if(id===flash && !done) setStatus(); }, 1500);
+    drawGrid();
   }
 
   function press(k){
     if(done) return;
+    if(refused){ refused=false; setStatus(); drawGrid(); }
     if(k==='back'){ if(cur.length){ cur=cur.slice(0,-1); drawGrid(); } return; }
     if(k==='enter'){ submit(); return; }
     if(/^[a-z]$/.test(k) && cur.length<LEN){ cur+=k; drawGrid(); }
@@ -5974,7 +5982,7 @@ function mountGloble(host, h){
     const name=String(raw||'').trim();
     if(!name){ h.status('Type a country name, then Guess.'); return; }
     const r=GLOBLE.guess(answer, name);
-    if(!r){ h.status(`“${name}” isn’t a country I know. Try another.`, {kind:'error'}); return; }
+    if(!r){ h.status(`“${name}” isn’t one of the ${GLOBLE.COUNTRIES.length} countries in the list. Pick one as you type.`, {kind:'error'}); return; }
     if(guesses.some(g=>g.country.name===r.country.name)){ h.status(`You already guessed ${r.country.name}.`, {kind:'error'}); return; }
     guesses.push(r);
     if(r.correct) done=true;
@@ -5983,11 +5991,23 @@ function mountGloble(host, h){
   function draw(){
     host.className='globe'; host.innerHTML='';
     if(!done){
+      // The field offers the bundled countries (a list, so a guess is one
+      // of them), says how many there are, and has a visible label.
+      const label=document.createElement('label'); label.className='glabel';
+      label.setAttribute('for','globle-guess');
+      label.textContent=`Country (one of ${GLOBLE.COUNTRIES.length})`;
       const row=document.createElement('div'); row.className='grow';
-      const inp=document.createElement('input'); inp.type='text'; inp.placeholder='Guess a country…';
-      inp.setAttribute('aria-label','country guess'); inp.autocomplete='off'; inp.autocapitalize='words'; inp.spellcheck=false;
+      const inp=document.createElement('input'); inp.type='text'; inp.placeholder='Start typing a country…';
+      inp.id='globle-guess'; inp.setAttribute('list','globle-countries');
+      inp.autocomplete='off'; inp.autocapitalize='words'; inp.spellcheck=false;
       inp.addEventListener('keydown',e=>{ if(e.key==='Enter') submit(inp.value); });
-      row.appendChild(inp); host.appendChild(row);
+      const list=document.createElement('datalist'); list.id='globle-countries';
+      for(const c of GLOBLE.COUNTRIES){
+        if(guesses.some(g=>g.country.name===c.name)) continue;
+        const o=document.createElement('option'); o.value=c.name; list.appendChild(o);
+      }
+      row.appendChild(inp); row.appendChild(list);
+      host.appendChild(label); host.appendChild(row);
       inp.focus();
     }
     const list=document.createElement('div'); list.className='guesses';
@@ -6017,7 +6037,7 @@ function mountGloble(host, h){
       h.status(`${guesses.length} guess${guesses.length===1?'':'es'} · warmest: ${best.country.name} (${best.proximity}/100).`);
       note.textContent='Redder = closer. The arrow points toward today’s country.';
     } else {
-      h.status('Guess any country to begin.');
+      h.status(`Today’s country is one of ${GLOBLE.COUNTRIES.length} countries. Guess any of them to begin.`);
       note.textContent='Each guess shows the distance, an arrow toward the answer, and a warmer/colder colour.';
     }
     host.appendChild(note);
@@ -6030,7 +6050,7 @@ function mountGloble(host, h){
 }
 
 function mountSudoku(host, h){
-  let solution, givens, cells, sel=-1, diff='easy', won=false;
+  let solution, givens, cells, sel=-1, diff='easy', puzzleDiff='easy', won=false;
 
   const controls=h.controls; controls.innerHTML='';
   const diffWrap=document.createElement('div'); diffWrap.className='sud-diffs';
@@ -6038,7 +6058,9 @@ function mountSudoku(host, h){
   [['easy','Easy'],['medium','Medium'],['hard','Hard']].forEach(([k,label])=>{
     const b=document.createElement('button'); b.type='button'; b.className='btn ghost sud-diff';
     b.textContent=label; b.setAttribute('aria-pressed', k===diff?'true':'false');
-    b.addEventListener('click',()=>{ if(diff===k) return; diff=k; for(const kk in diffBtns) diffBtns[kk].setAttribute('aria-pressed', kk===diff?'true':'false'); start(); });
+    // A new difficulty never throws away a puzzle in play: it applies to the
+    // next one, and starts at once only on an untouched or solved puzzle.
+    b.addEventListener('click',()=>{ if(diff===k) return; diff=k; for(const kk in diffBtns) diffBtns[kk].setAttribute('aria-pressed', kk===diff?'true':'false'); if(won||untouched()) start(); else draw(); });
     diffBtns[k]=b; diffWrap.appendChild(b);
   });
   const again=document.createElement('button'); again.type='button'; again.className='btn'; again.textContent='New puzzle';
@@ -6048,8 +6070,9 @@ function mountSudoku(host, h){
   function start(){
     const g=SUDOKU.generate(Math.random, diff);
     solution=g.solution; givens=g.givens; cells=g.puzzle.slice();
-    sel=-1; won=false; draw();
+    sel=-1; won=false; puzzleDiff=diff; draw();
   }
+  function untouched(){ return cells.every((v,i)=>givens[i]||v===0); }
   function select(i){ if(won||givens[i]) return; sel=(sel===i?-1:i); draw(); }
   function place(v){ if(won||sel<0||givens[sel]) return; cells[sel]=v; if(SUDOKU.isComplete(cells)) won=true; draw(); }
   function erase(){ if(won||sel<0||givens[sel]||!cells[sel]) return; cells[sel]=0; draw(); }
@@ -6058,10 +6081,12 @@ function mountSudoku(host, h){
     host.className='sud'; host.innerHTML='';
     const conf=SUDOKU.conflicts(cells);
     const filled=cells.filter(v=>v!==0).length;
-    const dname=diff[0].toUpperCase()+diff.slice(1);
+    const cap=(d)=>d[0].toUpperCase()+d.slice(1);
+    const dname=cap(puzzleDiff);
+    const next=diff!==puzzleDiff?' · next puzzle: '+cap(diff):'';
     if(won) h.status('Solved! Every row, column and box complete. Nicely done. 🎉');
     else if(conf.size) h.status('Clash: the same number twice in a row, column or box.', {kind:'error'});
-    else h.status(dname+' · '+filled+' / 81 filled · tap a cell, then a number.');
+    else h.status(dname+' · '+filled+' / 81 filled · tap a cell, then a number'+next+'.');
 
     const selVal=sel>=0?cells[sel]:0;
     const board=document.createElement('div'); board.className='sud-board';

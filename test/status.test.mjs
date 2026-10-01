@@ -77,13 +77,13 @@ test('every refusal in the games is sent as an error', () => {
   const refusals = [
     /note\('Not enough letters\.'\)/,          // Wordle, via note()
     /isn’t in the word list/,                  // Wordle
-    /isn’t a country I know/,                  // Globle
+    /isn’t one of the \$\{GLOBLE\.COUNTRIES\.length\} countries/, // Globle
     /You already guessed/,                     // Globle
   ];
   for (const re of refusals) assert.match(script, re, `refusal ${re} still exists`);
-  assert.match(extract('mountWordle'), /function note\(msg\)\{\s*h\.status\(msg,\s*\{kind:'error'\}\)/);
+  assert.match(extract('mountWordle'), /function note\(msg\)\{[^}]*h\.status\(msg,\s*\{kind:'error'\}\)/);
   const globle = extract('mountGloble');
-  assert.match(globle, /isn’t a country I know[^;]*,\s*\{kind:'error'\}\)/);
+  assert.match(globle, /isn’t one of the[^;]*,\s*\{kind:'error'\}\)/);
   assert.match(globle, /You already guessed[^;]*,\s*\{kind:'error'\}\)/);
   assert.match(extract('mountBlokus'), /info\s*\?\s*\{kind:'error'\}/);
   assert.match(extract('mountSudoku'), /conf\.size[^;]*\{kind:'error'\}/);
