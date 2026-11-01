@@ -28,7 +28,21 @@ const tpl = readFileSync(join(root, 'index.template.html'), 'utf8');
 if (!tpl.includes('/*__GAMES__*/')) {
   throw new Error('index.template.html is missing the /*__GAMES__*/ marker');
 }
-writeFileSync(join(root, 'index.html'), tpl.replace('/*__GAMES__*/', () => bundle));
+let page = tpl.replace('/*__GAMES__*/', () => bundle);
+// Allow each inline script and style by hash, so the policy needs no
+// 'unsafe-inline'. The hashes cover only the tag bodies, so filling in the
+// policy afterwards does not change them.
+const hashList = (tag) => {
+  const hashes = [...page.matchAll(new RegExp(`<${tag}>([\\s\\S]*?)</${tag}>`, 'g'))]
+    .map((m) => `'sha256-${createHash('sha256').update(m[1]).digest('base64')}'`);
+  if (!hashes.length) throw new Error(`No inline <${tag}> found to allow in the policy`);
+  return hashes.join(' ');
+};
+if (!page.includes('__CSP_SCRIPT__') || !page.includes('__CSP_STYLE__')) {
+  throw new Error('index.template.html is missing the Content-Security-Policy placeholders');
+}
+page = page.replace('__CSP_SCRIPT__', () => hashList('script')).replace('__CSP_STYLE__', () => hashList('style'));
+writeFileSync(join(root, 'index.html'), page);
 // Stamp the service worker's cache name with a hash of the files it caches, so
 // installed PWAs pick up every new build and drop the old cache
 // (test/sw-cache.test.mjs fails if a shipped file changes without a rebuild).

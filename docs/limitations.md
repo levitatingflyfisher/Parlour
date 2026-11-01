@@ -18,16 +18,17 @@ just not built yet.
   is no server and no identity.
 - **Bounded AI.** Computer opponents are minimax / alpha-beta / heuristics sized
   for a friendly game on a phone, not tournament engines. Only **Stratego** offers
-  a difficulty picker (Easy/Medium/Hard) today; the other games run a single fixed
-  strength.
+  a difficulty picker (Easy/Medium/Hard) for its computer opponent today; the
+  other computer opponents run a single fixed strength.
 
 ## Not built yet (roadmap, not reality)
 
 - **Tiers aren't surfaced.** Every game carries a `tier` (a simplest→hardest
   ladder) in the registry, but `renderCupboard` ignores it — the cupboard is one
   flat, ordered grid. There's no age/difficulty filter or grouping yet.
-- **Difficulty selection is mostly absent.** See above — most games have one AI
-  strength.
+- **Difficulty selection is mostly absent.** See above: every computer opponent
+  but Stratego's has one strength. Among the puzzles, only Sudoku has a picker
+  (Easy/Medium/Hard).
 - **No in-app help / rules.** Each game's tile blurb is the only explanation;
   there are no how-to-play overlays inside a game.
 - **Single-page scaling.** All games bundle into one `index.html`, which grows with

@@ -33,7 +33,7 @@ function mount() {
   const statuses = [];
   const timers = [];
   const keyHandlers = [];
-  const h = { status: (t, o) => statuses.push({ t, kind: o && o.kind }) };
+  const h = { status: (t, o) => statuses.push({ t, kind: o && o.kind }), onClose() {} };
   const document = { createElement: (t) => makeEl(t) };
   const window = { addEventListener: (ev, fn) => keyHandlers.push(fn), removeEventListener() {} };
   const setTimeout = (fn, ms) => { timers.push(ms); return timers.length; };

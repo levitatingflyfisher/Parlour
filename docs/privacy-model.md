@@ -1,23 +1,25 @@
 # Privacy model
 
 Parlour's privacy story is short because Parlour does very little: **after the page
-loads, nothing leaves your device, and nothing about you is stored.** The one thing
+loads, the page makes no network calls, and nothing about you is stored.** The one thing
 written to the browser is your theme choice. This page
 says exactly what that means and — the important part — how you can check it
 yourself rather than trust us.
 
 ## What leaves the device
 
-**Nothing, after the initial load.** The only network activity is fetching the app
+**Nothing about you or your play.** The only network activity is fetching the app
 itself (the HTML page and its shell assets) the first time you visit, and the
-service worker (`sw.js`) re-checking those same first-party assets to keep its
-offline cache warm. There are:
+service worker (`sw.js`) fetching those same first-party assets again, in the
+background, each time the app is opened online, to keep its offline cache
+fresh. There are:
 
 - **no accounts** — there is no server to sign in to;
 - **no analytics, telemetry, or beacons** — no tracking of taps, games, or scores;
 - **no ads** and no ad networks;
 - **no third-party requests** — nothing is loaded from a CDN or any other host;
-- **no `fetch`/XHR in the game code** — the app doesn't call out at all once cached.
+- **no `fetch`/XHR in the page or the game code**. The only fetches are the
+  service worker's, for the app's own files from its own host.
 
 ## What is stored
 
@@ -51,7 +53,8 @@ small:
   removes the cached app.
 - **The static host** (e.g. GitHub Pages) can see that a browser requested the page,
   like any website — standard web-server request logs, outside Parlour's control.
-  This is only the download, never gameplay.
+  This is only the download and the service worker's refresh of the same files,
+  never gameplay.
 
 ## Verify it yourself
 
@@ -71,9 +74,10 @@ grep -rniE "localStorage|sessionStorage|indexedDB|document.cookie|setItem|getIte
 
 The first two should come back empty (aside from same-origin/OpenHearth links);
 the third should show only the theme helpers.
-The only file that performs any `fetch` is the service worker `sw.js`, and only for
-the first-party app-shell assets it caches for offline use — read it; it's ~30
-lines.
+The only file that performs any `fetch` is the service worker `sw.js`. When the
+page asks for one of the app's own files, the worker answers from its cache and,
+when online, fetches that file again from the same host to refresh the cache.
+Read it; it is short.
 
 See also the plain-language [PRIVACY.md](../PRIVACY.md) and
 [ADR-0005](adr/0005-no-accounts-no-persistence-no-telemetry.md).

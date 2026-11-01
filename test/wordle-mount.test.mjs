@@ -49,7 +49,7 @@ const all = (el) => [el, ...el.children.flatMap((c) => (c.children ? all(c) : []
 function mount() {
   const host = makeEl('div');
   const statuses = [];
-  const h = { status: (t) => statuses.push(t), controls: makeEl('div'), board: host };
+  const h = { status: (t) => statuses.push(t), controls: makeEl('div'), board: host, onClose() {} };
   const document = { createElement: makeEl };
   const window = { addEventListener() {}, removeEventListener() {} };
   const fn = new Function('document', 'window', 'WORDLE', 'setTimeout',

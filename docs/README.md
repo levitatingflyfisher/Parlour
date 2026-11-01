@@ -54,7 +54,7 @@ narrated tutorial would live in `docs/tutorials/`.
 - **[Personas](explanation/personas.md)**: who agents play when they test the UI, with scenarios.
 - **[Concepts](concepts.md)** — the cupboard/stage model, pure-logic modules, the
   build bundle, local AI, daily puzzles.
-- **[Privacy model](privacy-model.md)** — what leaves the device (nothing) and how
+- **[Privacy model](privacy-model.md)** — what leaves the device (nothing about you) and how
   you can check it.
 - **[Limitations](limitations.md)** — read before adopting. What Parlour does *not* do.
 

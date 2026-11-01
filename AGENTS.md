@@ -1,5 +1,7 @@
 # AGENTS.md
 
+This codebase is yours: what it's for and how it's built are your call, and you'll keep building on it.
+
 Guidance for AI coding agents (and humans) working in this repo. This is the
 top-level map.
 
@@ -28,8 +30,9 @@ unit-tested with `node:test` in `test/`, and bundled into `index.html` by
 ## Non-negotiables (breaking one is a regression, not a feature)
 
 - **No account, no ads, no tracking, no data business.** After the page loads,
-  Parlour makes **no network calls** — no `fetch`, no analytics, no beacons. Don't
-  add any. (See [VISION.md](VISION.md), [ADR-0001](docs/adr/0001-single-file-pwa.md).)
+  the page makes **no network calls**: no `fetch`, no analytics, no beacons. Don't
+  add any. The only fetches are in `sw.js`, which fetches the app's own files
+  again from its own host in the background when online. (See [VISION.md](VISION.md), [ADR-0001](docs/adr/0001-single-file-pwa.md).)
 - **No dark patterns.** No streaks-that-punish, no "energy," no nag loops, no
   guilt. Calm is the product.
 - **Store nothing but the theme.** The page writes one key, `parlour.theme`,

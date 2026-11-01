@@ -38,7 +38,7 @@ flowchart TD
         STAGE -->|"calls"| NS["bundled logic<br/>e.g. CHESS.legalMoves(...)"]
     end
 
-    HTML -.->|"no fetch / no analytics / no saved games"| WORLD["the network<br/>(never contacted after load)"]
+    HTML -.->|"no fetch / no analytics / no saved games"| WORLD["the network<br/>(never contacted by the page after load)"]
 
     classDef ghost stroke-dasharray:5 5;
     class WORLD ghost;

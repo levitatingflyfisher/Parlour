@@ -83,7 +83,8 @@ computed on-device, with no server. See
 
 ## Offline as the default state
 
-The service worker caches the app shell on first visit, and since the app makes no
-other network requests, online and offline are indistinguishable after that. There
+The service worker caches the app shell on first visit and, when online, fetches
+it again in the background to keep the cache fresh. Since the app makes no
+other network requests, play is the same online and offline after that. There
 is no loading spinner waiting on a server, because there is no server. See
 [ADR-0001](adr/0001-single-file-pwa.md).

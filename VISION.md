@@ -50,8 +50,10 @@ regression against the whole reason Parlour exists. Each is recorded as an ADR.
    core play. Identity is not the price of a game.
    ([ADR-0005](docs/adr/0005-no-accounts-no-persistence-no-telemetry.md))
 2. **No ads, no tracking, no data business** — enforced by architecture, not by a
-   promise. After the page loads, Parlour makes no network calls, so there is
-   nowhere for a tracker to send anything. ([ADR-0001](docs/adr/0001-single-file-pwa.md))
+   promise. After the page loads, the page makes no network calls, so there is
+   nowhere for a tracker to send anything. The service worker (`sw.js`) fetches
+   the app's own files again from its own host in the background when online.
+   ([ADR-0001](docs/adr/0001-single-file-pwa.md))
 3. **No dark patterns.** No streaks that punish, no "energy," no nagging, no
    engagement-maximizing loops. A game you can put down and pick up with nothing
    lost is the point, not a bug.
@@ -92,9 +94,11 @@ before you rely on it. As of v0.1:
 - **Daily "-le" puzzles** (Wordle, Hexcodle, Globle) derived deterministically
   from a `YYYYMMDD` seed — the same puzzle for everyone, every day, with no server
   and no stored state.
-- **Zero egress, one stored setting** — no `fetch`, no analytics; the only thing
-  written to the browser is the Light/Dark choice (`parlour.theme`), and a test
-  fails if anything else appears (see [privacy model](docs/privacy-model.md)).
+- **No calls from the page, one stored setting.** The page and the game modules
+  hold no `fetch` and no analytics. The service worker fetches the app's own
+  files again from its own host when online. The only thing written to the
+  browser is the Light/Dark choice (`parlour.theme`), and a test fails if any
+  other storage use appears (see [privacy model](docs/privacy-model.md)).
 - **Light, dark or follow the device**, one tap away on every screen, default
   follow the device.
 
@@ -110,7 +114,8 @@ before you rely on it. As of v0.1:
   simplest→hardest ladder), but the cupboard renders one flat, ordered grid —
   tiers are latent authoring metadata, not a UI filter yet.
 - **A wider shelf, difficulty pickers everywhere, richer boards.** Roadmap, not
-  reality. Only Stratego surfaces a difficulty choice today.
+  reality. Only Stratego (its computer opponent) and Sudoku (its puzzles)
+  surface a difficulty choice today.
 
 Keep that line bright: the games and their tests are real; anything about saving,
 grouping, or the APK toolchain is a hope with a placeholder.

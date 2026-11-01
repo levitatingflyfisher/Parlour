@@ -40,18 +40,21 @@ Twenty-three games so far, each a self-contained logic module — the cupboard
 fills up one tile at a time:
 
 - **Play the computer or pass-and-play** — Tic-Tac-Toe, Connect Four, Reversi,
-  Gomoku, Dots & Boxes, Blokus, Checkers, Quoridor, Hex, Chess, and Stratego
-  (two-player).
-- **Solo puzzles** — 2048, Memory, Minesweeper, Mastermind, Sudoku, Solitaire,
-  Hangman, Nim, and Crazy Eights.
+  Gomoku, Dots & Boxes, Blokus, Checkers, Quoridor, Hex, Chess, Stratego, and
+  Nim.
+- **Play the computer**: Crazy Eights.
+- **Solo puzzles**: 2048, Memory (solo or take turns), Minesweeper, Mastermind,
+  Sudoku, Solitaire, and Hangman.
 - **Daily "-le"** — Wordle, Hexcodle, and Globle. One puzzle a day, the same for
   everyone, computed on-device from the date — no server, no stored state.
 
 ## Privacy
 
-Everything stays on your device. Parlour makes no network calls after the page
-loads and saves no games, no scores and nothing about you; the one thing it
-remembers is whether you picked Light or Dark. See [PRIVACY.md](PRIVACY.md) and the
+Everything you play stays on your device. The page makes no network calls after
+it loads. When you are online, its service worker (`sw.js`) fetches Parlour's
+own files again from the site that served them, in the background, to keep the
+offline copy fresh. Parlour saves no games, no scores and nothing about you; the
+one thing it remembers is whether you picked Light or Dark. See [PRIVACY.md](PRIVACY.md) and the
 checkable [privacy model](docs/privacy-model.md).
 
 ## See the docs

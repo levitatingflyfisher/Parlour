@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<!-- Makes "no network after load" a browser rule. build.mjs fills in the hashes
+     of the inline script and style. The service worker has its own context, so
+     the page needs worker-src for it and no connect-src. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-g4Sqllz/Cmf4EjhMXyPFF2e3Xvj/thq43yRKm/rvDLw=' 'sha256-GEqVps70rHURdzAFT7+Py7drzqM9bjTW9Dg37BU1b3M='; style-src 'sha256-eNW0zlpbxazFdPk1YgK2W2RGddmIvKPfQB+iJKjl3WI='; img-src 'self' data:; manifest-src 'self'; worker-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Parlour: pass-and-play games for the family table</title>
 <meta name="description" content="A calm cupboard of classic games for the whole family. Pass-and-play on one device, or play the computer. Local-first, offline, no accounts, no ads.">
@@ -211,6 +215,7 @@ if(darkQuery && darkQuery.addEventListener){
 
   .shelf-foot{color:var(--on-felt);opacity:.9;text-align:center;margin-top:32px;font-size:.8rem;line-height:1.7}
   .shelf-foot a{color:var(--on-felt)}
+  .data-notice{color:var(--on-felt);opacity:.9;text-align:center;font-size:.8rem;line-height:1.5;margin:.5rem 0}
   /* ---- Reversi / Othello ---- */
   .reversi{max-width:440px;margin:0 auto}
   .reversi .board{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;
@@ -669,6 +674,7 @@ div.qd .cell{cursor:default}
 </head>
 <body>
 <div class="wrap">
+  <p class="data-notice">Your data stays on this device, in this browser. If you clear the browser’s website data, it is erased.</p>
   <div class="topline">
     <p class="mark" aria-hidden="true">Parlour<span class="dot">.</span></p>
     <div class="themes" role="group" aria-label="Theme">
@@ -690,7 +696,8 @@ div.qd .cell{cursor:default}
 
   <p class="shelf-foot">
     Local-first · offline · no accounts, no ads, no tracking.<br>
-    An <a href="https://levitatingflyfisher.github.io">OpenHearth</a> game cupboard.
+    An <a href="https://levitatingflyfisher.github.io">OpenHearth</a> game cupboard.<br>
+    Published by Intergenerational Symbolic Systems.
   </p>
 </div>
 
@@ -4136,6 +4143,10 @@ function renderCupboard(){
   }
 }
 
+// What the open game must undo when it closes (key listeners, timers). A game
+// registers each with helpers.onClose(fn); closeGame runs them once.
+const closers=[];
+
 function openGame(g){
   document.body.classList.add('playing');
   stageEl.classList.add('on');
@@ -4149,6 +4160,7 @@ function openGame(g){
     board: document.getElementById('board'),
     controls: document.getElementById('controls'),
     status: (t, opt)=>{ const el=document.getElementById('status'); if(el) renderStatus(el, t, opt); },
+    onClose: (fn)=>{ closers.push(fn); },
   };
   g.mount(helpers.board, helpers);
   document.title = `${g.name} · Parlour`;
@@ -4173,6 +4185,9 @@ function renderStatus(el, text, opt){
 }
 
 function closeGame(){
+  // Take the list first so a callback that throws cannot leave stale ones behind.
+  const undo=closers.splice(0);
+  for(const fn of undo){ try{ fn(); }catch(e){ /* one failed cleanup must not strand the rest */ } }
   document.body.classList.remove('playing');
   stageEl.classList.remove('on');
   stageEl.innerHTML='';
@@ -4361,11 +4376,11 @@ function mountG2048(host, h){
   const again=document.createElement('button'); again.className='btn ghost'; again.type='button';
   again.textContent='New game'; again.addEventListener('click',start); controls.appendChild(again);
   function onKey(e){
-    if(!host.isConnected){ window.removeEventListener('keydown', onKey); return; }
     const dir={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right'}[e.key];
     if(dir){ e.preventDefault(); doMove(dir); }
   }
   window.addEventListener('keydown', onKey);
+  h.onClose(()=>window.removeEventListener('keydown', onKey));
   let sx=0, sy=0;
   host.addEventListener('touchstart',e=>{const t=e.changedTouches[0];sx=t.clientX;sy=t.clientY;},{passive:true});
   host.addEventListener('touchend',e=>{
@@ -4713,13 +4728,13 @@ function mountHangman(host, h){
              'Guess the word · '+wrong.length+' of '+HANGMAN.MAX_WRONG+' wrong.'
     );
   }
-  // Physical-keyboard support; self-removes once the stage is torn down.
+  // Physical-keyboard support; removed by the shared teardown when the game closes.
   function onKey(e){
-    if(!host.isConnected){ window.removeEventListener('keydown', onKey); return; }
     const ch=e.key.toLowerCase();
     if(ch.length===1 && ch>='a' && ch<='z') guess(ch);
   }
   window.addEventListener('keydown', onKey);
+  h.onClose(()=>window.removeEventListener('keydown', onKey));
 
   const controls=h.controls; controls.innerHTML='';
   const again=document.createElement('button'); again.className='btn'; again.type='button';
@@ -5081,13 +5096,13 @@ function mountWordle(host, h){
   }
 
   function onKey(e){
-    if(!host.isConnected){ window.removeEventListener('keydown', onKey); return; }
     if(e.metaKey||e.ctrlKey||e.altKey) return;
     if(e.key==='Enter'){ e.preventDefault(); press('enter'); }
     else if(e.key==='Backspace'){ e.preventDefault(); press('back'); }
     else if(/^[a-zA-Z]$/.test(e.key)) press(e.key.toLowerCase());
   }
   window.addEventListener('keydown', onKey);
+  h.onClose(()=>window.removeEventListener('keydown', onKey));
 
   drawGrid(); drawKeys(); setStatus();
 }
